@@ -1,0 +1,100 @@
+{
+  "$schema": "https://schemas.wp.org/wp/6.6/theme.json",
+  "version": 3,
+  "settings": {
+    "color": {
+      "defaultPalette": false,
+      "palette": [
+        { "slug": "background", "name": "Dark background", "color": "#0B0B0D" },
+        { "slug": "surface", "name": "Dark surface", "color": "#131316" },
+        { "slug": "surface-2", "name": "Dark surface 2", "color": "#1C1C20" },
+        { "slug": "surface-3", "name": "Dark surface 3", "color": "#2A2A30" },
+        { "slug": "text", "name": "Dark text", "color": "#F3F2EF" },
+        { "slug": "subtitle", "name": "Dark muted text", "color": "#9B9BA3" },
+        { "slug": "text-subtle", "name": "Dark subtle text", "color": "#6C6C75" },
+        { "slug": "line", "name": "Dark line", "color": "rgba(243, 242, 239, 0.12)" },
+        { "slug": "line-strong", "name": "Dark strong line", "color": "rgba(243, 242, 239, 0.28)" },
+        { "slug": "danger", "name": "Dark danger", "color": "#FF7A6B" },
+        { "slug": "scrim", "name": "Dark scrim", "color": "#0B0B0D" },
+        { "slug": "light-background", "name": "Light background", "color": "#f4f6f8" },
+        { "slug": "light-surface", "name": "Light surface", "color": "#FFFFFF" },
+        { "slug": "light-surface-2", "name": "Light surface 2", "color": "#E9EDF1" },
+        { "slug": "light-surface-3", "name": "Light surface 3", "color": "#D7DDE3" },
+        { "slug": "light-text", "name": "Light text", "color": "#0E1116" },
+        { "slug": "light-subtitle", "name": "Light muted text", "color": "#5A616B" },
+        { "slug": "light-text-subtle", "name": "Light subtle text", "color": "#8B929B" },
+        { "slug": "light-line", "name": "Light line", "color": "rgba(14, 17, 22, 0.12)" },
+        { "slug": "light-line-strong", "name": "Light strong line", "color": "rgba(14, 17, 22, 0.28)" },
+        { "slug": "light-danger", "name": "Light danger", "color": "#C2361F" },
+        { "slug": "light-scrim", "name": "Light scrim", "color": "#FFFFFF" },
+        { "slug": "health-background", "name": "Health background", "color": "#F8F5F8" },
+        { "slug": "health-surface", "name": "Health surface", "color": "#FFFFFF" },
+        { "slug": "health-surface-2", "name": "Health surface 2", "color": "#F0E9F1" },
+        { "slug": "health-surface-3", "name": "Health surface 3", "color": "#E1D6E3" },
+        { "slug": "health-text", "name": "Health text", "color": "#1A1320" },
+        { "slug": "health-subtitle", "name": "Health muted text", "color": "#655C6B" },
+        { "slug": "health-text-subtle", "name": "Health subtle text", "color": "#978D9C" },
+        { "slug": "health-line", "name": "Health line", "color": "rgba(26, 19, 32, 0.12)" },
+        { "slug": "health-line-strong", "name": "Health strong line", "color": "rgba(26, 19, 32, 0.26)" },
+        { "slug": "agency", "name": "Agency", "color": "#0E1116" },
+        { "slug": "agency-ink", "name": "Agency ink", "color": "#FFFFFF" },
+        { "slug": "agency-dark", "name": "Agency dark", "color": "#FFFFFF" },
+        { "slug": "agency-dark-ink", "name": "Agency dark ink", "color": "#0B0B0D" },
+        { "slug": "exp", "name": "EXP", "color": "#01B57C" },
+        { "slug": "exp-ink", "name": "EXP ink", "color": "#00150E" },
+        { "slug": "warsaw", "name": "Warsaw", "color": "#43A0ED" },
+        { "slug": "warsaw-ink", "name": "Warsaw ink", "color": "#04121F" },
+        { "slug": "health", "name": "Health", "color": "#8E3FA3" },
+        { "slug": "health-ink", "name": "Health ink", "color": "#FFFFFF" },
+        { "slug": "health-dark", "name": "Health dark", "color": "#A857BC" },
+        { "slug": "health-dark-ink", "name": "Health dark ink", "color": "#17071B" },
+        { "slug": "studio", "name": "Studio", "color": "#D65251" },
+        { "slug": "studio-ink", "name": "Studio ink", "color": "#1E0707" },
+        { "slug": "works", "name": "Works", "color": "#8C6A2C" },
+        { "slug": "works-ink", "name": "Works ink", "color": "#FFFFFF" },
+        { "slug": "works-dark", "name": "Works dark", "color": "#D8AB52" },
+        { "slug": "works-dark-ink", "name": "Works dark ink", "color": "#1B1406" }
+      ]
+    },
+    "custom": {
+      "brand": {
+        "agency": { "radius-sm": "2px", "radius-card": "4px", "radius-btn": "2px", "display-weight": "800" },
+        "exp": { "radius-sm": "6px", "radius-card": "12px", "radius-btn": "8px", "display-weight": "650" },
+        "warsaw": { "radius-sm": "0px", "radius-card": "0px", "radius-btn": "0px", "display-weight": "800" },
+        "health": { "radius-sm": "14px", "radius-card": "28px", "radius-btn": "999px", "display-weight": "500" },
+        "studio": { "radius-sm": "2px", "radius-card": "2px", "radius-btn": "2px", "display-weight": "800" },
+        "works": { "radius-sm": "0px", "radius-card": "0px", "radius-btn": "0px", "display-weight": "700" }
+      }
+    },
+    "typography": {
+      "defaultFontSizes": false,
+      "fluid": false,
+      "fontWeight": true,
+      "lineHeight": true,
+      "fontFamilies": [
+        { "name": "Primary Font — Plus Jakarta Sans", "slug": "primary", "fontFamily": "Plus Jakarta Sans, sans-serif" }
+      ],
+      "fontSizes": [
+        { "slug": "tag", "name": "Tag", "size": "11.5px" },
+        { "slug": "body", "name": "Body", "size": "20px" },
+        { "slug": "subtitle", "name": "Subtitle", "size": "33.6px" },
+        { "slug": "h2", "name": "H2", "size": "73.6px" },
+        { "slug": "h1", "name": "H1", "size": "145.5px" }
+      ]
+    }
+  },
+  "styles": {
+    "typography": {
+      "fontFamily": "var:preset|font-family|primary",
+      "fontSize": "var:preset|font-size|body",
+      "fontStyle": "normal",
+      "fontWeight": "400",
+      "lineHeight": "1.5"
+    },
+    "elements": {
+      "h1": { "typography": { "fontFamily": "var:preset|font-family|primary", "fontSize": "var:preset|font-size|h1", "fontStyle": "normal", "fontWeight": "800", "lineHeight": "1" } },
+      "h2": { "typography": { "fontFamily": "var:preset|font-family|primary", "fontSize": "var:preset|font-size|h2", "fontStyle": "normal", "fontWeight": "800", "lineHeight": "0.95" } }
+    },
+    "css": ".dev-subtitle { color: var(--wp--preset--color--subtitle); font-family: var(--wp--preset--font-family--primary); font-size: var(--wp--preset--font-size--subtitle); font-style: normal; font-weight: 400; line-height: 1.2; }\n.dev-tag { font-family: var(--wp--preset--font-family--primary); font-size: var(--wp--preset--font-size--tag); font-style: normal; font-weight: 600; line-height: 18.5px; }"
+  }
+}

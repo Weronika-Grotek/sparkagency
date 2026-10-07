@@ -1,0 +1,20 @@
+{
+  "name": "dev-theme-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SCSS build for a WordPress theme.",
+  "author": "dev.",
+  "license": "GPL-2.0-or-later",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "sass --style=compressed --no-source-map --no-error-css assets/scss:assets/css",
+    "dev": "npm run build:dev && sass --watch --style=expanded --embed-source-map --no-error-css assets/scss:assets/css",
+    "dev:poll": "npm run build:dev && sass --watch --poll --style=expanded --embed-source-map --no-error-css assets/scss:assets/css",
+    "build:dev": "sass --style=expanded --embed-source-map --no-error-css assets/scss:assets/css"
+  },
+  "devDependencies": {
+    "sass": "1.105.1"
+  }
+}

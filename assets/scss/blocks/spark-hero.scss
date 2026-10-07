@@ -1,0 +1,335 @@
+@use "../variables" as vars;
+
+
+.dev-spark-hero {
+    // Sass interpolation is required inside CSS custom properties.
+    --hero-bg: var(--spark-color-bg, #0B0B0D);
+    --hero-text: var(--spark-color-text, #F3F2EF);
+    --hero-muted: var(--spark-color-text-muted, #9B9BA3);
+    --hero-accent: var(--spark-color-accent, #FFFFFF);
+    --hero-accent-ink: var(--spark-color-accent-ink, #0B0B0D);
+    --hero-line: var(--spark-color-line, rgba(243, 242, 239, .12));
+    --hero-line-strong: var(--spark-color-line-strong, rgba(243, 242, 239, .28));
+    --hero-display-weight: #{vars.$font-weight-display};
+    --hero-display-track: #{vars.$font-tracking-display};
+    --hero-display-style: #{vars.$font-style-display};
+    --hero-font: #{vars.$font-family-primary};
+    --hero-gutter: clamp(16px, 4vw, 56px);
+    --hero-ease: cubic-bezier(.2, .7, .1, 1);
+
+    position: relative;
+    isolation: isolate;
+    contain: paint;
+    overflow: hidden;
+    width: 100%;
+    background: var(--hero-bg);
+    color: var(--hero-text);
+    border-bottom: 1px solid var(--hero-line);
+    color-scheme: dark;
+    font-family: var(--hero-font);
+    -webkit-font-smoothing: antialiased;
+
+    &,
+    &::before,
+    &::after,
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        z-index: var(--hero-particles-z-index, 4);
+        pointer-events: none;
+    }
+
+    &__canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        pointer-events: none;
+    }
+
+    > :not(.dev-spark-hero__particles):not(.dev-spark-hero__motifs):not(.dev-spark-hero__graphic) {
+        position: relative;
+    }
+
+    &__motifs {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    &__motif {
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .6s var(--hero-ease);
+    }
+
+    &__motif--works {
+        top: 40px;
+        right: -40px;
+        width: min(520px, 70vw);
+        color: var(--hero-accent);
+    }
+
+    &__graphic {
+        z-index: 2;
+        position: absolute;
+        inset: 0 0 0 46%;
+        margin: 0;
+        padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 3vw, 3rem) clamp(1.5rem, 4vw, 4rem) 0;
+        overflow: hidden;
+        pointer-events: none;
+
+        img {
+            position: absolute;
+            inset: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 3vw, 3rem) clamp(1.5rem, 4vw, 4rem) 0;
+            display: block;
+            width: calc(100% - clamp(1rem, 3vw, 3rem));
+            height: calc(100% - 2 * clamp(1.5rem, 4vw, 4rem));
+            max-width: none;
+            object-fit: contain;
+            object-position: center right;
+        }
+    }
+
+    &__motif--exp {
+        inset: 0;
+        background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--hero-accent) 35%, transparent) 1px, transparent 1.5px);
+        background-size: 28px 28px;
+        // Opaque black defines mask opacity, not a visible palette color.
+        -webkit-mask-image: radial-gradient(ellipse at 75% 40%, #000 0%, transparent 65%);
+        mask-image: radial-gradient(ellipse at 75% 40%, #000 0%, transparent 65%);
+    }
+
+    &__motif--warsaw {
+        inset: 18px;
+    }
+
+    &__register {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        border: 1px solid var(--hero-accent);
+
+        strong {
+            color: var(--hero-accent);
+            font-style: var(--hero-display-style);
+            font-weight: var(--hero-display-weight);
+            letter-spacing: var(--hero-display-track);
+            transition: color .5s var(--hero-ease);
+        }
+
+        strong>span {
+            display: inline-block;
+            animation: dev-spark-hero-rise .9s var(--hero-ease) both;
+            animation-delay: calc(var(--i) * 40ms);
+        }
+    }
+
+    &__wrap {
+        display: grid;
+        gap: 3rem;
+        width: 100%;
+        max-width: 1320px;
+        margin-inline: auto;
+        padding: clamp(3rem, 8vw, 7rem) var(--hero-gutter) clamp(2.5rem, 6vw, 5rem);
+
+        >* {
+            max-width: none;
+            margin-block: 0;
+        }
+    }
+
+    &__meta {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        color: var(--hero-muted);
+        font-size: .72rem;
+        font-weight: 600;
+        line-height: 1.6;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+
+        >* {
+            margin-block: 0;
+        }
+    }
+
+    &__title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        color: var(--hero-text);
+        font-family: var(--hero-font);
+        font-size: clamp(3.2rem, .6rem + 11vw, 12rem);
+        font-style: normal;
+        font-weight: 200;
+        line-height: .84;
+        letter-spacing: -.05em;
+        text-transform: none;
+
+        strong {
+            color: var(--hero-accent);
+            font-style: var(--hero-display-style);
+            font-weight: var(--hero-display-weight);
+            letter-spacing: var(--hero-display-track);
+        }
+
+        strong>span {
+            display: inline-block;
+            animation: dev-spark-hero-rise .9s var(--hero-ease) both;
+            animation-delay: calc(var(--i) * 40ms);
+        }
+    }
+
+    &__foot {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        align-items: end;
+        gap: 2rem;
+
+        >* {
+            max-width: none;
+        }
+    }
+
+    &__lead {
+        max-width: 26ch;
+        margin: 0;
+        color: var(--hero-text);
+        font-family: var(--hero-font);
+        font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: -.015em;
+        text-wrap: balance;
+    }
+
+    &__actions {
+        position: relative;
+        z-index: 5;
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 0;
+    }
+
+    .wp-block-button {
+        margin: 0;
+    }
+
+    .wp-block-button__link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .6rem;
+        padding: .9rem 1.25rem;
+        border: 1px solid var(--hero-accent);
+        border-radius: vars.$radius-btn;
+        background: var(--hero-accent);
+        color: var(--hero-accent-ink);
+        font: 700 .875rem/1.3 var(--hero-font);
+        text-align: center;
+        text-transform: none;
+        text-decoration: none;
+        box-shadow: none;
+    }
+
+    &__button--ghost .wp-block-button__link {
+        background: transparent;
+        border-color: var(--hero-line-strong);
+        color: var(--hero-text);
+    }
+
+    .wp-block-button__link:focus-visible {
+        outline: 2px solid var(--hero-accent);
+        outline-offset: 4px;
+    }
+
+    &__button:not(&__button--ghost) .wp-block-button__link::after {
+        content: "→";
+        margin-inline-start: .6rem;
+        transition: transform .25s var(--hero-ease);
+    }
+
+    &__button:not(&__button--ghost) .wp-block-button__link:hover::after {
+        transform: translateX(4px);
+    }
+}
+
+// Support both brand attributes and classes from variables.
+@each $brand in works, exp, warsaw, health, studio {
+
+    [data-brand="#{$brand}"] .dev-spark-hero__motif--#{$brand},
+    .is-brand-#{$brand} .dev-spark-hero__motif--#{$brand} {
+        opacity: 1;
+    }
+}
+
+@keyframes dev-spark-hero-rise {
+    from {
+        transform: translateY(.35em);
+        opacity: 0;
+    }
+
+    to {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+@keyframes dev-spark-hero-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .dev-spark-hero {
+        &__foot {
+            grid-template-columns: 1fr;
+        }
+
+        &__actions {
+            justify-content: flex-start;
+        }
+
+        &__graphic {
+            inset: 0 0 auto;
+            height: 48%;
+            padding: 1rem;
+            opacity: .55;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dev-spark-hero {
+
+        &__title strong>span,
+        &__motif--studio b i {
+            animation: none;
+        }
+
+        &__title strong,
+        &__motif,
+        &__button .wp-block-button__link::after {
+            transition: none;
+        }
+    }
+}

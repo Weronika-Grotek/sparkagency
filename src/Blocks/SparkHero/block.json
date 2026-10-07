@@ -1,0 +1,38 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "sparkagency/hero",
+	"version": "1.0.0",
+	"title": "Spark Hero",
+	"category": "design",
+	"icon": "cover-image",
+	"description": "Sekcja hero z treścią uzupełnianą w edytorze WordPress.",
+	"textdomain": "dev-theme-tooling",
+	"attributes": {
+		"eyebrow": { "type": "string", "default": "" },
+		"address": { "type": "string", "default": "" },
+		"headline": { "type": "string", "default": "" },
+		"brand": { "type": "string", "default": "" },
+		"theme": { "type": "string", "default": "dark" },
+		"backgroundColor": { "type": "string", "default": "" },
+		"showGraphic": { "type": "boolean", "default": false },
+		"graphicId": { "type": "number", "default": 0 },
+		"graphicUrl": { "type": "string", "default": "" },
+		"graphicAlt": { "type": "string", "default": "" },
+		"particleAnimation": { "type": "boolean", "default": true },
+		"particleColor": { "type": "string", "default": "" },
+		"particleGlowColor": { "type": "string", "default": "" },
+		"lead": { "type": "string", "default": "" },
+		"primaryLabel": { "type": "string", "default": "" },
+		"primaryUrl": { "type": "string", "default": "" },
+		"secondaryLabel": { "type": "string", "default": "" },
+		"secondaryUrl": { "type": "string", "default": "" }
+	},
+	"supports": {
+		"align": [ "wide", "full" ],
+		"html": false
+	},
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
+}

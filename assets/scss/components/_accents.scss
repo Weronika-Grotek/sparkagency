@@ -1,0 +1,6 @@
+// Opcjonalne klasy tekstu oparte na palecie istniejącego theme.json.
+@each $accent in exp, warsaw, health, studio, works {
+  .dev-accent--#{$accent} {
+    color: var(--wp--preset--color--#{$accent});
+  }
+}

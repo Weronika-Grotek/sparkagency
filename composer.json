@@ -1,0 +1,22 @@
+{
+    "name": "dev/theme-tooling",
+    "description": "WordPress theme PHP autoloading and asset setup.",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "dev."
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dev\\Theme\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
