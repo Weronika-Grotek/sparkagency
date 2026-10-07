@@ -1,0 +1,118 @@
+.p-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 50;
+  border-bottom: 1px solid var(--spark-color-line);
+  background: black;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 82.5rem;
+    min-height: 4rem;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 3.5rem);
+  }
+
+  &__brand {
+    flex: 0 0 auto;
+    margin-right: auto;
+    line-height: 1;
+  }
+
+  &__brand .custom-logo-link {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__brand .custom-logo {
+    display: block;
+    width: auto;
+    max-width: 12rem;
+    max-height: 2.5rem;
+    height: auto;
+  }
+
+  &__site-name {
+    color: var(--spark-color-text);
+    font-family: var(--wp--preset--font-family--primary, sans-serif);
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  &__navigation {
+    order: 1;
+  }
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__menu a {
+    position: relative;
+    color: var(--spark-color-text-muted);
+    font-family: var(--wp--preset--font-family--primary, sans-serif);
+    font-size: .875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+
+  &__menu a:hover,
+  &__menu a:focus-visible,
+  &__menu .current-menu-item > a,
+  &__menu .current_page_item > a {
+    color: var(--spark-color-text);
+  }
+
+  &__menu .current-menu-item > a::after,
+  &__menu .current_page_item > a::after {
+    position: absolute;
+    right: 0;
+    bottom: -.55rem;
+    left: 0;
+    height: 2px;
+    background: var(--spark-color-accent);
+    content: "";
+  }
+}
+
+@media (max-width: 53.75rem) {
+  .p-header__inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .75rem;
+    padding-top: .875rem;
+    padding-bottom: 1rem;
+  }
+
+  .p-header__navigation {
+    width: 100%;
+  }
+
+  .p-header__menu {
+    flex-wrap: wrap;
+    gap: .75rem 1.5rem;
+  }
+
+  .p-header__menu a {
+    display: block;
+    padding-block: .25rem;
+  }
+
+  .p-header__menu .current-menu-item > a::after,
+  .p-header__menu .current_page_item > a::after {
+    bottom: -.15rem;
+  }
+}
