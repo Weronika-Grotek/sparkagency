@@ -21,6 +21,18 @@
 			"type": "string",
 			"default": ""
 		},
+		"note": {
+			"type": "string",
+			"default": ""
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": ""
+		},
 		"panels": {
 			"type": "array",
 			"default": []
@@ -35,5 +47,6 @@
 		"html": false
 	},
 	"editorScript": "file:./index.js",
-	"viewScript": "file:./view.js"
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
 }

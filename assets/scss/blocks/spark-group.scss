@@ -1,12 +1,23 @@
 @use "../variables" as vars;
 
 .dev-spark-group {
+  // Ciemne tokeny z variables, niezależne od motywu strony.
+  --spark-color-bg: var(--wp--preset--color--background, #0B0B0D);
+  --spark-color-surface: var(--wp--preset--color--surface, #131316);
+  --spark-color-text: var(--wp--preset--color--text, #F3F2EF);
+  --spark-color-text-muted: var(--wp--preset--color--subtitle, #9B9BA3);
+  --spark-color-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
+  --spark-color-line-strong: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
+  --spark-color-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
+
   // Konfiguracja sekcji.
   --group-bg: #{vars.$color-background};
   --group-card-bg: #{vars.$color-surface};
   --group-text: #{vars.$color-text};
   --group-muted: #{vars.$color-subtitle};
   --group-header-height: 4rem;
+
+  color-scheme: dark;
 
   // Kolory.
   --ink-2: var(--group-card-bg);
@@ -19,7 +30,7 @@
   // Typografia.
   --f: #{vars.$font-family-primary};
   --fs-xs: #{vars.$font-size-tag};
-  --fs-sm: 0.875rem;
+  --fs-sm: #{vars.$font-size-tag};
   --fs-lg: #{vars.$font-size-body};
   --fs-2xl: clamp(2.2rem, 1.2rem + 4vw, #{vars.$font-size-h2});
   --fs-giant: clamp(3.4rem, 1rem + 9vw, #{vars.$font-size-h1});
@@ -127,7 +138,64 @@
     padding-bottom: var(--s4);
   }
 
-  // Karta — wariant jasny AGENCY.
+  &__footer {
+    display: grid;
+    justify-items: start;
+    gap: var(--s3);
+    margin-top: var(--s5, 3rem);
+  }
+
+&__note {
+  max-width: 62ch;
+  margin: 0;
+  color: #9B9BA3;
+  font-family: var(--f);
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.55;
+  letter-spacing: 0;
+
+  strong,
+  b {
+    color: var(--paper);
+    font-weight: 700;
+  }
+}
+
+  &__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s3);
+    margin: 0;
+  }
+
+  &__link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid currentColor;
+    color: var(--spark-color-accent, currentColor);
+    font-size: var(--fs-sm);
+    font-weight: #{vars.$font-weight-extrabold};
+    text-decoration: none;
+
+    span:last-child {
+      transition: transform 0.3s var(--ease);
+    }
+
+    &:hover span:last-child {
+      transform: translateX(5px);
+    }
+
+    &[aria-disabled="true"] {
+      cursor: text;
+    }
+  }
+
+  // Karta — wariant ciemny z akcentem marki.
   &__panel {
     --p: 0;
     --pc: #{vars.$color-accent};
@@ -185,7 +253,7 @@
 
       background: linear-gradient(
         90deg,
-        color-mix(in srgb, #{vars.$color-surface} 85%, transparent) 0%,
+        color-mix(in srgb, #{vars.$color-surface} 80%, transparent) 0%,
         transparent 75%
       );
     }
@@ -197,7 +265,7 @@
       letter-spacing: -0.05em;
       overflow-wrap: anywhere;
 
-      .dev-spark-group__l {
+      .group__panel-1-subtitle {
         display: block;
         margin-bottom: 0.1em;
         color: var(--mist);
@@ -206,13 +274,12 @@
         letter-spacing: -0.03em;
       }
 
-      .dev-spark-group__b {
-        color: color-mix(
-          in srgb,
-          var(--pc) 70%,
-          #{vars.$color-text}
-        );
+      .group__panel-1-title {
+        color: var(--pc);
         font-weight: #{vars.$font-weight-display};
+        &--warsaw {
+          font-size: 0.9em;
+        }
       }
     }
 
@@ -221,11 +288,7 @@
       align-items: center;
       gap: 0.6rem;
 
-      color: color-mix(
-        in srgb,
-        var(--pc) 70%,
-        #{vars.$color-text}
-      );
+      color: var(--pc);
 
       font-weight: #{vars.$font-weight-extrabold};
       font-size: var(--fs-sm);
@@ -314,19 +377,19 @@
   }
 
   // Kolumny karty.
-  &__panel-l,
-  &__panel-r {
+  &__panel-1,
+  &__panel-2 {
     display: flex;
     flex-direction: column;
     min-width: 0;
   }
 
-  &__panel-l {
+  &__panel-1 {
     justify-content: space-between;
     gap: var(--s4);
   }
 
-  &__panel-r {
+  &__panel-2 {
     justify-content: flex-end;
     gap: var(--s3);
 
@@ -345,11 +408,7 @@
     gap: var(--s2);
 
     b {
-      color: color-mix(
-        in srgb,
-        var(--pc) 70%,
-        #{vars.$color-text}
-      );
+      color: var(--pc);
       font-variant-numeric: tabular-nums;
     }
   }
@@ -367,7 +426,7 @@
 
       background: color-mix(
         in srgb,
-        #{vars.$color-surface} 72%,
+        #{vars.$color-background} 45%,
         transparent
       );
 
@@ -394,7 +453,7 @@
     }
   }
 
-  // Motyw EXP.
+  // Motyw EXP(kropki).
   &__m-exp {
     inset: 0;
 
