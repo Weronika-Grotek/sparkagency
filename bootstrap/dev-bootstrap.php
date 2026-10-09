@@ -53,5 +53,10 @@ $dev_theme_spark_group = new \Dev\Theme\Blocks\SparkGroup(
 );
 $dev_theme_spark_group->register();
 
-unset( $dev_theme_directory, $dev_theme_autoloader, $dev_theme_assets, $dev_theme_spark_hero, $dev_theme_spark_slider, $dev_theme_spark_group );
+$dev_theme_spark_oneteam = new \Dev\Theme\Blocks\SparkOneteam(
+	$dev_theme_directory,
+	get_stylesheet_directory_uri()
+);
+$dev_theme_spark_oneteam->register();
 
+unset( $dev_theme_directory, $dev_theme_autoloader, $dev_theme_assets, $dev_theme_spark_hero, $dev_theme_spark_slider, $dev_theme_spark_group, $dev_theme_spark_oneteam );

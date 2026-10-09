@@ -1,0 +1,255 @@
+
+@use "../variables" as vars;
+
+.spark-oneteam {
+    box-sizing: border-box;
+    padding-block: 7.5rem;
+    background: vars.$color-background;
+    color: vars.$color-text;
+    font-family: vars.$font-family-primary;
+    font-size: 1rem;
+    font-weight: vars.$font-weight-regular;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+
+    &.is-theme-dark {
+        color-scheme: dark;
+    }
+
+    &.is-theme-light {
+        color-scheme: light;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    :is(h2, h3, p) {
+        margin: 0;
+    }
+
+    &__inner {
+        width: 100%;
+        max-width: 82.5rem;
+        margin-inline: auto;
+        padding-inline: clamp(1rem, 4vw, 3.5rem);
+    }
+
+    &__header {
+        display: grid;
+        grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
+        gap: 2rem;
+        margin-bottom: 4.5rem;
+    }
+
+    &__label {
+        color: vars.$color-subtitle;
+        font-size: vars.$font-size-tag;
+        font-weight: vars.$font-weight-semibold;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        color: vars.$color-text;
+        font: vars.$font-weight-display clamp(2.2rem, 1.2rem + 4vw, #{vars.$font-size-h2}) / #{vars.$line-height-h2} vars.$font-family-primary;
+        font-style: vars.$font-style-display;
+        letter-spacing: vars.$font-tracking-display;
+        text-wrap: balance;
+        overflow-wrap: anywhere;
+    }
+
+    & &__lede {
+        margin-top: 1.5rem;
+        max-width: 58ch;
+        color: vars.$color-subtitle;
+        font-size: vars.$font-size-body;
+        line-height: vars.$line-height-body;
+        white-space: pre-line;
+    }
+
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(var(--teams-columns, 3), minmax(0, 1fr));
+        gap: 3rem 2rem;
+    }
+
+    &__card {
+        --team-accent: #{vars.$color-accent};
+        display: grid;
+        gap: 1rem;
+        align-content: start;
+        min-width: 0;
+        border-top: 1px solid vars.$color-line-strong;
+        padding-top: 1.5rem;
+
+        &[data-team-brand="exp"] {
+            --team-accent: #{vars.$color-exp};
+        }
+
+        &[data-team-brand="warsaw"] {
+            --team-accent: #{vars.$color-warsaw};
+        }
+
+        &[data-team-brand="health"] {
+            --team-accent: #{vars.$color-health};
+        }
+
+        &[data-team-brand="works"] {
+            --team-accent: #{vars.$color-works};
+        }
+
+        &[data-team-brand="studio"] {
+            --team-accent: #{vars.$color-studio};
+        }
+
+        h3 {
+            color: vars.$color-text;
+            font-family: vars.$font-family-primary;
+            font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+            font-weight: 700;
+            font-style: vars.$font-style-normal;
+            letter-spacing: -.02em;
+            line-height: 1.15;
+            text-wrap: balance;
+            overflow-wrap: anywhere;
+            hyphens: auto;
+        }
+
+        p {
+            color: vars.$color-subtitle;
+            line-height: 1.55;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
+    }
+
+    // Ciemne kolory marek zgodne z Twoim plikiem variables.
+    &.is-theme-dark &__card[data-team-brand="health"] {
+        --team-accent: var(--wp--preset--color--health-dark, #A857BC);
+    }
+
+    &.is-theme-dark &__card[data-team-brand="works"] {
+        --team-accent: var(--wp--preset--color--works-dark, #D8AB52);
+    }
+
+    &__lead {
+        display: inline-flex;
+        gap: .5rem;
+        align-items: center;
+        color: vars.$color-text;
+        font: vars.$font-weight-semibold vars.$font-size-tag vars.$font-family-primary;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+    }
+
+    &__lead::before {
+        content: "";
+        width: .5rem;
+        height: .5rem;
+        flex: none;
+        border-radius: 50%;
+        background: var(--team-accent);
+    }
+
+    & &__note {
+        margin-top: 3rem;
+        max-width: 62ch;
+        color: vars.$color-subtitle;
+        font-size: vars.$font-size-body;
+        font-weight: vars.$font-weight-regular;
+        letter-spacing: -.01em;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    &__note strong {
+        font-weight: 700;
+    }
+
+    & &__cta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1.5rem;
+        margin-top: 3rem;
+    }
+
+    &__link {
+        display: inline-flex;
+        align-items: center;
+        gap: .6rem;
+        padding-bottom: .2rem;
+        border-bottom: 1px solid currentColor;
+        color: vars.$color-accent;
+        font-size: .875rem;
+        font-weight: 700;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+    }
+
+    &__link-arrow {
+        flex: none;
+        transition: transform .3s cubic-bezier(.2, .7, .1, 1);
+    }
+
+    &__link:hover {
+        color: vars.$color-accent;
+        text-decoration: none;
+    }
+
+    &__link:hover &__link-arrow {
+        transform: translateX(.3125rem);
+    }
+
+    &__link:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: .1875rem;
+    }
+
+    @media (max-width: 62.5rem) {
+        &__cards {
+            grid-template-columns: repeat(min(var(--teams-columns, 3), 2), minmax(0, 1fr));
+        }
+
+    }
+
+    @media (max-width: 47.5rem) {
+        &__header {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+    }
+
+    @media (max-width: 40rem) {
+        &__cards {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+    }
+
+    @media (max-width: 32.5rem) {
+        & &__lede {
+            font-size: 1.125rem;
+        }
+
+        &__link {
+            padding-block: .75rem .35rem;
+        }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &__link-arrow {
+            transition: none;
+        }
+
+    }
+
+}
