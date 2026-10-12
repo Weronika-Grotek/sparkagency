@@ -7,6 +7,7 @@
 			hero.dataset.initialized = 'true';
 
 			const reducedMotion = window.matchMedia( '(prefers-reduced-motion: reduce)' );
+			const motionReduced = () => reducedMotion.matches || document.documentElement.hasAttribute( 'data-spark-motion' );
 			const brand = hero.querySelector( '.dev-spark-hero__title strong' );
 			if ( brand ) {
 				brand.setAttribute( 'aria-label', brand.textContent );
@@ -38,6 +39,7 @@
 			let lastTime = 0;
 			let lightTheme = false;
 			let glowColor = '#FFFFFF';
+			let particleBackgroundEnabled = false;
 			let particleAnimationEnabled = true;
 
 			const hexToRgba = ( color, alpha ) => {
@@ -56,6 +58,7 @@
 
 			const getBrand = () => {
 				const brandNames = [ 'agency', 'works', 'exp', 'warsaw', 'health', 'studio' ];
+				if ( brandNames.includes( hero.dataset.brand ) ) return hero.dataset.brand;
 				const brandNode = hero.closest( '[data-brand]' );
 				if ( brandNode && brandNames.includes( brandNode.dataset.brand ) ) return brandNode.dataset.brand;
 				const brand = brandNames.find( ( name ) => hero.closest( `.is-brand-${ name }` ) );
@@ -64,8 +67,10 @@
 			};
 
 			const isLightTheme = () => {
-				const themeNode = hero.closest( '[data-theme]' );
-				return Boolean( ( themeNode && themeNode.dataset.theme === 'light' ) || hero.closest( '.is-theme-light' ) );
+				if ( hero.dataset.theme ) return hero.dataset.theme === 'light';
+				const pageTheme = document.documentElement.dataset.theme || document.body.dataset.theme;
+				if ( pageTheme ) return pageTheme === 'light';
+				return hero.classList.contains( 'is-theme-light' );
 			};
 
 			const refreshColors = () => {
@@ -84,7 +89,10 @@
 				};
 				palette = customParticleColor ? [ customParticleColor ] : brandName === 'agency' ? [ brandColors.agency, ...darkPalette.slice( 1 ) ] : [ brandColors[ brandName ], brandColors[ brandName ], lightTheme ? '#0E1116' : '#F3F2EF' ];
 				glowColor = customGlowColor || ( lightTheme ? '#0E1116' : '#FFFFFF' );
-				particleAnimationEnabled = hero.dataset.particleAnimation !== 'false';
+				// Fajerwerki są wspólnym tłem każdej marki. Opcja dekoracji
+				// kontroluje tylko ozdobnik marki po prawej stronie Hero.
+				particleBackgroundEnabled = true;
+				particleAnimationEnabled = hero.dataset.particleAnimation !== 'false' && particleBackgroundEnabled;
 				particleBlend = lightTheme ? 'multiply' : 'lighter';
 			};
 
@@ -109,12 +117,16 @@
 				canvas.height = Math.max( 1, Math.round( height * ratio ) );
 				ctx.setTransform( ratio, 0, 0, ratio, 0, 0 );
 				particles = [];
+				if ( ! particleBackgroundEnabled ) {
+					ctx.clearRect( 0, 0, width, height );
+					return;
+				}
 				paintStill();
 			};
 
 			const animate = ( time ) => {
 				frameId = 0;
-				if ( ! hero.isConnected || ! visible || document.hidden || reducedMotion.matches || ! particleAnimationEnabled ) return;
+				if ( ! hero.isConnected || ! visible || document.hidden || motionReduced() || ! particleAnimationEnabled ) return;
 				if ( time - lastTime < 1000 / 60 ) {
 					frameId = requestAnimationFrame( animate );
 					return;
@@ -175,8 +187,9 @@
 			const syncAnimation = () => {
 				cancelAnimationFrame( frameId );
 				frameId = 0;
-				if ( reducedMotion.matches || ! particleAnimationEnabled ) {
-					paintStill();
+				if ( motionReduced() || ! particleAnimationEnabled ) {
+					if ( particleBackgroundEnabled ) paintStill();
+					else ctx.clearRect( 0, 0, width, height );
 					return;
 				}
 				if ( visible && ! document.hidden ) frameId = requestAnimationFrame( animate );
@@ -199,18 +212,23 @@
 				visible = entry.isIntersecting;
 				syncAnimation();
 			} ).observe( hero );
-			new MutationObserver( resize ).observe( document.documentElement, {
+			const refresh = () => {
+				resize();
+				syncAnimation();
+			};
+			new MutationObserver( refresh ).observe( document.documentElement, {
+				attributes: true,
+				attributeFilter: [ 'class', 'data-brand', 'data-theme', 'data-spark-motion' ],
+			} );
+			new MutationObserver( refresh ).observe( document.body, {
 				attributes: true,
 				attributeFilter: [ 'class', 'data-brand', 'data-theme' ],
 			} );
-			new MutationObserver( resize ).observe( document.body, {
+			new MutationObserver( refresh ).observe( hero, {
 				attributes: true,
-				attributeFilter: [ 'class', 'data-brand', 'data-theme' ],
+				attributeFilter: [ 'class', 'data-brand', 'data-theme', 'data-background-style', 'data-particle-animation' ],
 			} );
-			new MutationObserver( resize ).observe( hero, {
-				attributes: true,
-				attributeFilter: [ 'class', 'data-brand', 'data-theme' ],
-			} );
+			document.addEventListener( 'sparkpreferenceschange', refresh );
 			resize();
 		} );
 	};

@@ -123,7 +123,7 @@ body[data-theme],
     --spark-radius-btn: 2px;
     --spark-display-weight: 800;
     --spark-display-track: -.04em;
-    --spark-display-style: italic;
+    --spark-display-style: normal;
 }
 
 [data-brand="works"],
@@ -141,6 +141,10 @@ body[data-theme],
 // Health has a dedicated light palette in the supplied tokens.
 html[data-theme="light"][data-brand="health"],
 body[data-theme="light"][data-brand="health"],
+html[data-theme="light"] [data-brand="health"],
+body[data-theme="light"] [data-brand="health"],
+html[data-theme="light"] .is-brand-health,
+body[data-theme="light"] .is-brand-health,
 .is-theme-light.is-brand-health {
     --spark-color-accent: var(--wp--preset--color--health, #8E3FA3);
     --spark-color-accent-ink: var(--wp--preset--color--health-ink, #FFFFFF);
@@ -157,6 +161,10 @@ body[data-theme="light"][data-brand="health"],
 
 html[data-theme="light"][data-brand="agency"],
 body[data-theme="light"][data-brand="agency"],
+html[data-theme="light"] [data-brand="agency"],
+body[data-theme="light"] [data-brand="agency"],
+html[data-theme="light"] .is-brand-agency,
+body[data-theme="light"] .is-brand-agency,
 .is-theme-light.is-brand-agency {
     --spark-color-accent: var(--wp--preset--color--agency, #0E1116);
     --spark-color-accent-ink: var(--wp--preset--color--agency-ink, #FFFFFF);
@@ -164,6 +172,10 @@ body[data-theme="light"][data-brand="agency"],
 
 html[data-theme="light"][data-brand="works"],
 body[data-theme="light"][data-brand="works"],
+html[data-theme="light"] [data-brand="works"],
+body[data-theme="light"] [data-brand="works"],
+html[data-theme="light"] .is-brand-works,
+body[data-theme="light"] .is-brand-works,
 .is-theme-light.is-brand-works {
     --spark-color-accent: var(--wp--preset--color--works, #8C6A2C);
     --spark-color-accent-ink: var(--wp--preset--color--works-ink, #FFFFFF);

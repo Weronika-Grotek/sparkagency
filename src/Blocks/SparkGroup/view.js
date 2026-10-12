@@ -10,6 +10,7 @@
 
 			const panels = [ ...section.querySelectorAll( '.dev-spark-group__panel' ) ];
 			const motion = window.matchMedia( '(prefers-reduced-motion: reduce)' );
+			const motionReduced = () => motion.matches || document.documentElement.hasAttribute( 'data-spark-motion' );
 			const finePointer = window.matchMedia( '(pointer: fine)' );
 			const abort = new AbortController();
 			let frameId = 0;
@@ -23,7 +24,7 @@
 				}
 				panels.forEach( ( panel, index ) => {
 					const next = panels[ index + 1 ];
-					const disabled = motion.matches || panel.dataset.tooTall === 'true';
+					const disabled = motionReduced() || panel.dataset.tooTall === 'true';
 					const progress = ! next || disabled ? 0 : clamp( 1 - ( next.getBoundingClientRect().top - panel.getBoundingClientRect().top ) / Math.max( 1, panel.offsetHeight ) );
 					panel.style.setProperty( '--p', progress.toFixed( 3 ) );
 				} );
@@ -59,6 +60,7 @@
 			window.addEventListener( 'scroll', schedule, { passive: true, signal: abort.signal } );
 			window.addEventListener( 'resize', measure, { passive: true, signal: abort.signal } );
 			motion.addEventListener( 'change', measure, { signal: abort.signal } );
+			document.addEventListener( 'sparkpreferenceschange', measure, { signal: abort.signal } );
 			measure();
 		} );
 	};

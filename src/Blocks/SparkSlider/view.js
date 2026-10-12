@@ -18,6 +18,7 @@
 
 			const rows = [ ...slider.querySelectorAll( '.dev-spark-marquee__row' ) ];
 			const motion = window.matchMedia( '(prefers-reduced-motion: reduce)' );
+			const motionReduced = () => motion.matches || document.documentElement.hasAttribute( 'data-spark-motion' );
 			const widths = [ 0, 0 ];
 			const offsets = [ 0, 0 ];
 			let frameId = 0;
@@ -87,7 +88,7 @@
 			};
 
 			function sync() {
-				if ( motion.matches || document.hidden || ! visible ) {
+				if ( motionReduced() || document.hidden || ! visible ) {
 					stop();
 					return;
 				}
@@ -108,6 +109,7 @@
 			resize.observe( slider );
 			motion.addEventListener( 'change', sync );
 			document.addEventListener( 'visibilitychange', sync );
+			document.addEventListener( 'sparkpreferenceschange', sync );
 			if ( document.fonts ) document.fonts.ready.then( () => {
 				if ( slider.isConnected ) rebuild();
 			} );

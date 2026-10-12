@@ -17,6 +17,19 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+	<script>
+		(function () {
+			try {
+				var preferences = JSON.parse(localStorage.getItem('spark-preferences') || '{}');
+				var root = document.documentElement;
+				if (preferences.theme === 'light' || preferences.theme === 'dark') {
+					root.dataset.theme = preferences.theme;
+					root.style.colorScheme = preferences.theme;
+				}
+				if (preferences.motion === true) root.setAttribute('data-spark-motion', '');
+			} catch (error) {}
+		}());
+	</script>
 
 	<?php wp_head(); ?>
 </head>
@@ -67,41 +80,5 @@
 	<span class="p-header__progress" data-scroll-progress aria-hidden="true"></span>
 </header>
 
-<dialog class="p-header-a11y" id="spark-accessibility" aria-labelledby="spark-accessibility-title" aria-describedby="spark-accessibility-description">
-	<div class="p-header-a11y__heading">
-		<h2 id="spark-accessibility-title"><?php esc_html_e( 'Dostępność', 'dev-theme-tooling' ); ?></h2>
-		<button type="button" class="p-header-a11y__close" data-accessibility-close aria-label="<?php esc_attr_e( 'Zamknij ustawienia dostępności', 'dev-theme-tooling' ); ?>">×</button>
-	</div>
-	<p id="spark-accessibility-description"><?php esc_html_e( 'Dopasuj wygląd strony do swoich potrzeb. Ustawienia są zapamiętywane w tej przeglądarce.', 'dev-theme-tooling' ); ?></p>
-	<div class="p-header-a11y__row">
-		<span id="spark-theme-label"><?php esc_html_e( 'Motyw', 'dev-theme-tooling' ); ?></span>
-		<div class="p-header-a11y__segment" role="group" aria-labelledby="spark-theme-label">
-			<button type="button" data-theme-set="light" aria-pressed="false"><?php esc_html_e( 'Jasny', 'dev-theme-tooling' ); ?></button>
-			<button type="button" data-theme-set="dark" aria-pressed="false"><?php esc_html_e( 'Ciemny', 'dev-theme-tooling' ); ?></button>
-		</div>
-	</div>
-	<div class="p-header-a11y__row">
-		<span id="spark-text-label"><?php esc_html_e( 'Rozmiar tekstu', 'dev-theme-tooling' ); ?></span>
-		<div class="p-header-a11y__segment" role="group" aria-labelledby="spark-text-label">
-			<?php foreach ( array( '100', '125', '150' ) as $spark_text_size ) : ?>
-				<button type="button" data-text-set="<?php echo esc_attr( $spark_text_size ); ?>" aria-pressed="<?php echo '100' === $spark_text_size ? 'true' : 'false'; ?>"><?php echo esc_html( $spark_text_size . '%' ); ?></button>
-			<?php endforeach; ?>
-		</div>
-	</div>
-	<?php
-	$spark_accessibility_options = array(
-		'contrast' => __( 'Wysoki kontrast', 'dev-theme-tooling' ),
-		'links'    => __( 'Podkreślone linki', 'dev-theme-tooling' ),
-		'spacing'  => __( 'Większe odstępy w tekście', 'dev-theme-tooling' ),
-		'motion'   => __( 'Zatrzymaj animacje', 'dev-theme-tooling' ),
-		'focus'    => __( 'Wyraźny fokus klawiatury', 'dev-theme-tooling' ),
-	);
-	foreach ( $spark_accessibility_options as $spark_option => $spark_label ) :
-		?>
-		<button class="p-header-a11y__row p-header-a11y__switch" type="button" role="switch" aria-checked="false" data-accessibility-option="<?php echo esc_attr( $spark_option ); ?>">
-			<span><?php echo esc_html( $spark_label ); ?></span><span class="p-header-a11y__indicator" aria-hidden="true"></span>
-		</button>
-	<?php endforeach; ?>
-	<button class="p-header-a11y__reset" type="button" data-accessibility-reset><?php esc_html_e( 'Przywróć ustawienia domyślne', 'dev-theme-tooling' ); ?></button>
-</dialog>
+<?php get_template_part( 'template-parts/accessibility-controls' ); ?>
 
