@@ -2,11 +2,10 @@
 /**
  * Front-end theme styles.
  *
- * @package DevTheme
- * @author dev.
+ * @package SparkAgency
  */
 
-namespace Dev\Theme;
+namespace SparkAgency\Theme;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -59,7 +58,7 @@ final class Assets {
 		$version  = false !== $modified ? (string) $modified : wp_get_theme()->get( 'Version' );
 
 		wp_enqueue_style(
-			'dev-theme-main',
+			'sparkagency-main',
 			$this->uri . $relative_path,
 			array(),
 			$version

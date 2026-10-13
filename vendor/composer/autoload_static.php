@@ -7,21 +7,24 @@ namespace Composer\Autoload;
 class ComposerStaticInit016367a43371bc78b9fc370ba2054457
 {
     public static $prefixLengthsPsr4 = array (
-        'D' =>
+        'S' =>
         array (
-            'Dev\\Theme\\' => 10,
+            'SparkAgency\\Theme\\' => 18,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Dev\\Theme\\' =>
+        'SparkAgency\\Theme\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
+            1 => __DIR__ . '/../..' . '/includes',
         ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'SparkAgency\\Theme\\Assets' => __DIR__ . '/../..' . '/src/Assets.php',
+        'SparkAgency\\Theme\\BlocksRegister' => __DIR__ . '/../..' . '/includes/BlocksRegister.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

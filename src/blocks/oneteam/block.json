@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/oneteam",
+  "version": "1.0.0",
+  "title": "Spark One Team",
+  "category": "design",
+  "icon": "groups",
+  "description": "Edytowalna sekcja z kartami zespołów, opisem i przyciskiem.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": ""
+    },
+    "lede": {
+      "type": "string",
+      "default": ""
+    },
+    "note": {
+      "type": "string",
+      "default": ""
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "ctaUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "theme": {
+      "type": "string",
+      "default": "dark"
+    },
+    "columns": {
+      "type": "number",
+      "default": 3
+    },
+    "cards": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "html": false
+  },
+	"editorScript": "file:./index.jsx"
+}

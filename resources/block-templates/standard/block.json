@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/{{SLUG}}",
+  "version": "1.0.0",
+  "title": "{{TITLE}}",
+  "category": "design",
+  "icon": "layout",
+  "description": "{{DESCRIPTION}}",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "html": false
+  },
+  "editorScript": "file:./index.jsx"
+}

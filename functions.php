@@ -5,7 +5,7 @@
  * @package SparkAgency
  */
 
-require_once get_stylesheet_directory() . '/bootstrap/dev-bootstrap.php';
+require_once get_template_directory() . '/bootstrap/sparkagency-bootstrap.php';
 
 /** Configure WordPress features used by the theme. */
 function sparkagency_theme_setup() {
@@ -26,8 +26,8 @@ add_action( 'after_setup_theme', 'sparkagency_theme_setup' );
 function my_custom_menu_setup() {
 	register_nav_menus(
 		array(
-			'primary-menu' => __( 'Primary Menu', 'dev-theme-tooling' ),
-			'footer-menu'  => __( 'Footer Menu', 'dev-theme-tooling' ),
+			'primary-menu' => __( 'Primary Menu', 'sparkagency' ),
+			'footer-menu'  => __( 'Footer Menu', 'sparkagency' ),
 		)
 	);
 }

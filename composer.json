@@ -1,11 +1,11 @@
 {
-    "name": "dev/theme-tooling",
-    "description": "WordPress theme PHP autoloading and asset setup.",
+    "name": "sparkagency/theme",
+    "description": "Standalone WordPress theme for Spark Agency.",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "dev."
+            "name": "Spark Agency"
         }
     ],
     "require": {
@@ -13,7 +13,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Dev\\Theme\\": "src/"
+            "SparkAgency\\Theme\\": [
+                "src/",
+                "includes/"
+            ]
         }
     },
     "config": {

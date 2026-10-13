@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Dev\\Theme\\' => array($baseDir . '/src'),
+    'SparkAgency\\Theme\\' => array($baseDir . '/src', $baseDir . '/includes'),
 );

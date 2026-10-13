@@ -7,4 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'SparkAgency\\Theme\\Assets' => $baseDir . '/src/Assets.php',
+    'SparkAgency\\Theme\\BlocksRegister' => $baseDir . '/includes/BlocksRegister.php',
 );

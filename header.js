@@ -1,4 +1,4 @@
-/** Spark header. Author: dev. No external dependencies. */
+/** Spark Agency header behaviour. No external dependencies. */
 (() => {
   'use strict';
 

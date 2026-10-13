@@ -6,7 +6,7 @@
 		</p>
 
 		<?php if ( has_nav_menu( 'footer-menu' ) ) : ?>
-			<nav class="p-footer__navigation" aria-label="<?php echo esc_attr__( 'Footer menu', 'textdomain' ); ?>">
+			<nav class="p-footer__navigation" aria-label="<?php echo esc_attr__( 'Footer menu', 'sparkagency' ); ?>">
 				<?php
 				wp_nav_menu(
 					array(

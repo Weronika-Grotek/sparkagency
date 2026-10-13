@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/howstart",
+  "version": "1.0.0",
+  "title": "Spark How Start",
+  "category": "design",
+  "icon": "list-view",
+  "description": "Edytowalna sekcja „Jak zacząć” z krokami procesu.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "" },
+    "lede": { "type": "string", "default": "" },
+    "ctaLabel": { "type": "string", "default": "" },
+    "ctaUrl": { "type": "string", "default": "" },
+    "theme": { "type": "string", "default": "dark" },
+    "accentColor": { "type": "string", "default": "" },
+    "steps": { "type": "array", "default": [] }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "html": false
+  },
+  "editorScript": "file:./index.jsx",
+  "viewScript": "file:./view.js"
+}
