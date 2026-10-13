@@ -65,4 +65,10 @@ $dev_theme_spark_whyagency = new \Dev\Theme\Blocks\SparkWhyagency(
 );
 $dev_theme_spark_whyagency->register();
 
-unset( $dev_theme_directory, $dev_theme_autoloader, $dev_theme_assets, $dev_theme_spark_hero, $dev_theme_spark_slider, $dev_theme_spark_group, $dev_theme_spark_oneteam, $dev_theme_spark_whyagency );
+$dev_theme_spark_howstart = new \Dev\Theme\Blocks\SparkHowstart(
+	$dev_theme_directory,
+	get_stylesheet_directory_uri()
+);
+$dev_theme_spark_howstart->register();
+
+unset( $dev_theme_directory, $dev_theme_autoloader, $dev_theme_assets, $dev_theme_spark_hero, $dev_theme_spark_slider, $dev_theme_spark_group, $dev_theme_spark_oneteam, $dev_theme_spark_whyagency, $dev_theme_spark_howstart );

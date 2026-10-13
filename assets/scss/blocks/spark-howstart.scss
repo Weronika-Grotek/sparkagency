@@ -1,0 +1,210 @@
+@use "../variables" as vars;
+
+.spark-howstart {
+  --howstart-accent: #{vars.$color-accent};
+
+  box-sizing: border-box;
+  padding-block: 7.5rem;
+  background: vars.$color-background;
+  color: vars.$color-text;
+  font-family: vars.$font-family-primary;
+
+  &.is-theme-dark {
+    color-scheme: dark;
+  }
+
+  &.is-theme-light {
+    color-scheme: light;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :is(h2, h3, p) {
+    margin: 0;
+  }
+
+  &__inner {
+    width: 100%;
+    max-width: 82.5rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 3.5rem);
+  }
+
+  &__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: clamp(3rem, 7vw, 4.5rem);
+  }
+
+  &__intro {
+    position: sticky;
+    top: calc(var(--header-height, 4rem) + 3rem);
+    align-self: start;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  &__eyebrow {
+    color: vars.$color-subtitle;
+    font-size: vars.$font-size-tag;
+    font-weight: vars.$font-weight-semibold;
+    letter-spacing: .14em;
+    line-height: vars.$line-height-tag;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    color: vars.$color-text;
+    font: vars.$font-weight-display clamp(2.2rem, 1.2rem + 4vw, #{vars.$font-size-h2}) / #{vars.$line-height-h2} vars.$font-family-primary;
+    font-style: vars.$font-style-display;
+    letter-spacing: vars.$font-tracking-display;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  &__lede {
+    max-width: 40ch;
+    color: vars.$color-subtitle;
+    font-size: vars.$font-size-body;
+    line-height: vars.$line-height-body;
+    white-space: pre-line;
+  }
+
+  &__cta {
+    margin-top: 1.5rem !important;
+  }
+
+  &__cta a,
+  &__cta>span {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    padding-bottom: .2rem;
+    border-bottom: 1px solid currentColor;
+    color: var(--howstart-accent);
+    font-size: .875rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &__cta a span {
+    transition: transform .3s cubic-bezier(.2, .7, .1, 1);
+  }
+
+  &__cta a:hover span {
+    transform: translateX(.3125rem);
+  }
+
+  &__cta a:focus-visible {
+    outline: 2px solid var(--howstart-accent);
+    outline-offset: .2rem;
+  }
+
+  &__steps {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 2rem);
+    padding-block: 3rem;
+    border-top: 1px solid vars.$color-line;
+    opacity: 1;
+    transition: opacity .5s ease;
+  }
+
+  &__step>b {
+    color: var(--howstart-accent);
+    font-size: clamp(3rem, 1.5rem + 5vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -.05em;
+    line-height: .9;
+    font-variant-numeric: tabular-nums;
+    transition: color .5s ease;
+  }
+
+  &__step h3 {
+    margin-bottom: .5rem;
+    color: vars.$color-text;
+    font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  &__step p {
+    max-width: 44ch;
+    color: vars.$color-subtitle;
+    font-size: vars.$font-size-body;
+    line-height: vars.$line-height-body;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  &.has-motion &__step:not(.is-active) {
+    opacity: .35;
+  }
+
+  &.has-motion &__step:not(.is-active)>b {
+    color: vars.$color-text-subtle;
+  }
+
+  &__add-step {
+    padding-top: 1.5rem;
+    list-style: none;
+  }
+
+  &__editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+
+  &--editor &__intro {
+    position: relative;
+    top: auto;
+  }
+
+  &--editor &__step {
+    opacity: 1;
+  }
+
+  &--editor &__step>b {
+    color: var(--howstart-accent);
+    min-width: 2ch;
+  }
+
+  @media (max-width: 53.75rem) {
+    &__layout {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    &__intro {
+      position: static;
+    }
+
+    &__step {
+      padding-block: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    &__step,
+    &__step>b,
+    &__cta a span {
+      transition: none;
+    }
+  }
+}

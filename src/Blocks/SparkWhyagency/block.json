@@ -9,24 +9,16 @@
   "description": "Edytowalna sekcja Dlaczego Spark Agency z kartami i wizualizacjami procesu.",
   "textdomain": "dev-theme-tooling",
   "attributes": {
-    "eyebrow": { "type": "string", "default": "04 · Dlaczego Spark Agency" },
-    "title": { "type": "string", "default": "Zespół dobieramy do skali projektu." },
-    "lede": { "type": "string", "default": "Nie próbujemy zamykać wszystkich zadań w jednym uniwersalnym zespole. Każdy obszar ma osoby, które pracują w nim na co dzień, a gdy projekt wychodzi poza jedną specjalizację, zespoły uzgadniają wspólny zakres i odpowiedzialność." },
-    "ctaLabel": { "type": "string", "default": "Sprawdźmy, czego potrzebuje Twój projekt" },
-    "ctaUrl": { "type": "string", "default": "#kontakt" },
+    "eyebrow": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "" },
+    "lede": { "type": "string", "default": "" },
+    "ctaLabel": { "type": "string", "default": "" },
+    "ctaUrl": { "type": "string", "default": "" },
     "theme": { "type": "string", "default": "inherit" },
-    "cards": {
-      "type": "array",
-      "default": [
-        { "number": "01", "title": "Specjalizacja", "description": "Healthcare prowadzą osoby pracujące z komunikacją medyczną. Packaging trafia do zespołu zajmującego się artworkiem. Technologię rozwijają specjaliści od produktów cyfrowych.", "visual": "specialization", "visualContent": { "color": "agency", "chips": [ { "label": "Healthcare", "brand": "sparkHEALTH", "color": "health" }, { "label": "Packaging", "brand": "sparkWORKS", "color": "works" }, { "label": "Technologia", "brand": "sparkEXP", "color": "exp" }, { "label": "Video", "brand": "sparkSTUDIO", "color": "studio" }, { "label": "Multi-market", "brand": "sparkWARSAW", "color": "warsaw" } ] } },
-        { "number": "02", "title": "Wspólna odpowiedzialność", "description": "Przy projekcie obejmującym kilka zespołów ustalamy jednego właściciela i zasady współpracy. Klient nie musi sam przekazywać informacji pomiędzy poszczególnymi markami.", "visual": "ownership", "visualContent": { "color": "agency", "client": "Klient", "owner": "Jeden właściciel projektu", "teams": [ { "label": "sparkHEALTH", "color": "health" }, { "label": "sparkEXP", "color": "exp" }, { "label": "sparkWORKS", "color": "works" } ] } },
-        { "number": "03", "title": "Realizacja", "description": "Zespoły nie kończą pracy na rekomendacji. Przygotowują materiały, prowadzą produkcję oraz wdrożenie w zakresie, za który odpowiadają.", "visual": "delivery", "visualContent": { "color": "agency", "steps": [ "Rekomendacja", "Materiały", "Produkcja", "Wdrożenie" ] } },
-        { "number": "04", "title": "Technologia", "description": "Jeżeli proces wymaga dedykowanego narzędzia, integracji albo automatyzacji, odpowiednie rozwiązanie można przygotować wewnątrz grupy razem ze SparkEXP.", "visual": "technology", "visualContent": { "color": "exp", "tags": [ "Narzędzie", "Integracja", "Automatyzacja" ] } }
-      ]
-    }
+    "cards": { "type": "array", "default": [] }
   },
   "supports": {
-    "align": [ "wide", "full" ],
+    "align": ["wide", "full"],
     "anchor": true,
     "html": false
   },
