@@ -10,6 +10,8 @@ require_once get_template_directory() . '/bootstrap/sparkagency-bootstrap.php';
 /** Configure WordPress features used by the theme. */
 function sparkagency_theme_setup() {
 	add_theme_support( 'title-tag' );
+	add_theme_support( 'editor-styles' );
+	add_editor_style( 'style.css' );
 	add_theme_support(
 		'custom-logo',
 		array(

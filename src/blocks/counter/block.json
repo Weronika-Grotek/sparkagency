@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/counter",
+  "version": "1.0.0",
+  "title": "Licznik",
+  "category": "design",
+  "icon": "chart-bar",
+  "description": "Animowany licznik z etykietą do użycia w dowolnej sekcji.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "value": {
+      "type": "number",
+      "default": 0
+    },
+    "prefix": {
+      "type": "string",
+      "default": ""
+    },
+    "suffix": {
+      "type": "string",
+      "default": ""
+    },
+    "label": {
+      "type": "string",
+      "default": ""
+    },
+    "duration": {
+      "type": "number",
+      "default": 1200
+    }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "html": false
+  },
+  "editorScript": "file:./index.jsx",
+  "viewScript": "file:./view.js"
+}

@@ -7,6 +7,8 @@
  *
  * @package SparkAgency
  */
+
+$spark_page_transitions_enabled = \SparkAgency\Theme\ThemeSettings::page_transitions_enabled();
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -29,27 +31,31 @@
 			} catch (error) {}
 		}());
 	</script>
-	<script>
-		(function () {
-			try {
-				var startedAt = Number(sessionStorage.getItem('spark-page-transition'));
-				var isFresh = startedAt && Date.now() - startedAt < 10000;
-				var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	<?php if ( $spark_page_transitions_enabled ) : ?>
+		<script>
+			(function () {
+				try {
+					var startedAt = Number(sessionStorage.getItem('spark-page-transition'));
+					var isFresh = startedAt && Date.now() - startedAt < 10000;
+					var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-				sessionStorage.removeItem('spark-page-transition');
-				if (isFresh && !reduceMotion && !document.documentElement.hasAttribute('data-spark-motion')) {
-					document.documentElement.setAttribute('data-spark-page-enter', '');
-				}
-			} catch (error) {}
-		}());
-	</script>
+					sessionStorage.removeItem('spark-page-transition');
+					if (isFresh && !reduceMotion && !document.documentElement.hasAttribute('data-spark-motion')) {
+						document.documentElement.setAttribute('data-spark-page-enter', '');
+					}
+				} catch (error) {}
+			}());
+		</script>
+	<?php endif; ?>
 
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<div class="p-page-transition" data-page-transition aria-hidden="true"></div>
+<?php if ( $spark_page_transitions_enabled ) : ?>
+	<div class="p-page-transition" data-page-transition aria-hidden="true"></div>
+<?php endif; ?>
 
 <header class="p-header" data-spark-header>
 	<div class="p-header__inner">

@@ -2,15 +2,16 @@
 
 .spark-case-study-description-item {
 	display: grid;
-	grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
 	gap: 2rem;
-	padding-block: 4.5rem;
+	padding-block: clamp(2.5rem, 7vw, 4.5rem);
 	border-top: 1px solid vars.$color-line;
-	color: vars.$color-text;
+	color: var(--case-study-description-copy, vars.$color-text);
 
 	.spark-single-case-study__content &__title,
 	&__title {
 		margin: 0;
+		color: var(--case-study-description-copy, vars.$color-text);
 		font-family: vars.$font-family-primary;
 		font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
 		font-style: vars.$font-style-display;
@@ -24,16 +25,16 @@
 		display: grid;
 		gap: 1.5rem;
 		max-width: 62ch;
-		font-size: 1.25rem;
+		font-size: clamp(1.05rem, .98rem + .4vw, 1.25rem);
 		line-height: 1.55;
 
 		> * {
 			margin-block: 0;
 		}
 
-		p,
-		li {
-			color: vars.$color-text;
+		.spark-single-case-study__content & :is(p, li),
+		& :is(p, li) {
+			color: var(--case-study-description-copy, vars.$color-text);
 		}
 
 		figure,
@@ -44,6 +45,31 @@
 		}
 	}
 
+	&__counter {
+		display: grid;
+		grid-column: 2;
+		gap: .4rem;
+		margin-top: .5rem;
+		padding-top: 1.25rem;
+		border-top: 2px solid vars.$color-accent;
+	}
+
+	&__counter-value {
+		margin: 0;
+		color: var(--case-study-description-copy, vars.$color-text);
+		font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem);
+		font-weight: 800;
+		letter-spacing: -.04em;
+		line-height: 1;
+	}
+
+	&__counter-label {
+		margin: 0;
+		color: vars.$color-subtitle;
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+
 	.is-case-study-lede {
 		font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
 		font-weight: 600;
@@ -51,8 +77,16 @@
 		line-height: 1.25;
 	}
 
+	.is-case-study-muted {
+		font-size: 1rem;
+	}
+
 	@media (max-width: 47.5rem) {
 		grid-template-columns: 1fr;
 		gap: 1rem;
+
+		&__counter {
+			grid-column: 1;
+		}
 	}
 }

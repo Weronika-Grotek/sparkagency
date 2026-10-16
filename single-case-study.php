@@ -20,6 +20,8 @@ get_header();
 		$archive_url     = $post_type ? get_post_type_archive_link( $post_type ) : false;
 		$archive_label   = post_type_exists( (string) $post_type ) ? get_post_type_object( $post_type )->labels->name : __( 'Case studies', 'sparkagency' );
 		$case_terms      = array();
+		$brand_terms     = array();
+		$category_terms  = array();
 		$taxonomies      = get_object_taxonomies( (string) $post_type, 'objects' );
 		$client          = get_post_meta( $case_id, 'client', true );
 		$brand           = 'agency';
@@ -53,43 +55,71 @@ get_header();
 		);
 
 		foreach ( $case_terms as $term ) {
+			$is_brand_term = false;
+
 			foreach ( $brand_aliases as $candidate_brand => $aliases ) {
 				if ( in_array( sanitize_key( $term->slug ), $aliases, true ) ) {
 					$brand = $candidate_brand;
-					break 2;
+					$brand_terms[] = array(
+						'name'  => $term->name,
+						'brand' => $candidate_brand,
+					);
+					$is_brand_term = true;
+					break;
 				}
 			}
+
+			if ( ! $is_brand_term ) {
+				$category_terms[] = $term;
+			}
 		}
+
+		if ( '' === (string) $client && ! empty( $category_terms ) ) {
+			$client = $category_terms[0]->name;
+			array_shift( $category_terms );
+		}
+
+		$category_label = implode( ', ', wp_list_pluck( $category_terms, 'name' ) );
 
 		if ( '' !== (string) $client ) {
 			$metadata[ __( 'Klient / marka', 'sparkagency' ) ] = $client;
 		}
 
-		if ( ! empty( $case_terms ) ) {
-			$metadata[ __( 'Kategoria', 'sparkagency' ) ] = implode( ', ', wp_list_pluck( $case_terms, 'name' ) );
+		if ( '' !== $category_label ) {
+			$metadata[ __( 'Kategoria', 'sparkagency' ) ] = $category_label;
 		}
 
-		$metadata[ __( 'Rok', 'sparkagency' ) ] = get_the_date( 'Y', $case_id );
+		if ( ! empty( $brand_terms ) ) {
+			$metadata[ __( 'Zespoły', 'sparkagency' ) ] = implode( ', ', wp_list_pluck( $brand_terms, 'name' ) );
+		} elseif ( ! empty( $metadata ) ) {
+			$metadata[ __( 'Rok', 'sparkagency' ) ] = get_the_date( 'Y', $case_id );
+		}
 		?>
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'spark-single-case-study__article' ); ?> data-brand="<?php echo esc_attr( $brand ); ?>">
 			<header class="spark-single-case-study__hero" data-brand="<?php echo esc_attr( $brand ); ?>" data-spark-fireworks data-particle-animation="true">
 				<div class="spark-single-case-study__particles" aria-hidden="true"><canvas></canvas></div>
 				<div class="spark-single-case-study__wrap">
-					<div class="spark-single-case-study__crumbs" aria-label="<?php esc_attr_e( 'Okruszki', 'sparkagency' ); ?>">
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Start', 'sparkagency' ); ?></a>
-						<span aria-hidden="true">/</span>
-						<?php if ( $archive_url ) : ?>
-							<a href="<?php echo esc_url( $archive_url ); ?>"><?php echo esc_html( $archive_label ); ?></a>
+					<div class="spark-single-case-study__topline">
+						<div class="spark-single-case-study__crumbs" aria-label="<?php esc_attr_e( 'Okruszki', 'sparkagency' ); ?>">
+							<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Start', 'sparkagency' ); ?></a>
 							<span aria-hidden="true">/</span>
+							<?php if ( $archive_url ) : ?>
+								<a href="<?php echo esc_url( $archive_url ); ?>"><?php echo esc_html( $archive_label ); ?></a>
+								<span aria-hidden="true">/</span>
+							<?php endif; ?>
+							<span aria-current="page"><?php echo esc_html( $title ); ?></span>
+						</div>
+
+						<?php if ( '' !== $category_label ) : ?>
+							<p class="spark-single-case-study__category"><?php echo esc_html( $category_label ); ?></p>
 						<?php endif; ?>
-						<span aria-current="page"><?php echo esc_html( $title ); ?></span>
 					</div>
 
-					<?php if ( ! empty( $case_terms ) ) : ?>
-						<ul class="spark-single-case-study__terms" aria-label="<?php esc_attr_e( 'Kategorie realizacji', 'sparkagency' ); ?>">
-							<?php foreach ( $case_terms as $term ) : ?>
-								<li><?php echo esc_html( $term->name ); ?></li>
+					<?php if ( ! empty( $brand_terms ) ) : ?>
+						<ul class="spark-single-case-study__chips" aria-label="<?php esc_attr_e( 'Zespoły realizacji', 'sparkagency' ); ?>">
+							<?php foreach ( $brand_terms as $term ) : ?>
+								<li data-brand="<?php echo esc_attr( $term['brand'] ); ?>"><span aria-hidden="true"></span><?php echo esc_html( $term['name'] ); ?></li>
 							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>

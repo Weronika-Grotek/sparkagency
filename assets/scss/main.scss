@@ -8,3 +8,10 @@
 @use "parts/footer";
 @use "parts/single-case-study";
 
+.editor-styles-wrapper {
+	background:
+		radial-gradient(circle at 8% 12%, color-mix(in srgb, var(--wp--preset--color--exp) 42%, transparent), transparent 32rem),
+		radial-gradient(circle at 92% 18%, color-mix(in srgb, var(--wp--preset--color--warsaw) 38%, transparent), transparent 30rem),
+		radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--wp--preset--color--studio) 30%, transparent), transparent 36rem),
+		var(--wp--preset--color--background);
+}

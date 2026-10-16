@@ -28,6 +28,7 @@ $sparkagency_uri = get_template_directory_uri();
 $sparkagency_components = array(
 	new \SparkAgency\Theme\Assets( $sparkagency_directory, $sparkagency_uri ),
 	new \SparkAgency\Theme\BlocksRegister( $sparkagency_directory, $sparkagency_uri ),
+	new \SparkAgency\Theme\ThemeSettings(),
 );
 
 foreach ( $sparkagency_components as $sparkagency_component ) {

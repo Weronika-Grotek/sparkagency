@@ -13,6 +13,30 @@
     "title": {
       "type": "string",
       "default": ""
+    },
+    "showCounter": {
+      "type": "boolean",
+      "default": false
+    },
+    "counterValue": {
+      "type": "number",
+      "default": 0
+    },
+    "counterPrefix": {
+      "type": "string",
+      "default": ""
+    },
+    "counterSuffix": {
+      "type": "string",
+      "default": ""
+    },
+    "counterLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "counterDuration": {
+      "type": "number",
+      "default": 1200
     }
   },
   "supports": {
@@ -20,5 +44,6 @@
     "anchor": true,
     "html": false
   },
-  "editorScript": "file:./index.jsx"
+  "editorScript": "file:./index.jsx",
+  "viewScript": "file:./view.js"
 }
