@@ -4,11 +4,11 @@
     --spark-color-surface: var(--wp--preset--color--surface, #131316);
     --spark-color-surface-2: var(--wp--preset--color--surface-2, #1C1C20);
     --spark-color-surface-3: var(--wp--preset--color--surface-3, #2A2A30);
-    --spark-color-text: var(--wp--preset--color--text, #F3F2EF);
-    --spark-color-text-muted: var(--wp--preset--color--subtitle, #9B9BA3);
-    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #6C6C75);
-    --spark-color-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
-    --spark-color-line-strong: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
+    --spark-color-text: var(--wp--preset--color--text, #B5B5B5);
+    --spark-color-text-muted: var(--wp--preset--color--subtitle, #909090);
+    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #707070);
+    --spark-color-line: var(--wp--preset--color--line, #505050);
+    --spark-color-line-strong: var(--wp--preset--color--line-strong, #6C6C6C);
     --spark-color-danger: var(--wp--preset--color--danger, #FF7A6B);
     --spark-color-scrim: var(--wp--preset--color--scrim, #0B0B0D);
     --spark-color-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
@@ -28,11 +28,11 @@ body[data-theme="light"],
     --spark-color-surface: var(--wp--preset--color--light-surface, #FFFFFF);
     --spark-color-surface-2: var(--wp--preset--color--light-surface-2, #E9EDF1);
     --spark-color-surface-3: var(--wp--preset--color--light-surface-3, #D7DDE3);
-    --spark-color-text: var(--wp--preset--color--light-text, #0E1116);
-    --spark-color-text-muted: var(--wp--preset--color--light-subtitle, #5A616B);
-    --spark-color-text-subtle: var(--wp--preset--color--light-text-subtle, #8B929B);
-    --spark-color-line: var(--wp--preset--color--light-line, rgba(14, 17, 22, .12));
-    --spark-color-line-strong: var(--wp--preset--color--light-line-strong, rgba(14, 17, 22, .28));
+    --spark-color-text: var(--wp--preset--color--light-text, #484848);
+    --spark-color-text-muted: var(--wp--preset--color--light-subtitle, #707070);
+    --spark-color-text-subtle: var(--wp--preset--color--light-text-subtle, #939393);
+    --spark-color-line: var(--wp--preset--color--light-line, #B0B0B0);
+    --spark-color-line-strong: var(--wp--preset--color--light-line-strong, #808080);
     --spark-color-danger: var(--wp--preset--color--light-danger, #C2361F);
     --spark-color-scrim: var(--wp--preset--color--light-scrim, #FFFFFF);
     --spark-color-accent: var(--wp--preset--color--agency, #0E1116);
@@ -46,11 +46,11 @@ body[data-theme="dark"],
     --spark-color-surface: var(--wp--preset--color--surface, #131316);
     --spark-color-surface-2: var(--wp--preset--color--surface-2, #1C1C20);
     --spark-color-surface-3: var(--wp--preset--color--surface-3, #2A2A30);
-    --spark-color-text: var(--wp--preset--color--text, #F3F2EF);
-    --spark-color-text-muted: var(--wp--preset--color--subtitle, #9B9BA3);
-    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #6C6C75);
-    --spark-color-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
-    --spark-color-line-strong: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
+    --spark-color-text: var(--wp--preset--color--text, #B5B5B5);
+    --spark-color-text-muted: var(--wp--preset--color--subtitle, #909090);
+    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #707070);
+    --spark-color-line: var(--wp--preset--color--line, #505050);
+    --spark-color-line-strong: var(--wp--preset--color--line-strong, #6C6C6C);
     --spark-color-danger: var(--wp--preset--color--danger, #FF7A6B);
     --spark-color-scrim: var(--wp--preset--color--scrim, #0B0B0D);
     --spark-color-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
@@ -105,7 +105,7 @@ body[data-theme],
 [data-brand="health"],
 .is-brand-health {
     --spark-color-accent: var(--wp--preset--color--health-dark, #A857BC);
-    --spark-color-accent-ink: var(--wp--preset--color--health-dark-ink, #17071B);
+    --spark-color-accent-ink: var(--wp--preset--color--health-dark-ink, #B5B5B5);
     --spark-radius-sm: 14px;
     --spark-radius-card: 28px;
     --spark-radius-btn: 999px;
@@ -152,11 +152,23 @@ body[data-theme="light"] .is-brand-health,
     --spark-color-surface: var(--wp--preset--color--health-surface, #FFFFFF);
     --spark-color-surface-2: var(--wp--preset--color--health-surface-2, #F0E9F1);
     --spark-color-surface-3: var(--wp--preset--color--health-surface-3, #E1D6E3);
-    --spark-color-text: var(--wp--preset--color--health-text, #1A1320);
-    --spark-color-text-muted: var(--wp--preset--color--health-subtitle, #655C6B);
-    --spark-color-text-subtle: var(--wp--preset--color--health-text-subtle, #978D9C);
-    --spark-color-line: var(--wp--preset--color--health-line, rgba(26, 19, 32, .12));
-    --spark-color-line-strong: var(--wp--preset--color--health-line-strong, rgba(26, 19, 32, .26));
+    --spark-color-text: var(--wp--preset--color--health-text, #B5B5B5);
+    --spark-color-text-muted: var(--wp--preset--color--h`1`1ealth-subtitle, #707070);
+    --spark-color-text-subtle: var(--wp--preset--color--health-text-subtle, #939393);
+    --spark-color-line: var(--wp--preset--color--health-line, #B0B0B0);
+    --spark-color-line-strong: var(--wp--preset--color--health-line-strong, #B5B5B5);
+}
+
+// A dark Health block can be nested in a light page. Keep its copy on the
+// dark palette instead of inheriting the light Health text tokens.
+html[data-theme] .is-theme-dark.is-brand-health,
+body[data-theme] .is-theme-dark.is-brand-health,
+.is-theme-dark.is-brand-health {
+    --spark-color-text: var(--wp--preset--color--text, #B5B5B5);
+    --spark-color-text-muted: var(--wp--preset--color--subtitle, #909090);
+    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #707070);
+    --spark-color-line: var(--wp--preset--color--line, #505050);
+    --spark-color-line-strong: var(--wp--preset--color--line-strong, #B5B5B5);
 }
 
 html[data-theme="light"][data-brand="agency"],

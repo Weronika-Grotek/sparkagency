@@ -14,7 +14,7 @@ $panels  = is_array( $attributes['panels'] ?? null ) ? $attributes['panels'] : a
 $brands  = array( 'agency', 'works', 'exp', 'warsaw', 'health', 'studio' );
 $motifs  = array( 'works', 'exp', 'warsaw', 'health', 'studio' );
 ?>
-<section <?php echo get_block_wrapper_attributes( array( 'class' => 'dev-spark-group is-theme-dark', 'aria-label' => $eyebrow ) ); ?> data-dev-spark-group="">
+<section <?php echo get_block_wrapper_attributes( array( 'class' => 'dev-spark-group', 'aria-label' => $eyebrow ) ); ?> data-dev-spark-group="">
 	<div class="dev-spark-group__wrap">
 		<div class="dev-spark-group__head">
 			<span class="dev-spark-group__mono dev-spark-group__muted"><?php echo wp_kses_post( $attributes['eyebrow'] ?? '' ); ?></span>

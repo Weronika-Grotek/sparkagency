@@ -10,8 +10,108 @@
   const navigation = header.querySelector('.p-header__navigation');
   const toggle = header.querySelector('[data-menu-toggle]');
   const mobile = window.matchMedia('(max-width: 53.75rem)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const adminBar = document.getElementById('wpadminbar');
+  const pageTransition = document.querySelector('[data-page-transition]');
   let frame = 0;
+  let isNavigating = false;
+  const prefetchedPages = new Set();
+
+  function motionIsDisabled() {
+    return reducedMotion.matches || root.hasAttribute('data-spark-motion');
+  }
+
+  function pageTransitionDuration() {
+    const duration = getComputedStyle(pageTransition)
+      .getPropertyValue('--spark-page-transition-duration-in')
+      .trim();
+    const value = Number.parseFloat(duration);
+
+    if (!Number.isFinite(value)) return 360;
+    return duration.endsWith('ms') ? value : value * 1000;
+  }
+
+  function destinationForLink(link) {
+    if (
+      link.hasAttribute('download') ||
+      link.hasAttribute('data-no-page-transition') ||
+      link.closest('#wpadminbar')
+    ) return null;
+
+    const target = link.getAttribute('target');
+    if (target && target.toLowerCase() !== '_self') return null;
+
+    try {
+      const destination = new URL(link.href, window.location.href);
+      const isSamePage = destination.pathname === window.location.pathname && destination.search === window.location.search;
+
+      if (
+        destination.protocol !== window.location.protocol ||
+        destination.origin !== window.location.origin ||
+        isSamePage
+      ) return null;
+
+      return destination;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function prefetchPage(link) {
+    if (!link) return;
+
+    const connection = navigator.connection;
+    const destination = destinationForLink(link);
+    if (
+      !destination ||
+      link.dataset.sparkPrefetched ||
+      prefetchedPages.has(destination.href) ||
+      connection?.saveData ||
+      /(^|-)2g$/.test(connection?.effectiveType || '')
+    ) return;
+
+    const prefetch = document.createElement('link');
+    prefetch.rel = 'prefetch';
+    prefetch.href = destination.href;
+    prefetch.as = 'document';
+    document.head.append(prefetch);
+    prefetchedPages.add(destination.href);
+    link.dataset.sparkPrefetched = 'true';
+  }
+
+  function canAnimateLink(event, link) {
+    if (
+      !pageTransition ||
+      isNavigating ||
+      motionIsDisabled() ||
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return false;
+
+    return Boolean(destinationForLink(link));
+  }
+
+  function beginPageTransition(event) {
+    if (!(event.target instanceof Element)) return;
+    const link = event.target.closest('a[href]');
+    if (!link || !canAnimateLink(event, link)) return;
+
+    const destination = destinationForLink(link);
+    if (!destination) return;
+    event.preventDefault();
+    isNavigating = true;
+
+    try {
+      sessionStorage.setItem('spark-page-transition', String(Date.now()));
+    } catch (error) { /* The leave animation still works without storage. */ }
+
+    root.classList.add('is-page-transition-leaving');
+    window.setTimeout(() => window.location.assign(destination.href), pageTransitionDuration());
+  }
 
   function setMenu(open, restoreFocus = false) {
     const expanded = Boolean(open && mobile.matches);
@@ -68,6 +168,25 @@
   });
   navigation.addEventListener('click', (event) => {
     if (event.target.closest('[data-accessibility-open]')) setMenu(false, true);
+  });
+
+  document.addEventListener('click', beginPageTransition, true);
+  document.addEventListener('pointerover', (event) => {
+    if (!(event.target instanceof Element)) return;
+    prefetchPage(event.target.closest('a[href]'));
+  }, { passive: true, capture: true });
+  document.addEventListener('focusin', (event) => {
+    if (!(event.target instanceof Element)) return;
+    prefetchPage(event.target.closest('a[href]'));
+  });
+  document.addEventListener('touchstart', (event) => {
+    if (!(event.target instanceof Element)) return;
+    prefetchPage(event.target.closest('a[href]'));
+  }, { passive: true, capture: true });
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+    root.classList.remove('is-page-transition-leaving');
+    root.removeAttribute('data-spark-page-enter');
   });
 
   window.addEventListener('scroll', scheduleUpdate, { passive: true });

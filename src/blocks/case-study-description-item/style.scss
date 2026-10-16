@@ -1,0 +1,58 @@
+@use "../variables" as vars;
+
+.spark-case-study-description-item {
+	display: grid;
+	grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+	gap: 2rem;
+	padding-block: 4.5rem;
+	border-top: 1px solid vars.$color-line;
+	color: vars.$color-text;
+
+	.spark-single-case-study__content &__title,
+	&__title {
+		margin: 0;
+		font-family: vars.$font-family-primary;
+		font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+		font-style: vars.$font-style-display;
+		font-weight: 700;
+		letter-spacing: -.02em;
+		line-height: .95;
+		text-wrap: balance;
+	}
+
+	&__body {
+		display: grid;
+		gap: 1.5rem;
+		max-width: 62ch;
+		font-size: 1.25rem;
+		line-height: 1.55;
+
+		> * {
+			margin-block: 0;
+		}
+
+		p,
+		li {
+			color: vars.$color-text;
+		}
+
+		figure,
+		.wp-block-group,
+		.wp-block-columns,
+		.wp-block-buttons {
+			max-width: none;
+		}
+	}
+
+	.is-case-study-lede {
+		font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+		font-weight: 600;
+		letter-spacing: -.015em;
+		line-height: 1.25;
+	}
+
+	@media (max-width: 47.5rem) {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+}

@@ -41,6 +41,7 @@ final class Assets {
 	 */
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_case_study_fireworks' ), 25 );
 	}
 
 	/**
@@ -63,5 +64,17 @@ final class Assets {
 			array(),
 			$version
 		);
+	}
+
+	/**
+	 * Reuse the Hero block's fireworks controller for a native single case
+	 * study template. The script is registered automatically with the block.
+	 */
+	public function enqueue_case_study_fireworks(): void {
+		if ( ! is_singular( array( 'case-study', 'case_study' ) ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'sparkagency-hero-view-script' );
 	}
 }

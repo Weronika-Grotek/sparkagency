@@ -1,16 +1,7 @@
 @use "../variables" as vars;
 
 .dev-spark-group {
-  // Ciemne tokeny z variables, niezależne od motywu strony.
-  --spark-color-bg: var(--wp--preset--color--background, #0B0B0D);
-  --spark-color-surface: var(--wp--preset--color--surface, #131316);
-  --spark-color-text: var(--wp--preset--color--text, #F3F2EF);
-  --spark-color-text-muted: var(--wp--preset--color--subtitle, #9B9BA3);
-  --spark-color-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
-  --spark-color-line-strong: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
-  --spark-color-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
-
-  // Konfiguracja sekcji.
+  // Konfiguracja sekcji dziedziczona z aktywnego motywu.
   --group-bg: #{vars.$color-background};
   --group-card-bg: #{vars.$color-surface};
   --group-text: #{vars.$color-text};
@@ -148,7 +139,7 @@
 &__note {
   max-width: 62ch;
   margin: 0;
-  color: #9B9BA3;
+  color: var(--mist);
   font-family: var(--f);
   font-size: 1rem;
   font-weight: 400;
@@ -572,4 +563,18 @@
       min-width: 2rem;
     }
   }
+}
+
+html[data-theme="light"] .dev-spark-group,
+body[data-theme="light"] .dev-spark-group,
+.is-theme-light .dev-spark-group,
+.dev-spark-group.is-theme-light {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] .dev-spark-group,
+body[data-theme="dark"] .dev-spark-group,
+.is-theme-dark .dev-spark-group,
+.dev-spark-group.is-theme-dark {
+  color-scheme: dark;
 }

@@ -1,0 +1,48 @@
+@use "../variables" as vars;
+
+// The overlay is intentionally paint-only: it does not resize or reflow page
+// content while navigation is in progress.
+.p-page-transition {
+  --spark-page-transition-duration-in: .24s;
+  --spark-page-transition-duration-out: .36s;
+  --spark-page-transition-ease: cubic-bezier(.7, 0, .3, 1);
+
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  contain: paint;
+  background: vars.$color-accent;
+  transform: translate3d(0, 100%, 0);
+}
+
+// The marker is set in the document head, before styles are painted, so a
+// page reached through an animated link never flashes beneath the overlay.
+html[data-spark-page-enter] .p-page-transition {
+  animation: spark-page-transition-reveal var(--spark-page-transition-duration-out) var(--spark-page-transition-ease) forwards;
+  will-change: transform;
+}
+
+@keyframes spark-page-transition-reveal {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -100%, 0); }
+}
+
+html.is-page-transition-leaving .p-page-transition {
+  will-change: transform;
+}
+
+html.is-page-transition-leaving .p-page-transition {
+  transition: transform var(--spark-page-transition-duration-in) var(--spark-page-transition-ease);
+  transform: translate3d(0, 0, 0);
+}
+
+html[data-spark-motion] .p-page-transition {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-page-transition {
+    display: none;
+  }
+}

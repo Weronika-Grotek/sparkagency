@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/case-study-description",
+  "version": "1.0.0",
+  "title": "Opis case study",
+  "category": "design",
+  "icon": "layout",
+  "description": "Edytowalne sekcje opisowe pojedynczego case study.",
+  "textdomain": "sparkagency",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "html": false
+  },
+  "editorScript": "file:./index.js"
+}

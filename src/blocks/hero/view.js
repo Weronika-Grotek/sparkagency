@@ -2,7 +2,7 @@
 	'use strict';
 
 	const initialize = () => {
-		document.querySelectorAll( '.dev-spark-hero' ).forEach( ( hero ) => {
+		document.querySelectorAll( '.dev-spark-hero, [data-spark-fireworks]' ).forEach( ( hero ) => {
 			if ( hero.dataset.initialized ) return;
 			hero.dataset.initialized = 'true';
 
@@ -36,7 +36,6 @@
 			let targetY = y;
 			let visible = false;
 			let frameId = 0;
-			let lastTime = 0;
 			let lightTheme = false;
 			let glowColor = '#FFFFFF';
 			let particleBackgroundEnabled = false;
@@ -124,14 +123,12 @@
 				paintStill();
 			};
 
-			const animate = ( time ) => {
+			const animate = () => {
 				frameId = 0;
 				if ( ! hero.isConnected || ! visible || document.hidden || motionReduced() || ! particleAnimationEnabled ) return;
-				if ( time - lastTime < 1000 / 60 ) {
-					frameId = requestAnimationFrame( animate );
-					return;
-				}
-				lastTime = time;
+				// Keep the controller in lockstep with the display. The supplied
+				// prototype updates on every animation frame; throttling this to
+				// 60 fps made cursor-following visibly lag behind on 120/144 Hz displays.
 				x += ( targetX - x ) * 0.04;
 				y += ( targetY - y ) * 0.04;
 				// Płótno jest przezroczyste, więc ślad zanika przez destination-out (jak trail w prototypie).

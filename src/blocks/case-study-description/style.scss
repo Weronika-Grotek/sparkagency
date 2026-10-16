@@ -1,0 +1,48 @@
+@use "../variables" as vars;
+
+.spark-case-study-description {
+	width: 100%;
+	padding-inline: clamp(1rem, 4vw, 3.5rem);
+	padding-top: 3rem;
+	padding-bottom: 4.5rem;
+	color: vars.$color-text;
+}
+
+.spark-case-study-description__metrics {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1.5rem;
+	max-width: none !important;
+	margin-block: 0 !important;
+
+	> .wp-block-column {
+		align-content: start;
+		display: grid;
+		width: auto !important;
+		gap: .4rem;
+		margin: 0 !important;
+		padding-top: 1rem;
+		border-top: 2px solid vars.$color-accent;
+	}
+
+	h3 {
+		margin: 0;
+		font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem);
+		font-weight: 800;
+		letter-spacing: -.04em;
+		line-height: 1;
+		font-variant-numeric: tabular-nums;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	@media (max-width: 40rem) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.spark-case-study-description .is-case-study-muted {
+	color: vars.$color-subtitle;
+}

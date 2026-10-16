@@ -1,0 +1,369 @@
+@use "../variables" as vars;
+[data-theme="dark"] .spark-needs-generator { 
+        --spark-color-text:  #0E1116 !important;
+}
+.spark-needs-generator {
+    --needs-gap: clamp(1rem, 2vw, 1.5rem);
+    // Generator potrzeb zawsze korzysta z jasnej powierzchni, niezależnie od motywu strony.
+    --spark-color-bg: var(--wp--preset--color--light-background, #F4F6F8);
+    --spark-color-surface: var(--wp--preset--color--light-surface, #FFFFFF);
+    --spark-color-surface-2: var(--wp--preset--color--light-surface-2, #E9EDF1);
+    --spark-color-surface-3: var(--wp--preset--color--light-surface-3, #D7DDE3);
+    --spark-color-text: #b5b5b5 !important;
+    --spark-color-text-muted: var(--wp--preset--color--light-subtitle, #5A616B);
+    --spark-color-text-subtle: var(--wp--preset--color--light-text-subtle, #8B929B);
+    --spark-color-line: var(--wp--preset--color--light-line, rgba(14, 17, 22, .12));
+    --spark-color-line-strong: var(--wp--preset--color--light-line-strong, rgba(14, 17, 22, .28));
+    --spark-color-danger: var(--wp--preset--color--light-danger, #C2361F);
+    --spark-color-scrim: var(--wp--preset--color--light-scrim, #FFFFFF);
+    --spark-color-accent: var(--wp--preset--color--agency, #0E1116);
+    --spark-color-accent-ink: var(--wp--preset--color--agency-ink, #FFFFFF);
+    padding: clamp(3rem, 8vw, 7.5rem) clamp(1rem, 4vw, 3.5rem);
+    background: vars.$color-background;
+    color: vars.$color-text;
+
+    &__header,
+    &__finder {
+        width: min(100%, 82.5rem);
+        margin-inline: auto;
+    }
+
+    &__header {
+        display: grid;
+        grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
+        gap: 2rem;
+        margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+    }
+
+    &__eyebrow,
+    &__progress {
+        margin: 0;
+        color: vars.$color-subtitle;
+        font-size: .72rem;
+        font-weight: 600;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem);
+        line-height: .95;
+    }
+
+    &__lede {
+        max-width: 58ch;
+        margin: 1.5rem 0 0;
+        color: vars.$color-subtitle;
+        font-size: clamp(1rem, .9rem + .8vw, 1.25rem);
+        line-height: 1.5;
+    }
+
+    &__finder,
+    &__preview {
+        overflow: hidden;
+        border: 1px solid vars.$color-line-strong;
+        border-radius: vars.$radius-card;
+        background: vars.$color-surface;
+    }
+
+    &__steps {
+        display: grid;
+        grid-template-columns: repeat(var(--needs-step-count), minmax(0, 1fr));
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid vars.$color-line;
+        list-style: none;
+    }
+
+    &__steps li {
+        min-width: 0;
+        padding: 1rem 1.25rem;
+    }
+
+    &__steps li+li {
+        border-left: 1px solid vars.$color-line;
+    }
+
+    &__steps button,
+    &__back {
+        border: 0;
+        background: transparent;
+        color: vars.$color-subtitle;
+        cursor: pointer;
+        font: inherit;
+        text-align: left;
+    }
+
+    &__steps button:not(:disabled):hover,
+    &__steps .is-active button,
+    &__steps .is-done button {
+        color: vars.$color-text;
+    }
+
+    &__steps button:disabled {
+        cursor: default;
+    }
+
+    &__steps small {
+        display: block;
+        overflow: hidden;
+        margin-top: .3rem;
+        color: vars.$color-subtitle;
+        font-size: .72rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__bar {
+        height: 2px;
+        background: vars.$color-line;
+    }
+
+    &__bar span {
+        display: block;
+        width: calc(var(--needs-progress, 0) * 100%);
+        height: 100%;
+        background: vars.$color-accent;
+        transition: width .35s ease;
+    }
+
+    &__stage {
+        min-height: 18rem;
+        padding: clamp(1.5rem, 5vw, 3rem);
+    }
+
+    &__question {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__question legend,
+    &__result h3 {
+        margin-bottom: 2rem;
+        font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+        font-weight: 700;
+        letter-spacing: -.02em;
+        line-height: 1.15;
+    }
+
+    &__options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+        gap: .75rem;
+    }
+
+    &__options button,
+    &__preview button {
+        display: flex;
+        min-height: 4.5rem;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 1rem 1.15rem;
+        border: 1px solid vars.$color-line-strong;
+        background: transparent;
+        color: var(--spark-color-text);
+        cursor: pointer;
+        font: inherit;
+        font-weight: 600;
+        text-align: left;
+        transition: background .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    &__options button:hover,
+    &__options button:focus-visible {
+        border-color: vars.$color-text;
+        outline: 0;
+    }
+
+    &__options button b,
+    &__preview button b {
+        display: grid;
+        width: 1.6rem;
+        height: 1.6rem;
+        flex: none;
+        place-items: center;
+        border: 1px solid vars.$color-line-strong;
+        border-radius: vars.$radius-sm;
+        color: vars.$color-subtitle;
+        font-size: .72rem;
+    }
+
+    &__options button i,
+    &__preview button i {
+        width: .65rem;
+        height: .65rem;
+        flex: none;
+        margin-right: 2px;
+        border-radius: 50%;
+        background: var(--needs-option-color, vars.$color-accent);
+    }
+
+    &__options .is-brand-agency,
+    &__preview .is-brand-agency {
+        --needs-option-color: var(--wp--preset--color--agency, #0E1116);
+    }
+
+    &__options .is-brand-exp,
+    &__preview .is-brand-exp {
+        --needs-option-color: var(--wp--preset--color--exp, #01B57C);
+    }
+
+    &__options .is-brand-warsaw,
+    &__preview .is-brand-warsaw {
+        --needs-option-color: var(--wp--preset--color--warsaw, #43A0ED);
+    }
+
+    &__options .is-brand-health,
+    &__preview .is-brand-health {
+        --needs-option-color: var(--wp--preset--color--health, #8E3FA3);
+    }
+
+    &__options .is-brand-works,
+    &__preview .is-brand-works {
+        --needs-option-color: var(--wp--preset--color--works, #8C6A2C);
+    }
+
+    &__options .is-brand-studio,
+    &__preview .is-brand-studio {
+        --needs-option-color: var(--wp--preset--color--studio, #D65251);
+    }
+
+    &__options button em,
+    &__preview button em {
+        margin-left: auto;
+        font-style: normal;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0 clamp(1.5rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+    }
+
+    &__footer span {
+        color: vars.$color-subtitle;
+        font-size: .875rem;
+    }
+
+    &__result {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(15rem, .75fr);
+        gap: clamp(2rem, 5vw, 4.5rem);
+    }
+
+    &__result-brand {
+        color: vars.$color-accent;
+        font-size: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
+        font-weight: 800;
+        line-height: .9;
+        letter-spacing: -.05em;
+    }
+
+    &__result-text {
+        max-width: 56ch;
+        color: vars.$color-subtitle;
+    }
+
+    &__result img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        border-radius: vars.$radius-card;
+    }
+
+    &__result-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    &__final {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: .9rem 1.25rem;
+        border: 1px solid vars.$color-accent;
+        border-radius: vars.$radius-btn;
+        background: vars.$color-accent;
+        color: vars.$color-accent-ink;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    &__editor-option {
+        margin: 1.25rem 0;
+        padding: 1rem;
+        border: 1px solid #ddd;
+    }
+
+    &__editor-actions {
+        display: flex;
+        gap: .5rem;
+        margin-top: 1rem;
+    }
+
+    &__preview {
+        padding: clamp(1.5rem, 5vw, 3rem);
+    }
+
+    &__preview h3 {
+        margin: .75rem 0 2rem;
+        font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+    }
+}
+
+@media (max-width: 48rem) {
+    .spark-needs-generator {
+
+        &__header,
+        &__result {
+            grid-template-columns: 1fr;
+        }
+
+        &__steps {
+            grid-template-columns: repeat(var(--needs-step-count), auto);
+            overflow-x: auto;
+        }
+
+        &__steps li {
+            padding: .75rem;
+        }
+
+        &__steps small {
+            display: none;
+        }
+
+        &__stage {
+            padding: 1.5rem 1rem;
+        }
+
+        &__footer {
+            padding: 0 1rem 1.5rem;
+        }
+    }
+}
+
+// Sekcja jest jasna domyślnie. W jawnym jasnym motywie strony odwracamy ją do
+// ciemnego wariantu, aby zachować kontrast z resztą układu jak poprzednio.
+html[data-theme="light"] .spark-needs-generator,
+body[data-theme="light"] .spark-needs-generator,
+.is-theme-light .spark-needs-generator,
+.spark-needs-generator.is-theme-light {
+    --spark-color-bg: var(--wp--preset--color--background, #0B0B0D);
+    --spark-color-surface: var(--wp--preset--color--surface, #131316);
+    --spark-color-surface-2: var(--wp--preset--color--surface-2, #1C1C20);
+    --spark-color-surface-3: var(--wp--preset--color--surface-3, #2A2A30);
+    --spark-color-text: var(--wp--preset--color--text, #F3F2EF);
+    --spark-color-text-muted: var(--wp--preset--color--subtitle, #9B9BA3);
+    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #6C6C75);
+    --spark-color-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
+    --spark-color-line-strong: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
+    --spark-color-danger: var(--wp--preset--color--danger, #FF7A6B);
+    --spark-color-scrim: var(--wp--preset--color--scrim, #0B0B0D);
+    --spark-color-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
+    --spark-color-accent-ink: var(--wp--preset--color--agency-dark-ink, #0B0B0D);
+}

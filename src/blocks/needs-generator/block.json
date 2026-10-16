@@ -1,0 +1,28 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "sparkagency/needs-generator",
+	"version": "1.0.0",
+	"title": "SparkGenerator",
+	"category": "design",
+	"icon": "forms",
+	"description": "Kreator potrzeb z dopasowaniem firmy i przekierowaniem GET.",
+	"textdomain": "sparkagency",
+	"attributes": {
+		"eyebrow": { "type": "string", "default": "02 · Generator potrzeb" },
+		"title": { "type": "string", "default": "Znajdź właściwy punkt startu." },
+		"lede": { "type": "string", "default": "Odpowiedz na krótkie pytania. Na ich podstawie pokażemy zespół, od którego najlepiej zacząć rozmowę." },
+		"finalUrl": { "type": "string", "default": "" },
+		"finalButtonLabel": { "type": "string", "default": "Przejdź do briefu" },
+		"steps": { "type": "array", "default": [] },
+		"results": { "type": "array", "default": [] }
+	},
+	"supports": {
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"spacing": { "margin": [ "top", "bottom" ], "padding": [ "top", "bottom" ] },
+		"html": false
+	},
+	"editorScript": "file:./index.jsx",
+	"viewScript": "file:./view.js"
+}

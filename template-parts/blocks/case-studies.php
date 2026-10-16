@@ -1,0 +1,169 @@
+<?php
+/**
+ * Dynamic template for the Case Studies block.
+ *
+ * @package SparkAgency
+ *
+ * @var array $attributes Block attributes.
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+$post_type = sanitize_key( $attributes['postType'] ?? 'case-study' );
+
+if ( ! post_type_exists( $post_type ) ) {
+	foreach ( array( 'case-study', 'case_study' ) as $candidate_post_type ) {
+		if ( post_type_exists( $candidate_post_type ) ) {
+			$post_type = $candidate_post_type;
+			break;
+		}
+	}
+}
+
+$posts_per_page       = min( 12, max( 1, absint( $attributes['postsPerPage'] ?? 5 ) ) );
+$brand_taxonomy       = sanitize_key( $attributes['brandTaxonomy'] ?? '' );
+$client_meta_key      = sanitize_key( $attributes['clientMetaKey'] ?? 'client' );
+$metric_value_meta_key = sanitize_key( $attributes['metricValueMetaKey'] ?? 'metric_value' );
+$metric_label_meta_key = sanitize_key( $attributes['metricLabelMetaKey'] ?? 'metric_label' );
+$case_query           = new WP_Query(
+	array(
+		'post_type'           => $post_type,
+		'post_status'         => 'publish',
+		'posts_per_page'      => $posts_per_page,
+		'no_found_rows'       => true,
+		'ignore_sticky_posts' => true,
+	)
+);
+
+$brand_aliases = array(
+	'agency' => array( 'agency', 'sparkagency' ),
+	'exp'    => array( 'exp', 'sparkexp' ),
+	'warsaw' => array( 'warsaw', 'sparkwarsaw' ),
+	'health' => array( 'health', 'sparkhealth' ),
+	'studio' => array( 'studio', 'sparkstudio' ),
+	'works'  => array( 'works', 'sparkworks' ),
+);
+$get_case_terms = static function ( int $post_id, string $type, string $taxonomy ): array {
+	if ( '' !== $taxonomy && taxonomy_exists( $taxonomy ) ) {
+		$terms = get_the_terms( $post_id, $taxonomy );
+		return is_array( $terms ) ? $terms : array();
+	}
+
+	foreach ( get_object_taxonomies( $type, 'names' ) as $object_taxonomy ) {
+		if ( 'post_format' === $object_taxonomy ) {
+			continue;
+		}
+		$terms = get_the_terms( $post_id, $object_taxonomy );
+		if ( is_array( $terms ) && ! empty( $terms ) ) {
+			return $terms;
+		}
+	}
+
+	return array();
+};
+$get_case_brand = static function ( array $terms ) use ( $brand_aliases ): string {
+	foreach ( $terms as $term ) {
+		if ( ! $term instanceof WP_Term ) {
+			continue;
+		}
+
+		$slug = sanitize_key( $term->slug );
+		foreach ( $brand_aliases as $brand => $aliases ) {
+			if ( in_array( $slug, $aliases, true ) ) {
+				return $brand;
+			}
+		}
+	}
+
+	return 'exp';
+};
+?>
+<section <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'spark-case-studies' ) ) ); ?> data-spark-case-studies>
+	<header class="spark-case-studies__header">
+		<?php if ( ! empty( $attributes['eyebrow'] ) ) : ?>
+			<p class="spark-case-studies__eyebrow"><?php echo esc_html( $attributes['eyebrow'] ); ?></p>
+		<?php endif; ?>
+		<div>
+			<?php if ( ! empty( $attributes['title'] ) ) : ?>
+				<h2><?php echo wp_kses_post( $attributes['title'] ); ?></h2>
+			<?php endif; ?>
+			<?php if ( ! empty( $attributes['lede'] ) ) : ?>
+				<p class="spark-case-studies__lede"><?php echo wp_kses_post( $attributes['lede'] ); ?></p>
+			<?php endif; ?>
+		</div>
+	</header>
+	<?php if ( ! $case_query->have_posts() ) : ?>
+		<p class="spark-case-studies__empty"><?php esc_html_e( 'Nie znaleziono opublikowanych realizacji dla wybranego typu wpisu.', 'sparkagency' ); ?></p>
+	<?php else : ?>
+		<div class="spark-case-studies__pin" data-case-pin>
+			<div class="spark-case-studies__sticky">
+				<div class="spark-case-studies__progress" aria-hidden="true"><span><b data-case-current>01</b> / <?php echo esc_html( sprintf( '%02d', $case_query->post_count ) ); ?></span><i data-case-progress></i></div>
+				<div class="spark-case-studies__window">
+					<div class="spark-case-studies__track" data-case-track>
+						<?php $case_index = 0; ?>
+						<?php while ( $case_query->have_posts() ) : ?>
+							<?php
+							$case_query->the_post();
+							++$case_index;
+							$case_id      = get_the_ID();
+							$terms        = $get_case_terms( $case_id, $post_type, $brand_taxonomy );
+							$brand        = $get_case_brand( $terms );
+							$client       = '' !== $client_meta_key ? get_post_meta( $case_id, $client_meta_key, true ) : '';
+							$metric_value = '' !== $metric_value_meta_key ? get_post_meta( $case_id, $metric_value_meta_key, true ) : '';
+							$metric_label = '' !== $metric_label_meta_key ? get_post_meta( $case_id, $metric_label_meta_key, true ) : '';
+							$category     = ! empty( $terms ) ? $terms[0]->name : get_the_date( 'Y' );
+							$excerpt      = get_the_excerpt();
+							$is_wide_case = 0 === ( ( $case_index - 1 ) % 4 );
+							?>
+							<a class="spark-case-studies__card has-case-brand-<?php echo esc_attr( $brand ); ?><?php echo $is_wide_case ? ' is-case-wide' : ''; ?>" href="<?php the_permalink(); ?>" data-case-card style="--case-index:<?php echo esc_attr( (string) ( $case_index - 1 ) ); ?>">
+								<div class="spark-case-studies__art<?php echo has_post_thumbnail() ? ' has-case-image' : ''; ?>">
+									<span class="spark-case-studies__blob spark-case-studies__blob--one" aria-hidden="true"></span>
+									<span class="spark-case-studies__blob spark-case-studies__blob--two" aria-hidden="true"></span>
+									<span class="spark-case-studies__blob spark-case-studies__blob--three" aria-hidden="true"></span>
+									<span class="spark-case-studies__art-grid" aria-hidden="true"></span>
+									<div class="spark-case-studies__chips" aria-hidden="true">
+										<?php foreach ( array_slice( $terms, 0, 3 ) as $term ) : ?>
+											<span><?php echo esc_html( $term->name ); ?></span>
+										<?php endforeach; ?>
+									</div>
+									<span class="spark-case-studies__number" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $case_index ) ); ?></span>
+									<?php if ( has_post_thumbnail() ) : ?>
+										<?php
+										$image_attributes = array(
+											'class'    => 'spark-case-studies__image',
+											'loading'  => 1 === $case_index ? 'eager' : 'lazy',
+											'decoding' => 'async',
+										);
+										if ( 1 === $case_index ) {
+											$image_attributes['fetchpriority'] = 'high';
+										}
+										echo get_the_post_thumbnail( $case_id, 'large', $image_attributes );
+										?>
+									<?php endif; ?>
+								</div>
+								<div class="spark-case-studies__body">
+									<div class="spark-case-studies__meta"><span><?php echo esc_html( $client ?: get_the_title() ); ?></span><span><?php echo esc_html( $category ); ?></span></div>
+									<h3 class="spark-case-studies__title"><?php the_title(); ?></h3>
+									<?php if ( $excerpt ) : ?>
+										<p class="spark-case-studies__excerpt"><?php echo esc_html( wp_trim_words( $excerpt, 26 ) ); ?></p>
+									<?php endif; ?>
+									<span class="spark-case-studies__more"><?php esc_html_e( 'Zobacz case study', 'sparkagency' ); ?></span>
+									<?php if ( '' !== (string) $metric_value && '' !== (string) $metric_label ) : ?>
+										<div class="spark-case-studies__metric"><strong><?php echo esc_html( $metric_value ); ?></strong><span><?php echo esc_html( $metric_label ); ?></span></div>
+									<?php endif; ?>
+								</div>
+							</a>
+						<?php endwhile; ?>
+						<?php if ( ! empty( $attributes['allUrl'] ) ) : ?>
+							<a class="spark-case-studies__all" href="<?php echo esc_url( $attributes['allUrl'] ); ?>"><span><?php echo esc_html( $attributes['allLabel'] ?? __( 'Wszystkie realizacje', 'sparkagency' ) ); ?></span><b aria-hidden="true">→</b></a>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+	<?php if ( ! empty( $attributes['contactUrl'] ) ) : ?>
+		<footer class="spark-case-studies__footer"><a class="spark-case-studies__contact" href="<?php echo esc_url( $attributes['contactUrl'] ); ?>"><?php echo esc_html( $attributes['contactLabel'] ?? __( 'Porozmawiajmy o Twoim projekcie', 'sparkagency' ) ); ?></a></footer>
+	<?php endif; ?>
+</section>
+<?php wp_reset_postdata(); ?>

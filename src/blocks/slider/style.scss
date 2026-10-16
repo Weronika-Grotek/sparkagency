@@ -1,11 +1,12 @@
+@use "../variables" as vars;
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=swap");
 
 .dev-spark-marquee {
-    --marquee-bg: var(--wp--preset--color--background, #0B0B0D);
-    --marquee-text: var(--wp--preset--color--text, #F3F2EF);
-    --marquee-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
-    --marquee-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
-    --marquee-outline: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
+    --marquee-bg: #{vars.$color-background};
+    --marquee-text: #{vars.$color-text};
+    --marquee-accent: #{vars.$color-accent};
+    --marquee-line: #{vars.$color-line};
+    --marquee-outline: #{vars.$color-line-strong};
     --marquee-radius: var(--spark-radius-btn, 2px);
     --marquee-size: clamp(2.4rem, 1rem + 5.5vw, 6.5rem);
 
@@ -71,6 +72,20 @@
         align-content: center;
         padding-inline: clamp(1rem, 4vw, 3rem);
     }
+}
+
+html[data-theme="light"] .dev-spark-marquee,
+body[data-theme="light"] .dev-spark-marquee,
+.is-theme-light .dev-spark-marquee,
+.dev-spark-marquee.is-theme-light {
+    color-scheme: light;
+}
+
+html[data-theme="dark"] .dev-spark-marquee,
+body[data-theme="dark"] .dev-spark-marquee,
+.is-theme-dark .dev-spark-marquee,
+.dev-spark-marquee.is-theme-dark {
+    color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {

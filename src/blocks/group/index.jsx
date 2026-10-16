@@ -168,7 +168,7 @@ registerBlockType('sparkagency/group', {
           }])}>{'Dodaj kartę'}</Button></PanelBody><PanelBody title='Tekst i przycisk pod kafelkami' initialOpen={false}><TextControl label='Adres podstrony (URL)' type='url' value={attributes.ctaUrl || ''} __nextHasNoMarginBottom={true} onChange={v => setAttributes({
             ctaUrl: v
           })} /></PanelBody></InspectorControls><section {...useBlockProps({
-        className: 'dev-spark-group is-theme-dark dev-spark-group--editor'
+        className: 'dev-spark-group dev-spark-group--editor'
       })}>{sectionView(attributes, true, setAttributes)}<div className='dev-spark-group__wrap' style={{
           marginTop: '16px'
         }}><Button variant='secondary' onClick={() => setPanels([...panels, {
@@ -179,7 +179,7 @@ registerBlockType('sparkagency/group', {
   save: ({
     attributes
   }) => <section {...useBlockProps.save({
-    className: 'dev-spark-group is-theme-dark',
+    className: 'dev-spark-group',
     'data-dev-spark-group': '',
     'aria-label': plain(attributes.eyebrow)
   })}>{sectionView(attributes, false)}</section>
