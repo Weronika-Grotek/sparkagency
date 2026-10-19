@@ -1,17 +1,12 @@
 const reducedMotion = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
 const formatValue = ( value ) => {
-	const decimals = ( String( value ).split( '.' )[ 1 ] || '' ).length;
-
-	return new Intl.NumberFormat( 'pl-PL', {
-		maximumFractionDigits: decimals,
-		minimumFractionDigits: decimals,
-	} ).format( value );
+	return new Intl.NumberFormat( 'pl-PL', { maximumFractionDigits: 0 } ).format( value );
 };
 
 const animateCounter = ( element ) => {
 	const output = element.querySelector( '[data-case-study-counter-value]' );
-	const target = Number( element.dataset.counterValue );
+	const target = Number.parseInt( element.dataset.counterValue, 10 );
 	const duration = Number( element.dataset.counterDuration ) || 1200;
 
 	if ( ! output || ! Number.isFinite( target ) ) {
@@ -28,7 +23,7 @@ const animateCounter = ( element ) => {
 		const progress = Math.min( 1, ( now - startedAt ) / duration );
 		const eased = 1 - Math.pow( 1 - progress, 3 );
 
-		output.textContent = formatValue( target * eased );
+		output.textContent = formatValue( Math.round( target * eased ) );
 
 		if ( progress < 1 ) {
 			window.requestAnimationFrame( tick );

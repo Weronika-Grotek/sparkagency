@@ -8,6 +8,7 @@ const initializeNeedsGenerators = () => {
 			return;
 		}
 		const steps = Array.isArray( config.steps ) ? config.steps : [];
+		const serviceGroups = Array.isArray( config.serviceGroups ) ? config.serviceGroups : [];
 		if ( ! steps.length ) return;
 		root.dataset.initialized = 'true';
 
@@ -28,6 +29,16 @@ const initializeNeedsGenerators = () => {
 		const selectedResult = () => {
 			const answer = [ ...answers ].reverse().find( ( item ) => item?.resultId );
 			return ( config.results || [] ).find( ( result ) => result.id === answer?.resultId );
+		};
+		const firstAnswerResultId = () => answers[ 0 ]?.resultId || '';
+		const firstAnswerServiceGroupId = () => answers[ 0 ]?.serviceGroupId || answers[ 0 ]?.resultId || '';
+		const optionsForStep = ( step ) => {
+			if ( step.optionsSource === 'serviceGroups' ) {
+				const group = serviceGroups.find( ( item ) => item.id === firstAnswerServiceGroupId() );
+				return ( group?.categories || [] ).map( ( category ) => ( { label: category, value: category } ) );
+			}
+
+			return step.options.filter( ( option ) => ! option.visibleForResultId || option.visibleForResultId === firstAnswerResultId() );
 		};
 		const query = () => {
 			const params = new URLSearchParams();
@@ -83,7 +94,7 @@ const initializeNeedsGenerators = () => {
 			main.append( create( 'p', 'spark-needs-generator__result-brand', result?.title || 'Porozmawiajmy' ) );
 			if ( result?.description ) main.append( create( 'p', 'spark-needs-generator__result-text', result.description ) );
 			const actions = create( 'div', 'spark-needs-generator__result-actions' );
-			const finalUrl = destination( result?.contactUrl || config.finalUrl );
+			const finalUrl = destination( config.finalUrl || result?.contactUrl );
 			if ( finalUrl ) {
 				const link = create( 'a', 'spark-needs-generator__final', config.finalButtonLabel || 'Przejdź dalej' );
 				link.href = finalUrl;
@@ -109,7 +120,11 @@ const initializeNeedsGenerators = () => {
 			const question = create( 'fieldset', 'spark-needs-generator__question' );
 			question.append( create( 'legend', '', step.title || `Pytanie ${ index + 1 }` ) );
 			const options = create( 'div', 'spark-needs-generator__options' );
-			step.options.forEach( ( option, optionIndex ) => {
+			const visibleOptions = optionsForStep( step );
+			if ( ! visibleOptions.length ) {
+				question.append( create( 'p', 'spark-needs-generator__empty', 'Brak kategorii dla wybranej firmy. Wróć do pytania 1 i wybierz firmę lub uzupełnij jej kategorie.' ) );
+			}
+			visibleOptions.forEach( ( option, optionIndex ) => {
 				const button = create( 'button' );
 				button.type = 'button';
 				if ( step.markerMode === 'brand' ) {
@@ -122,7 +137,7 @@ const initializeNeedsGenerators = () => {
 				}
 				button.append( create( 'span', '', option.label ), create( 'em', '', '→' ) );
 				button.addEventListener( 'click', () => {
-					answers[ index ] = { question: step.title || `Pytanie ${ index + 1 }`, param: step.param, value: option.value || option.label, label: option.label, resultId: option.resultId || answers[ index - 1 ]?.resultId || '' };
+					answers[ index ] = { question: step.title || `Pytanie ${ index + 1 }`, param: step.param, value: option.value || option.label, label: option.label, resultId: option.resultId || answers[ index - 1 ]?.resultId || '', serviceGroupId: option.serviceGroupId || answers[ 0 ]?.serviceGroupId || '' };
 					answers.length = index + 1;
 					const nextUrl = destination( option.nextUrl );
 					if ( nextUrl ) {

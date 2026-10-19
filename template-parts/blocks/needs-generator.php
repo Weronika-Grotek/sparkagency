@@ -26,13 +26,16 @@ foreach ( (array) ( $attributes['steps'] ?? array() ) as $step_index => $step ) 
 			'label'     => $label,
 			'value'     => sanitize_text_field( $option['value'] ?? $label ),
 			'resultId'  => $sanitize_identifier( $option['resultId'] ?? '', '' ),
+			'serviceGroupId' => $sanitize_identifier( $option['serviceGroupId'] ?? '', '' ),
+			'visibleForResultId' => $sanitize_identifier( $option['visibleForResultId'] ?? '', '' ),
 			'nextUrl'   => esc_url_raw( $option['nextUrl'] ?? '' ),
 			'brand'     => $sanitize_identifier( $option['brand'] ?? '', 'agency' ),
 			'position'  => $option_index,
 		);
 	}
 
-	if ( empty( $options ) ) {
+	$options_source = 'serviceGroups' === ( $step['optionsSource'] ?? '' ) ? 'serviceGroups' : '';
+	if ( empty( $options ) && '' === $options_source ) {
 		continue;
 	}
 
@@ -40,6 +43,7 @@ foreach ( (array) ( $attributes['steps'] ?? array() ) as $step_index => $step ) 
 		'title'      => sanitize_text_field( $step['title'] ?? '' ),
 		'param'      => $sanitize_identifier( $step['param'] ?? '', 'answer_' . ( $step_index + 1 ) ),
 		'markerMode' => 'brand' === ( $step['markerMode'] ?? '' ) ? 'brand' : 'letters',
+		'optionsSource' => $options_source,
 		'options'    => $options,
 	);
 }
@@ -57,9 +61,30 @@ foreach ( (array) ( $attributes['results'] ?? array() ) as $result_index => $res
 	);
 }
 
+$service_groups = array();
+foreach ( (array) ( $attributes['serviceGroups'] ?? array() ) as $group_index => $group ) {
+	$id = $sanitize_identifier( $group['id'] ?? '', 'company_' . ( $group_index + 1 ) );
+	$categories = array_values(
+		array_filter(
+			array_map( 'sanitize_text_field', (array) ( $group['categories'] ?? array() ) )
+		)
+	);
+
+	if ( empty( $categories ) ) {
+		continue;
+	}
+
+	$service_groups[] = array(
+		'id'         => $id,
+		'title'      => sanitize_text_field( $group['title'] ?? '' ),
+		'categories' => $categories,
+	);
+}
+
 $config = array(
 	'steps'            => $steps,
 	'results'          => $results,
+	'serviceGroups'    => $service_groups,
 	'finalUrl'         => esc_url_raw( $attributes['finalUrl'] ?? '' ),
 	'finalButtonLabel' => sanitize_text_field( $attributes['finalButtonLabel'] ?? __( 'Przejdź dalej', 'sparkagency' ) ),
 );

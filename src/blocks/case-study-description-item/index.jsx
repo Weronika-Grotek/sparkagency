@@ -18,6 +18,7 @@ const ALLOWED_BLOCKS = [
 
 const Edit = ( { attributes, setAttributes } ) => {
 	const blockProps = useBlockProps( { className: 'spark-case-study-description-item' } );
+	const counterValue = Number.parseInt( attributes.counterValue, 10 ) || 0;
 	const innerBlocksProps = useInnerBlocksProps( { className: 'spark-case-study-description-item__body' }, {
 		allowedBlocks: ALLOWED_BLOCKS,
 		templateLock: false,
@@ -37,8 +38,9 @@ const Edit = ( { attributes, setAttributes } ) => {
 						<TextControl
 							label={ __( 'Wartość', 'sparkagency' ) }
 							type="number"
-							value={ String( attributes.counterValue ?? 0 ) }
-							onChange={ ( counterValue ) => setAttributes( { counterValue: Number( counterValue ) || 0 } ) }
+							step="1"
+							value={ String( counterValue ) }
+							onChange={ ( value ) => setAttributes( { counterValue: Number.parseInt( value, 10 ) || 0 } ) }
 						/>
 						<TextControl label={ __( 'Tekst przed liczbą', 'sparkagency' ) } value={ attributes.counterPrefix || '' } onChange={ ( counterPrefix ) => setAttributes( { counterPrefix } ) } />
 						<TextControl label={ __( 'Tekst po liczbie', 'sparkagency' ) } value={ attributes.counterSuffix || '' } onChange={ ( counterSuffix ) => setAttributes( { counterSuffix } ) } />
@@ -55,7 +57,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 			/>
 			<div { ...innerBlocksProps } />
 			{ attributes.showCounter && <div className="spark-case-study-description-item__counter">
-				<p className="spark-case-study-description-item__counter-value"><span>{ attributes.counterPrefix || '' }</span>{ attributes.counterValue ?? 0 }<span>{ attributes.counterSuffix || '' }</span></p>
+				<p className="spark-case-study-description-item__counter-value"><span>{ attributes.counterPrefix || '' }</span>{ counterValue }<span>{ attributes.counterSuffix || '' }</span></p>
 				<RichText tagName="p" className="spark-case-study-description-item__counter-label" value={ attributes.counterLabel || '' } placeholder={ __( 'Opis licznika', 'sparkagency' ) } onChange={ ( counterLabel ) => setAttributes( { counterLabel } ) } />
 			</div> }
 		</section>

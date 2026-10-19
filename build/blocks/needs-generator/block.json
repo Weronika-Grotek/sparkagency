@@ -33,6 +33,94 @@
       "type": "array",
       "default": []
     },
+    "serviceGroups": {
+      "type": "array",
+      "default": [
+        {
+          "id": "warsaw",
+          "title": "Spark Warsaw",
+          "categories": [
+            "Kreacja",
+            "Kampanie",
+            "Broszury",
+            "POS",
+            "Outdoor",
+            "Digital",
+            "Retusz",
+            "DTP",
+            "Adaptacje",
+            "Lokalizacja",
+            "Multi-market"
+          ]
+        },
+        {
+          "id": "exp",
+          "title": "Spark EXP",
+          "categories": [
+            "CLM",
+            "RTE",
+            "Strony WWW",
+            "Aplikacje",
+            "Platformy",
+            "Software",
+            "Integracje",
+            "Automatyzacja",
+            "AI",
+            "MVP",
+            "Maintenance"
+          ]
+        },
+        {
+          "id": "health",
+          "title": "Spark Health",
+          "categories": [
+            "HCP",
+            "Pacjenci",
+            "Farmaceuci",
+            "Strategia",
+            "Medical",
+            "Kreacja",
+            "Medical writing",
+            "Digital",
+            "Omnichannel",
+            "Disease awareness"
+          ]
+        },
+        {
+          "id": "works",
+          "title": "Spark Works",
+          "categories": [
+            "Packaging",
+            "Artwork",
+            "Master artwork",
+            "Adaptacje",
+            "Wersjonowanie",
+            "Prepress",
+            "Print-ready",
+            "QA",
+            "Multi-SKU",
+            "Rollout"
+          ]
+        },
+        {
+          "id": "studio",
+          "title": "Spark Studio",
+          "categories": [
+            "Spoty",
+            "Video",
+            "Produkcja",
+            "Postprodukcja",
+            "Motion",
+            "2D",
+            "3D",
+            "CGI",
+            "Compositing",
+            "Social video",
+            "Cutdowns"
+          ]
+        }
+      ]
+    },
     "results": {
       "type": "array",
       "default": []

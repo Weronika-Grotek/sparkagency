@@ -19,7 +19,7 @@
       "default": false
     },
     "counterValue": {
-      "type": "number",
+      "type": "integer",
       "default": 0
     },
     "counterPrefix": {

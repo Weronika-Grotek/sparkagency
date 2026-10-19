@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$value    = isset( $attributes['value'] ) && is_numeric( $attributes['value'] ) ? (float) $attributes['value'] : 0;
+$value    = isset( $attributes['value'] ) && is_numeric( $attributes['value'] ) ? (int) $attributes['value'] : 0;
 $prefix   = isset( $attributes['prefix'] ) ? (string) $attributes['prefix'] : '';
 $suffix   = isset( $attributes['suffix'] ) ? (string) $attributes['suffix'] : '';
 $label    = isset( $attributes['label'] ) ? (string) $attributes['label'] : '';
