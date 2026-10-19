@@ -29,6 +29,7 @@ $sparkagency_components = array(
 	new \SparkAgency\Theme\Assets( $sparkagency_directory, $sparkagency_uri ),
 	new \SparkAgency\Theme\BlocksRegister( $sparkagency_directory, $sparkagency_uri ),
 	new \SparkAgency\Theme\ThemeSettings(),
+	new \SparkAgency\Theme\ContactForm(),
 );
 
 foreach ( $sparkagency_components as $sparkagency_component ) {

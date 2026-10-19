@@ -1,0 +1,285 @@
+@use "../variables" as vars;
+
+.spark-contact-form {
+    box-sizing: border-box;
+    padding-block: clamp(4rem, 8vw, 7.5rem);
+    background: vars.$color-background;
+    color: vars.$color-text;
+    font-family: vars.$font-family-primary;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box
+    }
+
+    :is(h2, p) {
+        margin: 0
+    }
+
+    &__inner {
+        width: min(100%, 82.5rem);
+        margin: auto;
+        padding-inline: clamp(1rem, 4vw, 3.5rem)
+    }
+
+    &__layout {
+        display: grid;
+        grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+        gap: clamp(3rem, 8vw, 8rem);
+        align-items: start
+    }
+
+    &__intro {
+        display: grid;
+        gap: 1.5rem
+    }
+
+    &__eyebrow,
+    &__form legend,
+    &__foot>span {
+        color: vars.$color-subtitle;
+        font-size: vars.$font-size-tag;
+        font-weight: vars.$font-weight-semibold;
+        letter-spacing: .14em;
+        line-height: vars.$line-height-tag;
+        text-transform: uppercase
+    }
+
+    h2 {
+        font: vars.$font-family-primary;
+        font-style: vars.$font-style-display;
+        letter-spacing: vars.$font-tracking-display;
+        font-size: 4.375rem;
+        text-wrap: balance;
+        font-weight: vars.$font-weight-display;
+    }
+
+    &__lede {
+        max-width: 30rem;
+        color: vars.$color-subtitle;
+        font-size: clamp(1.1rem, 1rem + .5vw, 1.35rem);
+        line-height: 1.6;
+        white-space: pre-line
+    }
+
+    &__full-link {
+        display: inline-flex;
+        gap: .6rem;
+        padding-bottom: .2rem;
+        border-bottom: 1px solid currentColor;
+        color: vars.$color-text;
+        font-size: .875rem;
+        font-weight: 700;
+        text-decoration: none
+    }
+
+    &__form {
+        display: grid;
+        gap: 1.5rem
+    }
+
+    &__form fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0
+    }
+
+    &__form legend {
+        margin-bottom: .65rem
+    }
+
+    &__topics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem
+    }
+
+    &__topics button {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .65rem .85rem;
+        border: 1px solid vars.$color-line-strong;
+        border-radius: vars.$radius-btn;
+        background: transparent;
+        color: vars.$color-text;
+        font: 600 .875rem/1 vars.$font-family-primary;
+        cursor: pointer
+    }
+
+    &__topics button[aria-pressed="true"] {
+        border-color: vars.$color-accent;
+        background: vars.$color-accent;
+        color: vars.$color-accent-ink
+    }
+
+    &__topics i {
+        width: .5rem;
+        height: .5rem;
+        border-radius: 50%
+    }
+
+    &__topics button[aria-pressed="true"] i {
+        background: vars.$color-accent-ink !important
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem 1.5rem
+    }
+
+    &__field {
+        display: grid;
+        gap: .55rem;
+        color: vars.$color-subtitle;
+        font-size: vars.$font-size-tag;
+        font-weight: vars.$font-weight-semibold;
+        letter-spacing: .12em;
+        text-transform: uppercase
+    }
+
+    &__field--full {
+        grid-column: 1/-1
+    }
+
+    &__field input,
+    &__field textarea {
+        width: 100%;
+        padding: .45rem 0;
+        border: 0;
+        border-bottom: 1px solid vars.$color-line-strong;
+        border-radius: 0;
+        background: transparent;
+        color: vars.$color-text;
+        font: 400 1rem/1.5 vars.$font-family-primary;
+        letter-spacing: 0;
+        text-transform: none
+    }
+
+    &__field textarea {
+        min-height: 6.5rem;
+        resize: vertical
+    }
+
+    &__field :is(input, textarea):focus {
+        border-color: vars.$color-accent;
+        outline: 2px solid transparent
+    }
+
+    &__field input::file-selector-button {
+        margin-right: .8rem;
+        padding: .5rem .8rem;
+        border: 1px solid vars.$color-line-strong;
+        border-radius: vars.$radius-btn;
+        background: transparent;
+        color: vars.$color-text;
+        font: 600 .875rem vars.$font-family-primary
+    }
+
+    &__consent {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        align-items: flex-start;
+        color: vars.$color-subtitle;
+        font-size: .875rem;
+        line-height: 1.5
+    }
+
+    &__consent input {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex: none;
+        margin: .1rem 0 0;
+        accent-color: vars.$color-accent
+    }
+
+    &__consent a {
+        color: vars.$color-text
+    }
+
+    &__consent .spark-contact-form__error {
+        flex-basis: 100%;
+        padding-left: 2rem
+    }
+
+    &__foot {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        padding-top: 1.5rem
+    }
+
+    &__foot button {
+        display: inline-flex;
+        gap: .65rem;
+        align-items: center;
+        padding: .9rem 1.25rem;
+        border: 1px solid vars.$color-accent;
+        border-radius: vars.$radius-btn;
+        background: vars.$color-accent;
+        color: vars.$color-accent-ink;
+        font: 700 .875rem vars.$font-family-primary;
+        cursor: pointer
+    }
+
+    &__notice {
+        margin: 0 0 1.5rem;
+        padding: 1rem;
+        border: 1px solid vars.$color-accent;
+        color: vars.$color-text
+    }
+
+    &__notice.is-error {
+        border-color: vars.$color-danger;
+        color: vars.$color-danger
+    }
+
+    &__error {
+        display: block;
+        min-height: 1.1rem;
+        margin-top: -.3rem;
+        color: vars.$color-danger;
+        font-size: .78rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none
+    }
+
+    .is-invalid :is(input, textarea) {
+        border-color: vars.$color-danger
+    }
+
+    &--editor input,
+    &--editor textarea,
+    &--editor button {
+        cursor: default
+    }
+
+    &__editor-topic {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #ddd
+    }
+
+    @media(max-width:52rem) {
+        &__layout {
+            grid-template-columns: 1fr;
+            gap: 2.5rem
+        }
+    }
+
+    @media(max-width:34rem) {
+        &__grid {
+            grid-template-columns: 1fr
+        }
+
+        &__foot {
+            align-items: flex-start;
+            flex-direction: column
+        }
+    }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/contact-form",
+  "version": "2.0.0",
+  "title": "Kontakt — formularz skrócony",
+  "category": "design",
+  "icon": "email-alt",
+  "description": "Dwukolumnowy formularz kontaktowy na stronę główną z przekazaniem danych do pełnego formularza.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "07 · Kontakt" },
+    "title": { "type": "string", "default": "Porozmawiajmy." },
+    "lede": { "type": "string", "default": "Gotowy brief jest dobrym początkiem, ale nie jest warunkiem kontaktu. Krótki opis problemu lub planowanego projektu wystarczy, żebyśmy mogli skierować temat do właściwego zespołu.\n\nJeżeli projekt wymaga kilku specjalizacji, ustalimy ich udział po naszej stronie." },
+    "fullFormLabel": { "type": "string", "default": "Pełny formularz i dane kontaktowe" },
+    "fullFormUrl": { "type": "string", "default": "/kontakt/" },
+    "topicsLabel": { "type": "string", "default": "Czego dotyczy" },
+    "topics": { "type": "array", "default": [
+      { "label": "Komunikacja na wiele rynków", "value": "warsaw", "color": "#43A0ED" },
+      { "label": "Reklama i marketing dla sektora healthcare", "value": "health", "color": "#A857BC" },
+      { "label": "Technologia dla biznesu", "value": "exp", "color": "#01B57C" },
+      { "label": "Produkcja i postprodukcja video", "value": "studio", "color": "#D65251" },
+      { "label": "Packaging i artwork production", "value": "works", "color": "#D8AB52" },
+      { "label": "Nie wiem, doradźcie", "value": "advice", "color": "#FFFFFF" }
+    ] },
+    "nameLabel": { "type": "string", "default": "Imię i nazwisko" },
+    "emailLabel": { "type": "string", "default": "E-mail" },
+    "companyLabel": { "type": "string", "default": "Firma" },
+    "messageLabel": { "type": "string", "default": "O czym chcesz porozmawiać?" },
+    "consentText": { "type": "string", "default": "Wyrażam zgodę na kontakt w sprawie mojego zapytania." },
+    "privacyLabel": { "type": "string", "default": "Polityka prywatności" },
+    "privacyUrl": { "type": "string", "default": "/polityka-prywatnosci/" },
+    "attachmentLabel": { "type": "string", "default": "Załącz brief · opcjonalnie" },
+    "submitLabel": { "type": "string", "default": "Wyślij wiadomość" },
+    "successMessage": { "type": "string", "default": "Dziękujemy! Twoja wiadomość została wysłana." }
+  },
+  "supports": { "align": ["wide", "full"], "anchor": true, "spacing": { "margin": ["top", "bottom"], "padding": ["top", "bottom"] }, "html": false },
+  "editorScript": "file:./index.jsx",
+  "viewScript": "file:./view.js"
+}

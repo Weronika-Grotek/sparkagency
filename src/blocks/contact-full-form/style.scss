@@ -1,0 +1,46 @@
+@use "../variables" as vars;
+
+.spark-contact-full-form {
+  padding-block: clamp(4rem, 8vw, 7rem);
+  background: vars.$color-background;
+  color: vars.$color-text;
+  font-family: vars.$font-family-primary;
+}
+
+.spark-contact-full-form *, .spark-contact-full-form *::before, .spark-contact-full-form *::after { box-sizing: border-box; }
+.spark-contact-full-form :is(h2, p) { margin: 0; }
+.spark-contact-full-form__inner { width: min(100%, 82.5rem); margin: auto; padding-inline: clamp(1rem, 4vw, 3.5rem); }
+.spark-contact-full-form header { max-width: 50rem; display: grid; gap: 1rem; margin-bottom: clamp(3rem, 6vw, 5rem); }
+.spark-contact-full-form h2 { font-family: vars.$font-family-primary; font-size: clamp(2.8rem, 1.5rem + 5vw, 6rem); font-weight: vars.$font-weight-display; font-style: vars.$font-style-display; line-height: .92; letter-spacing: vars.$font-tracking-display; }
+.spark-contact-full-form header p { color: vars.$color-subtitle; font-size: vars.$font-size-body; line-height: 1.5; }
+.spark-contact-full-form__layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(15rem, .7fr); gap: clamp(3rem, 7vw, 6rem); }
+.spark-contact-full-form form { display: grid; gap: 2rem; }
+.spark-contact-full-form fieldset { display: grid; gap: 1.25rem; margin: 0; padding: 2rem 0 0; border: 0; border-top: 1px solid vars.$color-line; }
+.spark-contact-full-form legend { font-weight: 700; }
+.spark-contact-full-form legend b { margin-right: .75rem; color: vars.$color-accent; font-size: .85rem; }
+.spark-contact-full-form label { display: grid; gap: .55rem; color: vars.$color-subtitle; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.spark-contact-full-form input, .spark-contact-full-form textarea, .spark-contact-full-form select { width: 100%; padding: .75rem 0; border: 0; border-bottom: 1px solid vars.$color-line-strong; border-radius: 0; background: transparent; color: vars.$color-text; font: 400 1rem/1.5 vars.$font-family-primary; letter-spacing: 0; text-transform: none; }
+.spark-contact-full-form textarea { resize: vertical; }
+.spark-contact-full-form__topics { display: flex; flex-wrap: wrap; gap: .5rem; }
+.spark-contact-full-form__topics button { display: inline-flex; gap: .5rem; align-items: center; padding: .65rem .85rem; border: 1px solid vars.$color-line-strong; border-radius: vars.$radius-btn; background: transparent; color: vars.$color-text; font: 600 .875rem vars.$font-family-primary; }
+.spark-contact-full-form__topics button[aria-pressed="true"] { background: vars.$color-accent; border-color: vars.$color-accent; color: vars.$color-accent-ink; }
+.spark-contact-full-form__topics i { width: .5rem; height: .5rem; border-radius: 50%; }
+.spark-contact-full-form__topics button[aria-pressed="true"] i { background: vars.$color-accent-ink !important; }
+.spark-contact-full-form__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.spark-contact-full-form__consent { display: flex !important; flex-wrap: wrap; gap: .7rem; align-items: flex-start; font-size: .875rem !important; line-height: 1.5; letter-spacing: 0 !important; text-transform: none !important; }
+.spark-contact-full-form__consent input { width: 1.2rem; height: 1.2rem; flex: none; accent-color: vars.$color-accent; }
+.spark-contact-full-form__consent a { color: vars.$color-text; }
+.spark-contact-full-form__error { min-height: 1.1rem; color: vars.$color-danger; font-size: .78rem; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.spark-contact-full-form__consent .spark-contact-full-form__error { flex-basis: 100%; padding-left: 2rem; }
+.spark-contact-full-form label.is-invalid :is(input, textarea) { border-color: vars.$color-danger; }
+.spark-contact-full-form footer { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding-top: 1.5rem; border-top: 1px solid vars.$color-line; }
+.spark-contact-full-form footer span, .spark-contact-full-form aside span { color: vars.$color-subtitle; font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.spark-contact-full-form footer button { padding: .9rem 1.25rem; border: 1px solid vars.$color-accent; border-radius: vars.$radius-btn; background: vars.$color-accent; color: vars.$color-accent-ink; font: 700 .875rem vars.$font-family-primary; }
+.spark-contact-full-form aside { display: grid; align-content: start; gap: 1.5rem; }
+.spark-contact-full-form aside div { display: grid; gap: .5rem; padding-bottom: 1.5rem; border-bottom: 1px solid vars.$color-line; }
+.spark-contact-full-form aside p { white-space: pre-line; line-height: 1.5; }
+.spark-contact-full-form__notice { margin: 0 0 1.5rem; padding: 1rem; border: 1px solid vars.$color-accent; }
+.spark-contact-full-form__topic-editor { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #ddd; }
+
+@media (max-width: 52rem) { .spark-contact-full-form__layout { grid-template-columns: 1fr; } .spark-contact-full-form aside { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 34rem) { .spark-contact-full-form__grid, .spark-contact-full-form aside { grid-template-columns: 1fr; } .spark-contact-full-form footer { align-items: flex-start; flex-direction: column; } }

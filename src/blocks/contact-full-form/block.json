@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/contact-full-form",
+  "version": "1.0.0",
+  "title": "Kontakt — pełny formularz",
+  "category": "design",
+  "icon": "feedback",
+  "description": "Rozbudowany formularz na podstronę Kontakt, uzupełniany danymi z formularza skróconego.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "title": { "type": "string", "default": "Opowiedz nam o projekcie" },
+    "lede": { "type": "string", "default": "Napisz, czego potrzebujesz. Ustalimy właściwy zespół i kolejny krok." },
+    "topics": { "type": "array", "default": [
+      { "label": "Komunikacja na wiele rynków", "value": "warsaw", "color": "#43A0ED" },
+      { "label": "Reklama i marketing dla sektora healthcare", "value": "health", "color": "#A857BC" },
+      { "label": "Technologia dla biznesu", "value": "exp", "color": "#01B57C" },
+      { "label": "Produkcja i postprodukcja video", "value": "studio", "color": "#D65251" },
+      { "label": "Packaging i artwork production", "value": "works", "color": "#D8AB52" },
+      { "label": "Nie wiem, doradźcie", "value": "advice", "color": "#FFFFFF" }
+    ] },
+    "address": { "type": "string", "default": "ul. Cybernetyki 19\n02-677 Warszawa" },
+    "contactInfo": { "type": "string", "default": "Nowe projekty\nOdpowiadamy w dni robocze." },
+    "privacyUrl": { "type": "string", "default": "/polityka-prywatnosci/" },
+    "successMessage": { "type": "string", "default": "Dziękujemy! Twoja wiadomość została wysłana." }
+  },
+  "supports": { "align": ["wide", "full"], "anchor": true, "spacing": { "margin": ["top", "bottom"], "padding": ["top", "bottom"] }, "html": false },
+  "editorScript": "file:./index.jsx",
+  "viewScript": "file:./view.js"
+}
