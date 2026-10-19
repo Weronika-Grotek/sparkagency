@@ -24,7 +24,8 @@ foreach ( (array) ( $attributes['steps'] ?? array() ) as $step_index => $step ) 
 		}
 		$options[] = array(
 			'label'     => $label,
-			'value'     => sanitize_text_field( $option['value'] ?? $label ),
+			'value'     => sanitize_text_field( $option['v\
+			/alue'] ?? $label ),
 			'resultId'  => $sanitize_identifier( $option['resultId'] ?? '', '' ),
 			'serviceGroupId' => $sanitize_identifier( $option['serviceGroupId'] ?? '', '' ),
 			'visibleForResultId' => $sanitize_identifier( $option['visibleForResultId'] ?? '', '' ),
