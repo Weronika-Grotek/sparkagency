@@ -267,6 +267,31 @@
         color: vars.$color-subtitle;
     }
 
+    &__result-summary {
+        max-width: 56ch;
+        margin: 1.5rem 0 0;
+        border-top: 1px solid vars.$color-line;
+    }
+
+    &__result-summary div {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1rem;
+        padding: .8rem 0;
+        border-bottom: 1px solid vars.$color-line;
+    }
+
+    &__result-summary dt {
+        color: vars.$color-subtitle;
+        font-size: .8rem;
+    }
+
+    &__result-summary dd {
+        margin: 0;
+        font-weight: 700;
+        text-align: right;
+    }
+
     &__result img {
         width: 100%;
         aspect-ratio: 4 / 3;

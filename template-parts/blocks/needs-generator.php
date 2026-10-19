@@ -65,11 +65,24 @@ foreach ( (array) ( $attributes['results'] ?? array() ) as $result_index => $res
 $service_groups = array();
 foreach ( (array) ( $attributes['serviceGroups'] ?? array() ) as $group_index => $group ) {
 	$id = $sanitize_identifier( $group['id'] ?? '', 'company_' . ( $group_index + 1 ) );
-	$categories = array_values(
-		array_filter(
-			array_map( 'sanitize_text_field', (array) ( $group['categories'] ?? array() ) )
-		)
-	);
+	$categories = array();
+	foreach ( (array) ( $group['categories'] ?? array() ) as $category ) {
+		$label = is_array( $category )
+			? sanitize_text_field( $category['label'] ?? '' )
+			: sanitize_text_field( $category );
+		$value = is_array( $category )
+			? sanitize_text_field( $category['value'] ?? $label )
+			: $label;
+
+		if ( '' === $label ) {
+			continue;
+		}
+
+		$categories[] = array(
+			'label' => $label,
+			'value' => '' !== $value ? $value : $label,
+		);
+	}
 
 	if ( empty( $categories ) ) {
 		continue;

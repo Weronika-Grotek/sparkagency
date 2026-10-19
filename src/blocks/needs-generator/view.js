@@ -2,11 +2,8 @@ const initializeNeedsGenerators = () => {
 	document.querySelectorAll( '[data-spark-needs-generator]' ).forEach( ( root ) => {
 		if ( root.dataset.initialized === 'true' ) return;
 		let config;
-		try {
-			config = JSON.parse( root.dataset.config || '{}' );
-		} catch ( error ) {
-			return;
-		}
+		try { config = JSON.parse( root.dataset.config || '{}' ); } catch ( error ) { return; }
+
 		const steps = Array.isArray( config.steps ) ? config.steps : [];
 		const serviceGroups = Array.isArray( config.serviceGroups ) ? config.serviceGroups : [];
 		if ( ! steps.length ) return;
@@ -26,19 +23,22 @@ const initializeNeedsGenerators = () => {
 			if ( text ) element.textContent = text;
 			return element;
 		};
-		const selectedResult = () => {
-			const answer = [ ...answers ].reverse().find( ( item ) => item?.resultId );
-			return ( config.results || [] ).find( ( result ) => result.id === answer?.resultId );
-		};
 		const firstAnswerResultId = () => answers[ 0 ]?.resultId || '';
 		const firstAnswerServiceGroupId = () => answers[ 0 ]?.serviceGroupId || answers[ 0 ]?.resultId || '';
+		const selectedResult = () => {
+			const resultId = firstAnswerResultId() || [ ...answers ].reverse().find( ( item ) => item?.resultId )?.resultId;
+			return ( config.results || [] ).find( ( result ) => result.id === resultId );
+		};
 		const optionsForStep = ( step ) => {
 			if ( step.optionsSource === 'serviceGroups' ) {
 				const group = serviceGroups.find( ( item ) => item.id === firstAnswerServiceGroupId() );
-				return ( group?.categories || [] ).map( ( category ) => ( { label: category, value: category } ) );
+				return ( group?.categories || [] ).map( ( category ) => {
+					if ( typeof category === 'object' && category ) return { label: category.label || '', value: category.value || category.label || '' };
+					return { label: category, value: category };
+				} ).filter( ( category ) => category.label );
 			}
 
-			return step.options.filter( ( option ) => ! option.visibleForResultId || option.visibleForResultId === firstAnswerResultId() );
+			return ( step.options || [] ).filter( ( option ) => ! option.visibleForResultId || option.visibleForResultId === firstAnswerResultId() );
 		};
 		const query = () => {
 			const params = new URLSearchParams();
@@ -50,11 +50,17 @@ const initializeNeedsGenerators = () => {
 				params.set( 'result', result.id );
 				params.set( 'spark_result_name', result.title || result.id );
 			}
+			if ( answers[ 0 ] ) {
+				params.set( 'spark_company', answers[ 0 ].value || answers[ 0 ].label || '' );
+				params.set( 'spark_company_id', firstAnswerServiceGroupId() || firstAnswerResultId() );
+			}
+			if ( answers[ 1 ] ) params.set( 'spark_information', answers[ 1 ].value || answers[ 1 ].label || '' );
+			if ( answers[ 2 ] ) {
+				params.set( 'spark_category', answers[ 2 ].value || answers[ 2 ].label || '' );
+				params.set( 'spark_category_name', answers[ 2 ].label || '' );
+			}
 			params.set( 'spark_answers', JSON.stringify( answers.map( ( answer ) => ( {
-				question: answer.question,
-				param: answer.param,
-				label: answer.label,
-				value: answer.value,
+				question: answer.question, param: answer.param, label: answer.label, value: answer.value,
 			} ) ) ) );
 			return params;
 		};
@@ -65,13 +71,11 @@ const initializeNeedsGenerators = () => {
 				if ( ! [ 'http:', 'https:' ].includes( url.protocol ) ) return null;
 				query().forEach( ( queryValue, key ) => url.searchParams.set( key, queryValue ) );
 				return url.href;
-			} catch ( error ) {
-				return null;
-			}
+			} catch ( error ) { return null; }
 		};
 		const renderNavigation = ( isResult ) => {
 			navigation.replaceChildren();
-			[ ...steps, { title: 'Wynik' } ].forEach( ( step, index ) => {
+			[ ...steps, { title: 'Podsumowanie' } ].forEach( ( step, index ) => {
 				const item = create( 'li' );
 				item.classList.toggle( 'is-active', index === activeStep );
 				item.classList.toggle( 'is-done', index < steps.length && Boolean( answers[ index ] ) );
@@ -90,11 +94,18 @@ const initializeNeedsGenerators = () => {
 			const result = selectedResult();
 			const wrapper = create( 'div', 'spark-needs-generator__result' );
 			const main = create( 'div' );
-			main.append( create( 'p', 'spark-needs-generator__progress', 'Od tego warto zacząć' ) );
-			main.append( create( 'p', 'spark-needs-generator__result-brand', result?.title || 'Porozmawiajmy' ) );
+			main.append( create( 'p', 'spark-needs-generator__progress', 'Twój punkt startu' ) );
+			main.append( create( 'p', 'spark-needs-generator__result-brand', result?.title || answers[ 0 ]?.label || 'Porozmawiajmy' ) );
 			if ( result?.description ) main.append( create( 'p', 'spark-needs-generator__result-text', result.description ) );
+			const summary = create( 'dl', 'spark-needs-generator__result-summary' );
+			answers.forEach( ( answer ) => {
+				const row = create( 'div' );
+				row.append( create( 'dt', '', answer.question ), create( 'dd', '', answer.label ) );
+				summary.append( row );
+			} );
+			main.append( summary );
 			const actions = create( 'div', 'spark-needs-generator__result-actions' );
-			const finalUrl = destination( config.finalUrl || result?.contactUrl );
+			const finalUrl = destination( result?.contactUrl || config.finalUrl );
 			if ( finalUrl ) {
 				const link = create( 'a', 'spark-needs-generator__final', config.finalButtonLabel || 'Przejdź dalej' );
 				link.href = finalUrl;
@@ -122,7 +133,7 @@ const initializeNeedsGenerators = () => {
 			const options = create( 'div', 'spark-needs-generator__options' );
 			const visibleOptions = optionsForStep( step );
 			if ( ! visibleOptions.length ) {
-				question.append( create( 'p', 'spark-needs-generator__empty', 'Brak kategorii dla wybranej firmy. Wróć do pytania 1 i wybierz firmę lub uzupełnij jej kategorie.' ) );
+				question.append( create( 'p', 'spark-needs-generator__empty', index === 2 ? 'Brak zakresów dla wybranej firmy. Wróć do kroku 1 lub uzupełnij jej kategorie.' : 'Brak odpowiedzi do wyświetlenia. Uzupełnij konfigurację generatora.' ) );
 			}
 			visibleOptions.forEach( ( option, optionIndex ) => {
 				const button = create( 'button' );
@@ -132,18 +143,17 @@ const initializeNeedsGenerators = () => {
 					const marker = create( 'i' );
 					marker.setAttribute( 'aria-hidden', 'true' );
 					button.append( marker );
-				} else {
-					button.append( create( 'b', '', String.fromCharCode( 65 + optionIndex ) ) );
-				}
+				} else button.append( create( 'b', '', String.fromCharCode( 65 + optionIndex ) ) );
 				button.append( create( 'span', '', option.label ), create( 'em', '', '→' ) );
 				button.addEventListener( 'click', () => {
-					answers[ index ] = { question: step.title || `Pytanie ${ index + 1 }`, param: step.param, value: option.value || option.label, label: option.label, resultId: option.resultId || answers[ index - 1 ]?.resultId || '', serviceGroupId: option.serviceGroupId || answers[ 0 ]?.serviceGroupId || '' };
+					answers[ index ] = {
+						question: step.title || `Pytanie ${ index + 1 }`, param: step.param, value: option.value || option.label, label: option.label,
+						resultId: option.resultId || answers[ index - 1 ]?.resultId || '',
+						serviceGroupId: option.serviceGroupId || answers[ 0 ]?.serviceGroupId || '',
+					};
 					answers.length = index + 1;
 					const nextUrl = destination( option.nextUrl );
-					if ( nextUrl ) {
-						window.location.assign( nextUrl );
-						return;
-					}
+					if ( nextUrl ) { window.location.assign( nextUrl ); return; }
 					render( index + 1 );
 				} );
 				options.append( button );

@@ -13,19 +13,18 @@ const brands = [
 	{ label: 'Spark Studio', value: 'studio' },
 ];
 const blankOption = () => ( { label: '', value: '', resultId: '', serviceGroupId: '', visibleForResultId: '', nextUrl: '', brand: 'agency' } );
-const blankStep = ( number ) => ( { title: `Pytanie ${ number }`, param: `answer_${ number }`, markerMode: 'letters', options: [ blankOption(), blankOption() ] } );
 const blankResult = () => ( { id: 'agency', title: 'Spark Agency', description: '', contactUrl: '', imageId: 0, imageUrl: '', imageAlt: '' } );
 const blankServiceGroup = () => ( { id: '', title: '', categories: [ '' ] } );
 const cleanSteps = ( steps ) => Array.isArray( steps ) ? steps : [];
 const cleanResults = ( results ) => Array.isArray( results ) ? results : [];
 const cleanServiceGroups = ( groups ) => Array.isArray( groups ) ? groups : [];
-const groupedServicesStep = () => ( {
-	title: 'Czego dokładnie potrzebujesz?',
-	param: 'service',
-	markerMode: 'letters',
-	optionsSource: 'serviceGroups',
-	options: [],
-} );
+const requiredJourneySteps = () => [
+	{ title: 'Dla której firmy szukasz wsparcia?', param: 'company', markerMode: 'brand', options: [] },
+	{ title: 'Jaka informacja jest dla Ciebie najważniejsza?', param: 'information', markerMode: 'letters', options: [ blankOption(), blankOption() ] },
+	{ title: 'Jakiego zakresu potrzebujesz?', param: 'scope', markerMode: 'letters', optionsSource: 'serviceGroups', options: [] },
+];
+const journeyStepLabel = ( index ) => [ __( 'Firma', domain ), __( 'Informacja', domain ), __( 'Zakres firmy', domain ) ][ index ] || __( 'Dodatkowe pytanie', domain );
+const categoryData = ( category ) => typeof category === 'object' && category ? { label: category.label || '', value: category.value || category.label || '' } : { label: category || '', value: category || '' };
 
 const Edit = ( { attributes, setAttributes } ) => {
 	const steps = cleanSteps( attributes.steps );
@@ -45,6 +44,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 	};
 	const setServiceGroups = ( nextGroups ) => setAttributes( { serviceGroups: nextGroups } );
 	const updateServiceGroup = ( groupIndex, changes ) => setServiceGroups( serviceGroups.map( ( group, position ) => position === groupIndex ? { ...group, ...changes } : group ) );
+	const addMissingJourneySteps = () => setSteps( [ ...steps, ...requiredJourneySteps().slice( steps.length ) ] );
 	const firstStep = steps[ 0 ];
 
 	return (
@@ -59,13 +59,13 @@ const Edit = ( { attributes, setAttributes } ) => {
 				</PanelBody>
 				{ steps.map( ( step, stepIndex ) => {
 					const options = Array.isArray( step.options ) ? step.options : [];
-					return <PanelBody key={ stepIndex } title={ `${ stepIndex + 1 }. ${ step.title || __( 'Pytanie bez tytułu', domain ) }` } initialOpen={ false }>
+					return <PanelBody key={ stepIndex } title={ `${ stepIndex + 1 }. ${ journeyStepLabel( stepIndex ) }: ${ step.title || __( 'Pytanie bez tytułu', domain ) }` } initialOpen={ false }>
 						<TextControl label={ __( 'Tytuł pytania', domain ) } value={ step.title || '' } onChange={ ( title ) => updateStep( stepIndex, { title } ) } />
-						<TextControl label={ __( 'Nazwa parametru GET', domain ) } help={ __( 'Np. zakres, usluga lub rynek. Tylko litery, cyfry i podkreślenia.', domain ) } value={ step.param || '' } onChange={ ( param ) => updateStep( stepIndex, { param } ) } />
+						<TextControl label={ __( 'Nazwa parametru i pola formularza', domain ) } help={ __( 'Np. firma, informacja lub zakres. Dokładna wartość odpowiedzi zostanie przekazana pod tą nazwą do URL i pola formularza.', domain ) } value={ step.param || '' } onChange={ ( param ) => updateStep( stepIndex, { param } ) } />
 						<SelectControl label={ __( 'Znacznik odpowiedzi', domain ) } value={ step.markerMode === 'brand' ? 'brand' : 'letters' } options={ [ { label: __( 'Litery A / B / C', domain ), value: 'letters' }, { label: __( 'Kolory marek', domain ), value: 'brand' } ] } onChange={ ( markerMode ) => updateStep( stepIndex, { markerMode } ) } />
 						{ options.map( ( option, optionIndex ) => <div className="spark-needs-generator__editor-option" key={ optionIndex }>
-							<TextControl label={ `${ __( 'Odpowiedź', domain ) } ${ optionIndex + 1 }` } value={ option.label || '' } onChange={ ( label ) => updateOption( stepIndex, optionIndex, { label } ) } />
-							<TextControl label={ __( 'Wartość GET', domain ) } value={ option.value || '' } onChange={ ( value ) => updateOption( stepIndex, optionIndex, { value } ) } />
+							<TextControl label={ stepIndex === 0 ? `${ __( 'Firma', domain ) } ${ optionIndex + 1 }` : `${ __( 'Odpowiedź', domain ) } ${ optionIndex + 1 }` } value={ option.label || '' } onChange={ ( label ) => updateOption( stepIndex, optionIndex, { label } ) } />
+							<TextControl label={ __( 'Dokładna wartość do formularza', domain ) } help={ __( 'Ta wartość, a nie etykieta, zostanie przesłana do formularza.', domain ) } value={ option.value || '' } onChange={ ( value ) => updateOption( stepIndex, optionIndex, { value } ) } />
 							<SelectControl label={ __( 'Wynik po tej odpowiedzi', domain ) } help={ stepIndex === 0 ? __( 'Pierwsza odpowiedź wybiera firmę pokazywaną w wyniku.', domain ) : __( 'Opcjonalnie nadpisuje wynik wybrany wcześniej.', domain ) } value={ option.resultId || '' } options={ resultOptions } onChange={ ( resultId ) => updateOption( stepIndex, optionIndex, { resultId } ) } />
 							{ stepIndex === 0 && <SelectControl label={ __( 'Firma dla pytania 3', domain ) } help={ __( 'Wybierz firmę, której kategorie mają pojawić się po tej odpowiedzi.', domain ) } value={ option.serviceGroupId || '' } options={ serviceGroupOptions } onChange={ ( serviceGroupId ) => updateOption( stepIndex, optionIndex, { serviceGroupId } ) } /> }
 							{ stepIndex > 0 && <SelectControl label={ __( 'Pokaż po wyborze w pytaniu 1', domain ) } help={ __( 'Pozostaw „Wyświetlaj zawsze”, aby odpowiedź była dostępna dla każdej firmy. W pytaniu 1 odpowiedzi muszą mieć przypisany wynik.', domain ) } value={ option.visibleForResultId || '' } options={ firstQuestionResultOptions } onChange={ ( visibleForResultId ) => updateOption( stepIndex, optionIndex, { visibleForResultId } ) } /> }
@@ -75,25 +75,29 @@ const Edit = ( { attributes, setAttributes } ) => {
 						</div> ) }
 						{ step.optionsSource === 'serviceGroups' ? <Notice status="info" isDismissible={ false }>{ __( 'To pytanie pobiera kategorie z panelu „Firmy i kategorie pytania 3”.', domain ) }</Notice> : <Button variant="secondary" onClick={ () => updateStep( stepIndex, { options: [ ...options, blankOption() ] } ) }>{ __( 'Dodaj odpowiedź', domain ) }</Button> }
 						<div className="spark-needs-generator__editor-actions">
-							<Button disabled={ stepIndex === 0 } onClick={ () => setSteps( steps.map( ( item, position ) => position === stepIndex ? steps[ stepIndex - 1 ] : position === stepIndex - 1 ? step : item ) ) }>{ __( 'Przesuń wyżej', domain ) }</Button>
-							<Button isDestructive variant="tertiary" onClick={ () => setSteps( steps.filter( ( item, position ) => position !== stepIndex ) ) }>{ __( 'Usuń pytanie', domain ) }</Button>
+							<Button disabled={ stepIndex <= 3 } onClick={ () => setSteps( steps.map( ( item, position ) => position === stepIndex ? steps[ stepIndex - 1 ] : position === stepIndex - 1 ? step : item ) ) }>{ __( 'Przesuń wyżej', domain ) }</Button>
+							<Button disabled={ stepIndex < 3 } isDestructive variant="tertiary" onClick={ () => setSteps( steps.filter( ( item, position ) => position !== stepIndex ) ) }>{ __( 'Usuń pytanie', domain ) }</Button>
 						</div>
 					</PanelBody>;
 				} ) }
-				<PanelBody title={ __( 'Pytania', domain ) } initialOpen={ false }>
-					<Button variant="primary" onClick={ () => setSteps( [ ...steps, blankStep( steps.length + 1 ) ] ) }>{ __( 'Dodaj pytanie', domain ) }</Button>
-					<Button variant="secondary" onClick={ () => setSteps( [ ...steps, groupedServicesStep() ] ) }>{ __( 'Dodaj pytanie 3: usługi według firmy', domain ) }</Button>
+				<PanelBody title={ __( 'Trzy kroki generatora', domain ) } initialOpen={ false }>
+					<Notice status="info" isDismissible={ false }>{ __( 'Krok 1 wybiera firmę i jej wynik, krok 2 przekazuje dokładną wartość informacyjną, a krok 3 pokazuje zakresy przypisane do firmy.', domain ) }</Notice>
+					<Button variant="secondary" disabled={ steps.length >= 3 } onClick={ addMissingJourneySteps }>{ __( 'Dodaj brakujące kroki', domain ) }</Button>
 				</PanelBody>
 				{ serviceGroups.map( ( group, groupIndex ) => {
 					const categories = Array.isArray( group.categories ) ? group.categories : [];
 					return <PanelBody key={ `service-group-${ groupIndex }` } title={ `${ __( 'Firma i kategorie', domain ) }: ${ group.title || group.id || '—' }` } initialOpen={ false }>
 						<TextControl label={ __( 'Nazwa firmy', domain ) } value={ group.title || '' } onChange={ ( title ) => updateServiceGroup( groupIndex, { title } ) } />
 						<TextControl label={ __( 'Identyfikator firmy', domain ) } help={ __( 'Unikalna mała nazwa, np. exp lub nowa-firma. Nie zmieniaj po przypisaniu do pytania 1.', domain ) } value={ group.id || '' } onChange={ ( id ) => updateServiceGroup( groupIndex, { id } ) } />
-						{ categories.map( ( category, categoryIndex ) => <div className="spark-needs-generator__editor-option" key={ categoryIndex }>
-							<TextControl label={ `${ __( 'Kategoria', domain ) } ${ categoryIndex + 1 }` } value={ category || '' } onChange={ ( value ) => updateServiceGroup( groupIndex, { categories: categories.map( ( item, position ) => position === categoryIndex ? value : item ) } ) } />
+						{ categories.map( ( category, categoryIndex ) => {
+							const data = categoryData( category );
+							return <div className="spark-needs-generator__editor-option" key={ categoryIndex }>
+							<TextControl label={ `${ __( 'Zakres', domain ) } ${ categoryIndex + 1 }` } value={ data.label } onChange={ ( label ) => updateServiceGroup( groupIndex, { categories: categories.map( ( item, position ) => position === categoryIndex ? { ...categoryData( item ), label, value: categoryData( item ).value || label } : item ) } ) } />
+							<TextControl label={ __( 'Dokładna wartość do formularza', domain ) } help={ __( 'Wartość przekazywana w kroku 3; może różnić się od etykiety.', domain ) } value={ data.value } onChange={ ( value ) => updateServiceGroup( groupIndex, { categories: categories.map( ( item, position ) => position === categoryIndex ? { ...categoryData( item ), value } : item ) } ) } />
 							<Button isDestructive variant="tertiary" onClick={ () => updateServiceGroup( groupIndex, { categories: categories.filter( ( item, position ) => position !== categoryIndex ) } ) }>{ __( 'Usuń kategorię', domain ) }</Button>
-						</div> ) }
-						<Button variant="secondary" onClick={ () => updateServiceGroup( groupIndex, { categories: [ ...categories, '' ] } ) }>{ __( 'Dodaj kategorię', domain ) }</Button>
+							</div>;
+						} ) }
+						<Button variant="secondary" onClick={ () => updateServiceGroup( groupIndex, { categories: [ ...categories, { label: '', value: '' } ] } ) }>{ __( 'Dodaj zakres', domain ) }</Button>
 						<Button isDestructive variant="tertiary" onClick={ () => setServiceGroups( serviceGroups.filter( ( item, position ) => position !== groupIndex ) ) }>{ __( 'Usuń firmę', domain ) }</Button>
 					</PanelBody>;
 				} ) }
@@ -102,7 +106,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 					<TextControl label={ __( 'Identyfikator wyniku', domain ) } help={ __( 'Powinien odpowiadać opcji „Wynik po tej odpowiedzi”.', domain ) } value={ result.id || '' } onChange={ ( id ) => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, id } : item ) } ) } />
 					<TextControl label={ __( 'Nazwa firmy', domain ) } value={ result.title || '' } onChange={ ( title ) => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, title } : item ) } ) } />
 					<TextareaControl label={ __( 'Opis firmy', domain ) } value={ result.description || '' } onChange={ ( description ) => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, description } : item ) } ) } />
-					<TextControl label={ __( 'Alternatywny adres strony firmy', domain ) } type="url" help={ __( 'Używany tylko wtedy, gdy nie ustawisz „Linku do strony z podsumowaniem” powyżej.', domain ) } value={ result.contactUrl || '' } onChange={ ( contactUrl ) => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, contactUrl } : item ) } ) } />
+					<TextControl label={ __( 'Adres strony docelowej firmy', domain ) } type="url" help={ __( 'Ma pierwszeństwo przed globalnym linkiem strony z podsumowaniem. Odpowiedzi zostaną dopisane do adresu URL.', domain ) } value={ result.contactUrl || '' } onChange={ ( contactUrl ) => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, contactUrl } : item ) } ) } />
 					<MediaUploadCheck><MediaUpload allowedTypes={ [ 'image' ] } value={ result.imageId || 0 } onSelect={ ( media ) => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, imageId: media.id || 0, imageUrl: media.url || '', imageAlt: media.alt || '' } : item ) } ) } render={ ( { open } ) => <Button variant="secondary" onClick={ open }>{ result.imageUrl ? __( 'Zmień obraz', domain ) : __( 'Wybierz obraz', domain ) }</Button> } /></MediaUploadCheck>
 					{ result.imageUrl && <Button isDestructive variant="tertiary" onClick={ () => setAttributes( { results: results.map( ( item, position ) => position === resultIndex ? { ...item, imageId: 0, imageUrl: '', imageAlt: '' } : item ) } ) }>{ __( 'Usuń obraz', domain ) }</Button> }
 					<Button isDestructive variant="tertiary" onClick={ () => setAttributes( { results: results.filter( ( item, position ) => position !== resultIndex ) } ) }>{ __( 'Usuń wynik', domain ) }</Button>

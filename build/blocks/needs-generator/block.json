@@ -31,7 +31,27 @@
     },
     "steps": {
       "type": "array",
-      "default": []
+      "default": [
+        {
+          "title": "Dla której firmy szukasz wsparcia?",
+          "param": "company",
+          "markerMode": "brand",
+          "options": []
+        },
+        {
+          "title": "Jaka informacja jest dla Ciebie najważniejsza?",
+          "param": "information",
+          "markerMode": "letters",
+          "options": []
+        },
+        {
+          "title": "Jakiego zakresu potrzebujesz?",
+          "param": "scope",
+          "markerMode": "letters",
+          "optionsSource": "serviceGroups",
+          "options": []
+        }
+      ]
     },
     "serviceGroups": {
       "type": "array",

@@ -14,7 +14,14 @@
 		"lede": { "type": "string", "default": "Odpowiedz na krótkie pytania. Na ich podstawie pokażemy zespół, od którego najlepiej zacząć rozmowę." },
 		"finalUrl": { "type": "string", "default": "" },
 		"finalButtonLabel": { "type": "string", "default": "Przejdź do briefu" },
-		"steps": { "type": "array", "default": [] },
+		"steps": {
+			"type": "array",
+			"default": [
+				{ "title": "Dla której firmy szukasz wsparcia?", "param": "company", "markerMode": "brand", "options": [] },
+				{ "title": "Jaka informacja jest dla Ciebie najważniejsza?", "param": "information", "markerMode": "letters", "options": [] },
+				{ "title": "Jakiego zakresu potrzebujesz?", "param": "scope", "markerMode": "letters", "optionsSource": "serviceGroups", "options": [] }
+			]
+		},
 		"serviceGroups": {
 			"type": "array",
 			"default": [
