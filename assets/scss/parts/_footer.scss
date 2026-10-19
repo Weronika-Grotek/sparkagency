@@ -1,3 +1,5 @@
+@use "../variables" as vars;
+
 .p-footer {
   border-top: 1px solid var(--spark-color-line);
   padding: 4.5rem clamp(1rem, 4vw, 3.5rem) calc(2rem + 4rem);
@@ -79,3 +81,45 @@
     justify-content: flex-start;
   }
 }
+
+.p-scroll-top {
+  position: fixed;
+  right: clamp(1rem, 2vw, 1.5rem);
+  bottom: calc(clamp(1rem, 2vw, 1.5rem) + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  display: inline-grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  place-items: center;
+  border: 1px solid vars.$color-line-strong;
+  border-radius: vars.$radius-btn;
+  background: vars.$color-surface;
+  color: vars.$color-text;
+  box-shadow: 0 .5rem 1.5rem rgb(0 0 0 / .18);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(.75rem);
+  transition: border-color .2s ease, background .2s ease, color .2s ease, opacity .3s ease, transform .3s ease;
+}
+
+.p-scroll-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.p-scroll-top:hover,
+.p-scroll-top:focus-visible {
+  border-color: vars.$color-accent;
+  background: vars.$color-accent;
+  color: vars.$color-accent-ink;
+}
+
+.p-scroll-top:focus-visible {
+  outline: .1875rem solid vars.$color-accent;
+  outline-offset: .1875rem;
+}
+
+.p-scroll-top svg { display: block; }

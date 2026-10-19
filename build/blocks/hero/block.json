@@ -69,6 +69,30 @@
       "type": "string",
       "default": ""
     },
+    "showNavigation": {
+      "type": "boolean",
+      "default": false
+    },
+    "navigationRootLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "navigationRootUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "navigationCurrentLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "showPrimaryButton": {
+      "type": "boolean",
+      "default": true
+    },
+    "showSecondaryButton": {
+      "type": "boolean",
+      "default": true
+    },
     "primaryLabel": {
       "type": "string",
       "default": ""

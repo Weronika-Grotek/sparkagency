@@ -13,9 +13,19 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const adminBar = document.getElementById('wpadminbar');
   const pageTransition = document.querySelector('[data-page-transition]');
+  const scrollTopButton = document.querySelector('[data-scroll-top]');
+  const cursorDot = document.querySelector('[data-cursor-dot]');
+  const cursorRing = document.querySelector('[data-cursor-ring]');
+  const finePointer = window.matchMedia('(pointer: fine)');
   let frame = 0;
   let isNavigating = false;
   const prefetchedPages = new Set();
+  let cursorEnabled = false;
+  let cursorFrame = 0;
+  let cursorX = -100;
+  let cursorY = -100;
+  let ringX = -100;
+  let ringY = -100;
 
   function motionIsDisabled() {
     return reducedMotion.matches || root.hasAttribute('data-spark-motion');
@@ -132,11 +142,41 @@
     const scrollable = root.scrollHeight - root.clientHeight;
     const progress = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
     header.style.setProperty('--spark-scroll-progress', String(progress));
+
+    if (scrollTopButton) {
+      const isVisible = window.scrollY > window.innerHeight * 1.5;
+      scrollTopButton.classList.toggle('is-visible', isVisible);
+      scrollTopButton.tabIndex = isVisible ? 0 : -1;
+    }
   }
 
   function scheduleUpdate() {
     if (!frame) frame = window.requestAnimationFrame(updateLayout);
   } 
+
+  function updateCursorRing() {
+    cursorFrame = 0;
+    ringX += (cursorX - ringX) * .16;
+    ringY += (cursorY - ringY) * .16;
+    cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+
+    if (cursorEnabled) cursorFrame = window.requestAnimationFrame(updateCursorRing);
+  }
+
+  function syncCustomCursor() {
+    const shouldEnable = Boolean(cursorDot && cursorRing && finePointer.matches && !motionIsDisabled());
+    if (shouldEnable === cursorEnabled) return;
+
+    cursorEnabled = shouldEnable;
+    body.classList.toggle('has-custom-cursor', cursorEnabled);
+
+    if (cursorEnabled) {
+      cursorFrame = window.requestAnimationFrame(updateCursorRing);
+    } else if (cursorFrame) {
+      window.cancelAnimationFrame(cursorFrame);
+      cursorFrame = 0;
+    }
+  }
 
   toggle.hidden = false;
   header.querySelector('.p-header__tools').hidden = false;
@@ -170,6 +210,29 @@
     if (event.target.closest('[data-accessibility-open]')) setMenu(false, true);
   });
 
+  document.addEventListener('pointermove', (event) => {
+    if (!cursorEnabled || event.pointerType === 'touch') return;
+    cursorX = event.clientX;
+    cursorY = event.clientY;
+    cursorDot.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+  }, { passive: true });
+  finePointer.addEventListener('change', syncCustomCursor);
+  reducedMotion.addEventListener('change', syncCustomCursor);
+  document.addEventListener('sparkpreferenceschange', syncCustomCursor);
+
+  if (scrollTopButton) {
+    scrollTopButton.addEventListener('click', () => {
+      const main = document.querySelector('main, [role="main"]');
+
+      if (main) {
+        if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
+
+      window.scrollTo({ top: 0, behavior: motionIsDisabled() ? 'auto' : 'smooth' });
+    });
+  }
+
   document.addEventListener('click', beginPageTransition, true);
   document.addEventListener('pointerover', (event) => {
     if (!(event.target instanceof Element)) return;
@@ -198,5 +261,6 @@
     observer.observe(header);
     if (adminBar) observer.observe(adminBar);
   }
+  syncCustomCursor();
   scheduleUpdate();
 })();

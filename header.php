@@ -53,6 +53,9 @@ $spark_page_transitions_enabled = \SparkAgency\Theme\ThemeSettings::page_transit
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<div class="p-cursor-dot" data-cursor-dot aria-hidden="true"></div>
+<div class="p-cursor-ring" data-cursor-ring aria-hidden="true"></div>
+
 <?php if ( $spark_page_transitions_enabled ) : ?>
 	<div class="p-page-transition" data-page-transition aria-hidden="true"></div>
 <?php endif; ?>

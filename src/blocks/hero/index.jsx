@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { ColorPalette, InnerBlocks, InspectorControls, MediaUpload, MediaUploadCheck, useBlockProps } from '@wordpress/block-editor';
-import { Button, PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { Button, PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
 const particleColors = [{
   name: 'Biały',
   color: '#FFFFFF'
@@ -21,6 +21,8 @@ const particleColors = [{
   color: '#D8AB52'
 }];
 const heroMotifs = () => <div className='dev-spark-hero__motifs' aria-hidden={true}><svg className='dev-spark-hero__motif dev-spark-hero__motif--works' viewBox='0 0 520 420' fill='none'><g stroke='currentColor' strokeOpacity='.55'><rect x='140' y='110' width='140' height='200' /><rect x='280' y='110' width='90' height='200' /><rect x='370' y='110' width='140' height='200' /><rect x='50' y='110' width='90' height='200' /><path d='M140 110 160 40h100l20 70M140 310l20 70h100l20-70M280 110V70h90v40M280 310v40h90v-40M50 110l-20 15v170l20 15' strokeDasharray='6 5' /></g></svg><div className='dev-spark-hero__motif dev-spark-hero__motif--exp'><div className='dev-spark-hero__code-card'><div className='dev-spark-hero__code-bar'><i /><i /><i /><b>{'sparkEXP.tsx'}</b></div><code><span>{'const idea = spark;'}</span><span>{'export default idea;'}</span><span className='dev-spark-hero__caret' /></code></div></div><div className='dev-spark-hero__motif dev-spark-hero__motif--warsaw'><span className='dev-spark-hero__register dev-spark-hero__register--tl' /><span className='dev-spark-hero__register dev-spark-hero__register--tr' /><span className='dev-spark-hero__register dev-spark-hero__register--bl' /><span className='dev-spark-hero__register dev-spark-hero__register--br' /><span className='dev-spark-hero__cmyk'><i /><i /><i /><i /></span></div><div className='dev-spark-hero__motif dev-spark-hero__motif--health'><i /><i /><i /></div><div className='dev-spark-hero__motif dev-spark-hero__motif--studio'><span /><span /><b><i />{' REC 00:00:00:00'}</b></div></div>;
+const navigationRootLabel = attributes => attributes.navigationRootLabel || `spark${attributes.brand || 'agency'}`;
+const heroNavigation = attributes => <nav className='dev-spark-hero__breadcrumb' aria-label='Nawigacja okruszkowa'><a href={attributes.navigationRootUrl || '/'}>{navigationRootLabel(attributes)}</a>{attributes.navigationCurrentLabel && <><span aria-hidden='true'> / </span><span>{attributes.navigationCurrentLabel}</span></>}</nav>;
 const createTemplate = attributes => [['core/group', {
   className: 'dev-spark-hero__wrap',
   layout: {
@@ -78,14 +80,29 @@ registerBlockType('sparkagency/hero', {
       '--hero-particle-color': attributes.particleColor || undefined,
       '--hero-particle-glow-color': attributes.particleGlowColor || undefined
     };
-    const heroClass = `dev-spark-hero is-brand-${brand}${theme === 'inherit' ? '' : ` is-theme-${theme}`}`;
+    const showNavigation = attributes.showNavigation === true;
+    const hidePrimaryButton = attributes.showPrimaryButton === false;
+    const hideSecondaryButton = attributes.showSecondaryButton === false;
+    const heroClass = `dev-spark-hero is-brand-${brand}${theme === 'inherit' ? '' : ` is-theme-${theme}`}${showNavigation ? ' has-navigation' : ''}${hidePrimaryButton ? ' is-primary-action-hidden' : ''}${hideSecondaryButton ? ' is-secondary-action-hidden' : ''}`;
     return <section {...useBlockProps({
       className: heroClass,
       'data-theme': theme === 'inherit' ? undefined : theme,
       'data-brand': brand,
       'data-background-style': backgroundStyle,
       style: particleStyle
-    })}><InspectorControls><PanelBody title='Tło i motyw' initialOpen={true}><SelectControl label='Agencja / marka' value={brand} options={[{
+    })}><InspectorControls><PanelBody title='Nawigacja w hero' initialOpen={true}><ToggleControl label='Pokaż menu nawigacyjne' help='Zastępuje pierwszy tekst w górnym wierszu hero.' checked={showNavigation} onChange={value => setAttributes({
+            showNavigation: value
+          })} />{showNavigation && <><TextControl label='Nazwa strony głównej' value={attributes.navigationRootLabel || ''} placeholder={`spark${brand}`} onChange={value => setAttributes({
+              navigationRootLabel: value
+            })} /><TextControl label='Adres strony głównej' value={attributes.navigationRootUrl || ''} placeholder='/' type='url' onChange={value => setAttributes({
+              navigationRootUrl: value
+            })} /><TextControl label='Nazwa bieżącej strony / podstrony' value={attributes.navigationCurrentLabel || ''} placeholder='Kontakt' onChange={value => setAttributes({
+              navigationCurrentLabel: value
+            })} /></>}</PanelBody><PanelBody title='Przyciski' initialOpen={false}><ToggleControl label='Pokaż pierwszy przycisk' checked={!hidePrimaryButton} onChange={value => setAttributes({
+            showPrimaryButton: value
+          })} /><ToggleControl label='Pokaż drugi przycisk' checked={!hideSecondaryButton} onChange={value => setAttributes({
+            showSecondaryButton: value
+          })} /></PanelBody><PanelBody title='Tło i motyw' initialOpen={true}><SelectControl label='Agencja / marka' value={brand} options={[{
             label: 'sparkAGENCY',
             value: 'agency'
           }, {
@@ -139,12 +156,15 @@ registerBlockType('sparkagency/hero', {
             graphicUrl: '',
             graphicAlt: ''
           })}>{'Usuń wybraną grafikę'}</Button>}</PanelBody><PanelBody title='Fajerwerki przy kursorze' initialOpen={true}><ToggleControl label='Włącz animację' checked={attributes.particleAnimation !== false} onChange={value => setAttributes({
-            particleAnimation: value
+        particleAnimation: value
           })} /><ColorPalette label='Kolor fajerwerków' colors={particleColors} value={attributes.particleColor || undefined} clearable={true} disableCustomColors={false} onChange={value => setAttributes({
             particleColor: value || ''
           })} /><ColorPalette label='Kolor poświaty fajerwerków' colors={particleColors} value={attributes.particleGlowColor || undefined} clearable={true} disableCustomColors={false} onChange={value => setAttributes({
             particleGlowColor: value || ''
-          })} /></PanelBody></InspectorControls><div className='dev-spark-hero__particles' aria-hidden={true}><canvas className='dev-spark-hero__canvas' /></div>{backgroundStyle === 'brand' && heroMotifs()}{hasGraphic && <figure className='dev-spark-hero__graphic'><img src={attributes.graphicUrl} alt={attributes.graphicAlt || ''} /></figure>}<InnerBlocks template={createTemplate(attributes)} templateLock={false} /></section>;
+          })} /></PanelBody></InspectorControls><div className='dev-spark-hero__particles' aria-hidden={true}><canvas className='dev-spark-hero__canvas' /></div>{backgroundStyle === 'brand' && heroMotifs()}{hasGraphic && <figure className='dev-spark-hero__graphic'><img src={attributes.graphicUrl} alt={attributes.graphicAlt || ''} /></figure>}{showNavigation && heroNavigation({
+        ...attributes,
+        brand
+      })}<InnerBlocks template={createTemplate(attributes)} templateLock={false} /></section>;
   },
   save: () => <InnerBlocks.Content />
 });
