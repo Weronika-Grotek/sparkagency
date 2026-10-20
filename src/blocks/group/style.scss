@@ -569,7 +569,25 @@ html[data-theme="light"] .dev-spark-group,
 body[data-theme="light"] .dev-spark-group,
 .is-theme-light .dev-spark-group,
 .dev-spark-group.is-theme-light {
-  color-scheme: light;
+	--group-bg: var(--wp--preset--color--light-background);
+	--group-card-bg: var(--wp--preset--color--light-surface);
+	--group-text: var(--wp--preset--color--light-text);
+	--group-muted: var(--wp--preset--color--light-subtitle);
+	--line: var(--wp--preset--color--light-line);
+	--line-strong: var(--wp--preset--color--light-line-strong);
+
+	background: var(--wp--preset--color--light-background);
+	color-scheme: light;
+
+	.dev-spark-group__panel {
+		box-shadow: 0 1.25rem 3.5rem color-mix(in srgb, var(--group-text) 8%, transparent);
+
+		&::before { opacity: .5; }
+		&::after { background: linear-gradient(90deg, color-mix(in srgb, var(--group-card-bg) 90%, transparent) 0%, transparent 75%); }
+	}
+
+	.dev-spark-group__pills span { background: color-mix(in srgb, var(--group-bg) 72%, transparent); }
+	.dev-spark-group__lbox { background: var(--group-text); }
 }
 
 html[data-theme="dark"] .dev-spark-group,

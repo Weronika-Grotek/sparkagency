@@ -61,21 +61,40 @@ $get_case_terms = static function ( int $post_id, string $type, string $taxonomy
 
 	return array();
 };
-$get_case_brand = static function ( array $terms ) use ( $brand_aliases ): string {
-	foreach ( $terms as $term ) {
-		if ( ! $term instanceof WP_Term ) {
+$get_case_brands = static function ( int $post_id, string $type, string $taxonomy ) use ( $brand_aliases ): array {
+	$taxonomies = '' !== $taxonomy && taxonomy_exists( $taxonomy )
+		? array( $taxonomy )
+		: get_object_taxonomies( $type, 'names' );
+	$brands = array();
+
+	foreach ( $taxonomies as $object_taxonomy ) {
+		if ( 'post_format' === $object_taxonomy ) {
 			continue;
 		}
 
-		$slug = sanitize_key( $term->slug );
-		foreach ( $brand_aliases as $brand => $aliases ) {
-			if ( in_array( $slug, $aliases, true ) ) {
-				return $brand;
+		$terms = get_the_terms( $post_id, $object_taxonomy );
+		if ( ! is_array( $terms ) ) {
+			continue;
+		}
+
+		foreach ( $terms as $term ) {
+			if ( ! $term instanceof WP_Term ) {
+				continue;
+			}
+
+			$term_slug = sanitize_key( $term->slug );
+			foreach ( $brand_aliases as $brand => $aliases ) {
+				if ( in_array( $term_slug, $aliases, true ) && ! isset( $brands[ $brand ] ) ) {
+					$brands[ $brand ] = array(
+						'slug' => $brand,
+						'name' => $term->name,
+					);
+				}
 			}
 		}
 	}
 
-	return 'exp';
+	return array_values( $brands );
 };
 ?>
 <section <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'spark-case-studies' ) ) ); ?> data-spark-case-studies>
@@ -107,7 +126,8 @@ $get_case_brand = static function ( array $terms ) use ( $brand_aliases ): strin
 							++$case_index;
 							$case_id      = get_the_ID();
 							$terms        = $get_case_terms( $case_id, $post_type, $brand_taxonomy );
-							$brand        = $get_case_brand( $terms );
+							$case_brands  = $get_case_brands( $case_id, $post_type, $brand_taxonomy );
+							$brand        = $case_brands[0]['slug'] ?? 'exp';
 							$client       = '' !== $client_meta_key ? get_post_meta( $case_id, $client_meta_key, true ) : '';
 							$metric_value = '' !== $metric_value_meta_key ? get_post_meta( $case_id, $metric_value_meta_key, true ) : '';
 							$metric_label = '' !== $metric_label_meta_key ? get_post_meta( $case_id, $metric_label_meta_key, true ) : '';
@@ -117,15 +137,23 @@ $get_case_brand = static function ( array $terms ) use ( $brand_aliases ): strin
 							?>
 							<a class="spark-case-studies__card has-case-brand-<?php echo esc_attr( $brand ); ?><?php echo $is_wide_case ? ' is-case-wide' : ''; ?>" href="<?php the_permalink(); ?>" data-case-card style="--case-index:<?php echo esc_attr( (string) ( $case_index - 1 ) ); ?>">
 								<div class="spark-case-studies__art<?php echo has_post_thumbnail() ? ' has-case-image' : ''; ?>">
-									<span class="spark-case-studies__blob spark-case-studies__blob--one" aria-hidden="true"></span>
-									<span class="spark-case-studies__blob spark-case-studies__blob--two" aria-hidden="true"></span>
-									<span class="spark-case-studies__blob spark-case-studies__blob--three" aria-hidden="true"></span>
+									<?php
+									$blob_brands    = ! empty( $case_brands ) ? $case_brands : array( array( 'slug' => $brand ) );
+									$blob_modifiers = array( 'one', 'two', 'three', 'four' );
+									$blob_count     = min( count( $blob_modifiers ), max( 3, count( $blob_brands ) ) );
+									?>
+									<?php for ( $blob_index = 0; $blob_index < $blob_count; ++$blob_index ) : ?>
+										<?php $blob_brand = $blob_brands[ $blob_index % count( $blob_brands ) ]['slug']; ?>
+										<span class="spark-case-studies__blob spark-case-studies__blob--<?php echo esc_attr( $blob_modifiers[ $blob_index ] ); ?> has-case-brand-<?php echo esc_attr( $blob_brand ); ?>" aria-hidden="true"></span>
+									<?php endfor; ?>
 									<span class="spark-case-studies__art-grid" aria-hidden="true"></span>
-									<div class="spark-case-studies__chips" aria-hidden="true">
-										<?php foreach ( array_slice( $terms, 0, 3 ) as $term ) : ?>
-											<span><?php echo esc_html( $term->name ); ?></span>
-										<?php endforeach; ?>
-									</div>
+									<?php if ( ! empty( $case_brands ) ) : ?>
+										<div class="spark-case-studies__chips" aria-hidden="true">
+											<?php foreach ( $case_brands as $case_brand ) : ?>
+												<span class="has-case-brand-<?php echo esc_attr( $case_brand['slug'] ); ?>"><?php echo esc_html( $case_brand['name'] ); ?></span>
+											<?php endforeach; ?>
+										</div>
+									<?php endif; ?>
 									<span class="spark-case-studies__number" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $case_index ) ); ?></span>
 									<?php if ( has_post_thumbnail() ) : ?>
 										<?php

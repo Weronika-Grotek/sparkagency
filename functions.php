@@ -7,7 +7,6 @@
 
 require_once get_template_directory() . '/bootstrap/sparkagency-bootstrap.php';
 
-/** Configure WordPress features used by the theme. */
 function sparkagency_theme_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'editor-styles' );
@@ -24,20 +23,19 @@ function sparkagency_theme_setup() {
 }
 add_action( 'after_setup_theme', 'sparkagency_theme_setup' );
 
-/** Preserve the existing menu locations and their assignments. */
 function my_custom_menu_setup() {
 	register_nav_menus(
 		array(
-			'primary-menu' => __( 'Primary Menu', 'sparkagency' ),
-			'footer-menu'  => __( 'Footer Menu', 'sparkagency' ),
+			'primary-menu'            => __( 'Primary Menu', 'sparkagency' ),
+			'footer-menu'             => __( 'Footer Menu', 'sparkagency' ),
+			'footer-information-menu' => __( 'Footer Information Menu', 'sparkagency' ),
+
 		)
 	);
 }
 add_action( 'after_setup_theme', 'my_custom_menu_setup' );
 
 /**
- * Style the Kontakt item as the primary action without duplicating the
- * WordPress-managed menu in the template.
  *
  * @param string[] $classes Existing menu-item classes.
  * @param object   $item    Current menu item.
@@ -61,7 +59,6 @@ function sparkagency_primary_menu_contact_cta( $classes, $item, $args, $depth ) 
 }
 add_filter( 'nav_menu_css_class', 'sparkagency_primary_menu_contact_cta', 10, 4 );
 
-/** Load header assets; file modification times invalidate browser caches. */
 function sparkagency_enqueue_header_assets() {
 	$assets = array(
 		'spark-header-tokens' => '/assets/css/header-tokens.css',

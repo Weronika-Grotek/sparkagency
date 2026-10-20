@@ -54,5 +54,6 @@
     "anchor": true,
     "html": false
   },
-  "editorScript": "file:./index.js"
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js"
 }
