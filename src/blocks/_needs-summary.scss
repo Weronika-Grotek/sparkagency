@@ -1,0 +1,45 @@
+@use "variables" as vars;
+
+// Answers from the Needs Generator shown above a contact form (see _shared/needs.js).
+.spark-needs-summary {
+    margin-bottom: 2rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid vars.$color-line-strong;
+    border-radius: vars.$radius-card;
+    background: vars.$color-surface;
+    color: vars.$color-text;
+
+    &__title {
+        margin: 0 0 .75rem;
+        color: vars.$color-subtitle;
+        font-size: .75rem;
+        font-weight: 600;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    dl {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+        gap: .75rem 1.5rem;
+        margin: 0;
+    }
+
+    dt {
+        color: vars.$color-subtitle;
+        font-size: .75rem;
+    }
+
+    dd {
+        margin: .2rem 0 0;
+        font-weight: 700;
+    }
+
+    &__change {
+        display: inline-block;
+        margin-top: 1rem;
+        color: vars.$color-accent;
+        font-size: .875rem;
+        font-weight: 600;
+    }
+}

@@ -36,6 +36,140 @@ function my_custom_menu_setup() {
 add_action( 'after_setup_theme', 'my_custom_menu_setup' );
 
 /**
+ * Rejestruje natywnie typ wpisu Case Study.
+ *
+ * Definicja zastępuje konfigurację z wtyczki Custom Post Type UI.
+ */
+function sparkagency_register_case_study_post_type() {
+	if ( post_type_exists( 'case-study' ) ) {
+		return;
+	}
+
+	$labels = array(
+		'name'                  => __( 'Case studies', 'sparkagency' ),
+		'singular_name'         => __( 'Case study', 'sparkagency' ),
+		'menu_name'             => __( 'Case studies', 'sparkagency' ),
+		'name_admin_bar'        => __( 'Case study', 'sparkagency' ),
+		'add_new'               => __( 'Dodaj nowe', 'sparkagency' ),
+		'add_new_item'          => __( 'Dodaj case study', 'sparkagency' ),
+		'new_item'              => __( 'Nowe case study', 'sparkagency' ),
+		'edit_item'             => __( 'Edytuj case study', 'sparkagency' ),
+		'view_item'             => __( 'Zobacz case study', 'sparkagency' ),
+		'all_items'             => __( 'Wszystkie case studies', 'sparkagency' ),
+		'search_items'          => __( 'Szukaj case studies', 'sparkagency' ),
+		'not_found'             => __( 'Nie znaleziono case studies.', 'sparkagency' ),
+		'not_found_in_trash'    => __( 'Nie znaleziono case studies w koszu.', 'sparkagency' ),
+		'featured_image'        => __( 'Obrazek wyróżniający', 'sparkagency' ),
+		'set_featured_image'    => __( 'Ustaw obrazek wyróżniający', 'sparkagency' ),
+		'remove_featured_image' => __( 'Usuń obrazek wyróżniający', 'sparkagency' ),
+		'use_featured_image'    => __( 'Użyj jako obrazka wyróżniającego', 'sparkagency' ),
+		'archives'              => __( 'Archiwum case studies', 'sparkagency' ),
+	);
+
+	register_post_type(
+		'case-study',
+		array(
+			'labels'             => $labels,
+			'public'             => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'show_in_nav_menus'  => true,
+			'show_in_admin_bar'  => true,
+			'show_in_rest'       => true,
+			'has_archive'        => true,
+			'rewrite'            => array(
+				'slug'       => 'case-study',
+				'with_front' => false,
+			),
+			'query_var'          => true,
+			'hierarchical'       => false,
+			'capability_type'    => 'post',
+			'map_meta_cap'       => true,
+			'menu_icon'          => 'dashicons-portfolio',
+			'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions' ),
+		)
+	);
+}
+add_action( 'init', 'sparkagency_register_case_study_post_type' );
+
+/**
+ * Registers team content and the brand taxonomy used to route it in Team Sync.
+ */
+function sparkagency_register_team_post_type() {
+	if ( ! post_type_exists( 'team' ) ) {
+		$labels = array(
+			'name'                  => __( 'Zespoły', 'sparkagency' ),
+			'singular_name'         => __( 'Zespół', 'sparkagency' ),
+			'menu_name'             => __( 'Zespoły', 'sparkagency' ),
+			'name_admin_bar'        => __( 'Zespół', 'sparkagency' ),
+			'add_new'               => __( 'Dodaj nowy', 'sparkagency' ),
+			'add_new_item'          => __( 'Dodaj zespół', 'sparkagency' ),
+			'new_item'              => __( 'Nowy zespół', 'sparkagency' ),
+			'edit_item'             => __( 'Edytuj zespół', 'sparkagency' ),
+			'view_item'             => __( 'Zobacz zespół', 'sparkagency' ),
+			'all_items'             => __( 'Wszystkie zespoły', 'sparkagency' ),
+			'search_items'          => __( 'Szukaj zespołów', 'sparkagency' ),
+			'not_found'             => __( 'Nie znaleziono zespołów.', 'sparkagency' ),
+			'not_found_in_trash'    => __( 'Nie znaleziono zespołów w koszu.', 'sparkagency' ),
+			'featured_image'        => __( 'Obrazek wyróżniający', 'sparkagency' ),
+			'set_featured_image'    => __( 'Ustaw obrazek wyróżniający', 'sparkagency' ),
+			'remove_featured_image' => __( 'Usuń obrazek wyróżniający', 'sparkagency' ),
+			'use_featured_image'    => __( 'Użyj jako obrazka wyróżniającego', 'sparkagency' ),
+			'archives'              => __( 'Archiwum zespołów', 'sparkagency' ),
+		);
+
+		register_post_type(
+			'team',
+			array(
+				'labels'             => $labels,
+				'public'             => true,
+				'publicly_queryable' => true,
+				'show_ui'            => true,
+				'show_in_menu'       => true,
+				'show_in_nav_menus'  => true,
+				'show_in_admin_bar'  => true,
+				'show_in_rest'       => true,
+				'has_archive'        => true,
+				'rewrite'            => array(
+					'slug'       => 'team',
+					'with_front' => false,
+				),
+				'query_var'          => true,
+				'hierarchical'       => false,
+				'capability_type'    => 'post',
+				'map_meta_cap'       => true,
+				'menu_icon'          => 'dashicons-groups',
+				'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions' ),
+			)
+		);
+	}
+
+	if ( ! taxonomy_exists( 'team-brand' ) ) {
+		register_taxonomy(
+			'team-brand',
+			array( 'team' ),
+			array(
+				'labels' => array(
+					'name'          => __( 'Marki zespołu', 'sparkagency' ),
+					'singular_name' => __( 'Marka zespołu', 'sparkagency' ),
+					'menu_name'     => __( 'Marki zespołu', 'sparkagency' ),
+				),
+				'public'       => true,
+				'show_ui'      => true,
+				'show_in_rest' => true,
+				'hierarchical' => false,
+				'rewrite'      => array(
+					'slug'       => 'team-brand',
+					'with_front' => false,
+				),
+			)
+		);
+	}
+}
+add_action( 'init', 'sparkagency_register_team_post_type', 5 );
+
+/**
  *
  * @param string[] $classes Existing menu-item classes.
  * @param object   $item    Current menu item.

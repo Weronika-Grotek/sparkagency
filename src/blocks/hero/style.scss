@@ -26,7 +26,9 @@
     background: var(--hero-bg);
     color: var(--hero-text);
     border-bottom: 1px solid var(--hero-line);
-    color-scheme: light dark;
+    // The website defaults to dark. This is deliberately explicit so form
+    // controls and browser UI inside the hero match it too.
+    color-scheme: dark;
     font-family: var(--hero-font);
     -webkit-font-smoothing: antialiased;
 
@@ -451,8 +453,8 @@
     &__button--ghost .wp-block-button__link {
         padding: 14px 20px;
         background: transparent;
-        border-color: #F3F2EF;
-        color: #F3F2EF;
+        border-color: var(--hero-text);
+        color: var(--hero-text);
     }
 
     .wp-block-button__link:focus-visible {
@@ -469,6 +471,44 @@
     &__button:not(&__button--ghost) .wp-block-button__link:hover::after {
         transform: translateX(4px);
     }
+}
+
+// A visitor's choice has priority over a per-block editor setting. This lets
+// existing heroes that were saved as `is-theme-dark` still switch cleanly with
+// the site-wide button. The isolated selectors keep editor previews working
+// when no site theme is present.
+html[data-theme="light"] .dev-spark-hero,
+body[data-theme="light"] .dev-spark-hero,
+.dev-spark-hero.is-theme-light {
+    // A manually selected editor colour is an inline property. The visitor's
+    // accessibility preference must still be able to switch the whole hero.
+    --hero-bg: var(--wp--preset--color--light-background, #F4F6F8) !important;
+    --hero-text: var(--wp--preset--color--light-text, #484848);
+    --hero-muted: var(--wp--preset--color--light-subtitle, #707070);
+    --hero-accent: var(--spark-color-accent, #0E1116);
+    --hero-accent-ink: var(--spark-color-accent-ink, #FFFFFF);
+    --hero-line: var(--wp--preset--color--light-line, #B0B0B0);
+    --hero-line-strong: var(--wp--preset--color--light-line-strong, #808080);
+    --hero-particle-glow-color: #0E1116;
+    background-color: var(--wp--preset--color--light-background, #F4F6F8) !important;
+    color: var(--wp--preset--color--light-text, #484848) !important;
+    color-scheme: light;
+}
+
+html[data-theme="dark"] .dev-spark-hero,
+body[data-theme="dark"] .dev-spark-hero,
+.dev-spark-hero.is-theme-dark {
+    --hero-bg: var(--wp--preset--color--background, #0B0B0D) !important;
+    --hero-text: var(--wp--preset--color--text, #B5B5B5);
+    --hero-muted: var(--wp--preset--color--subtitle, #909090);
+    --hero-accent: var(--spark-color-accent, #FFFFFF);
+    --hero-accent-ink: var(--spark-color-accent-ink, #0B0B0D);
+    --hero-line: var(--wp--preset--color--line, #505050);
+    --hero-line-strong: var(--wp--preset--color--line-strong, #6C6C6C);
+    --hero-particle-glow-color: #FFFFFF;
+    background-color: var(--wp--preset--color--background, #0B0B0D) !important;
+    color: var(--wp--preset--color--text, #B5B5B5) !important;
+    color-scheme: dark;
 }
 
 // Support both brand attributes and classes from variables.

@@ -23,10 +23,13 @@ $spark_page_transitions_enabled = \SparkAgency\Theme\ThemeSettings::page_transit
 			try {
 				var preferences = JSON.parse(localStorage.getItem('spark-preferences') || '{}');
 				var root = document.documentElement;
-				if (preferences.theme === 'light' || preferences.theme === 'dark') {
-					root.dataset.theme = preferences.theme;
-					root.style.colorScheme = preferences.theme;
-				}
+				// The public site starts in dark mode. A saved choice is applied before
+				// styles are painted, preventing a light/dark flash on navigation.
+				var theme = preferences.theme === 'light' || preferences.theme === 'dark'
+					? preferences.theme
+					: 'dark';
+				root.dataset.theme = theme;
+				root.style.colorScheme = theme;
 				if (preferences.motion === true) root.setAttribute('data-spark-motion', '');
 			} catch (error) {}
 		}());

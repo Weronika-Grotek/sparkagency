@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
 		<?php if ( ! empty( $attributes['lede'] ) ) : ?><p><?php echo wp_kses_post( $attributes['lede'] ); ?></p><?php endif; ?>
 		<p class="spark-contact-handoff__result" data-contact-result hidden></p>
 		<dl data-contact-list></dl>
+		<a class="spark-contact-handoff__change" href="#" data-contact-change hidden><?php esc_html_e( 'Zmień odpowiedzi', 'sparkagency' ); ?></a>
 	</div>
 	<p class="spark-contact-handoff__empty" data-contact-empty><?php echo esc_html( $attributes['emptyText'] ?? '' ); ?></p>
 	<div class="spark-contact-handoff__form">

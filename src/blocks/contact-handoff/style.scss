@@ -58,6 +58,18 @@
         font-weight: 700;
     }
 
+    &__change {
+        display: inline-block;
+        margin-top: 1.25rem;
+        color: vars.$color-accent;
+        font-size: .875rem;
+        font-weight: 600;
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
     &__empty {
         margin: 0;
         color: vars.$color-subtitle;

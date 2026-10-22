@@ -1,0 +1,42 @@
+@use "../variables" as vars;
+
+.spark-aboutfirm {
+	--aboutfirm-bg: #{vars.$color-background};
+	--aboutfirm-text: #{vars.$color-text};
+	--aboutfirm-muted: #{vars.$color-subtitle};
+	--aboutfirm-line: #{vars.$color-line};
+	--aboutfirm-brand: #{vars.$color-agency-dark};
+	--aboutfirm-hover-text: #{vars.$color-background};
+	background: var(--aboutfirm-bg);
+	color: var(--aboutfirm-text);
+	padding-block: clamp(4.5rem, 9vw, 7.5rem);
+
+	&.is-theme-light {
+		--aboutfirm-bg: var(--wp--preset--color--light-background);
+		--aboutfirm-text: var(--wp--preset--color--light-text);
+		--aboutfirm-muted: var(--wp--preset--color--light-subtitle);
+		--aboutfirm-line: var(--wp--preset--color--light-line);
+		--aboutfirm-brand: var(--wp--preset--color--agency);
+		--aboutfirm-hover-text: var(--wp--preset--color--light-background);
+	}
+}
+
+.spark-aboutfirm__inner { width: 100%; max-width: 1320px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 56px); }
+.spark-aboutfirm__header { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 2rem; margin-bottom: clamp(3rem, 6vw, 4.5rem); }
+.spark-aboutfirm__eyebrow { color: var(--aboutfirm-muted); font-family: vars.$font-family-primary; font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.spark-aboutfirm__header h2 { margin: 0; color: var(--aboutfirm-text); font-family: vars.$font-family-primary; font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem); font-style: vars.$font-style-display; font-weight: vars.$font-weight-display; letter-spacing: vars.$font-tracking-display; line-height: .95; }
+.spark-aboutfirm__lede { max-width: 58ch; margin: 1.5rem 0 0; color: var(--aboutfirm-muted); font-size: clamp(1rem, .85rem + .5vw, 1.25rem); line-height: 1.5; }
+.spark-aboutfirm__rows { border-top: 1px solid var(--aboutfirm-line); }
+.spark-aboutfirm__row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1.5rem; width: 100%; min-height: 7rem; padding: 1.5rem 1rem; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--aboutfirm-line); background: transparent; color: var(--aboutfirm-text); text-align: left; transition: color .3s; }
+.spark-aboutfirm__row::before { position: absolute; z-index: -1; inset: 0; background: var(--aboutfirm-brand); content: ""; transform: scaleX(0); transform-origin: left; transition: transform .55s cubic-bezier(.2,.7,.1,1); }
+.spark-aboutfirm__row:hover::before, .spark-aboutfirm__link:focus-visible .spark-aboutfirm__row::before { transform: scaleX(1); }
+.spark-aboutfirm__row:hover, .spark-aboutfirm__link:focus-visible .spark-aboutfirm__row { color: var(--aboutfirm-hover-text); }
+.spark-aboutfirm__row.is-brand-works { --aboutfirm-brand: #{vars.$color-works-dark}; }.spark-aboutfirm__row.is-brand-exp { --aboutfirm-brand: #{vars.$color-exp}; }.spark-aboutfirm__row.is-brand-warsaw { --aboutfirm-brand: #{vars.$color-warsaw}; }.spark-aboutfirm__row.is-brand-health { --aboutfirm-brand: #{vars.$color-health-dark}; }.spark-aboutfirm__row.is-brand-studio { --aboutfirm-brand: #{vars.$color-studio}; }
+.spark-aboutfirm.is-theme-light .spark-aboutfirm__row.is-brand-works, html[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row.is-brand-works, body[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row.is-brand-works { --aboutfirm-brand: #{vars.$color-works}; }.spark-aboutfirm.is-theme-light .spark-aboutfirm__row.is-brand-health, html[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row.is-brand-health, body[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row.is-brand-health { --aboutfirm-brand: #{vars.$color-health}; }
+.spark-aboutfirm__row h3 { margin: 0; font-family: vars.$font-family-primary; font-size: clamp(2rem, 1rem + 4vw, 4.6rem); font-style: normal; letter-spacing: -.045em; line-height: .95; }.spark-aboutfirm__prefix { font-weight: 200; }.spark-aboutfirm__name { color: var(--aboutfirm-brand); font-weight: 800; transition: color .3s; }.spark-aboutfirm__row:hover .spark-aboutfirm__name, .spark-aboutfirm__link:focus-visible .spark-aboutfirm__name { color: currentcolor; }
+.spark-aboutfirm__description { max-width: 34ch; color: var(--aboutfirm-muted); font-size: .875rem; line-height: 1.5; text-align: right; transition: color .3s; }.spark-aboutfirm__row:hover .spark-aboutfirm__description, .spark-aboutfirm__link:focus-visible .spark-aboutfirm__description { color: currentcolor; }
+.spark-aboutfirm__link { display: block; color: inherit; text-decoration: none; }.spark-aboutfirm__link:focus-visible { outline: 2px solid var(--aboutfirm-brand); outline-offset: 3px; }.spark-aboutfirm__editor-add { margin-top: 1.5rem; }.spark-aboutfirm-editor-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+.spark-aboutfirm.is-theme-light .spark-aboutfirm__row:not(:hover) .spark-aboutfirm__name, html[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row:not(:hover) .spark-aboutfirm__name, body[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row:not(:hover) .spark-aboutfirm__name { color: color-mix(in srgb, var(--aboutfirm-brand) 70%, var(--wp--preset--color--background)); }
+@media (max-width: 760px) { .spark-aboutfirm__header { grid-template-columns: 1fr; gap: 1rem; } }
+@media (max-width: 640px) { .spark-aboutfirm__row { grid-template-columns: 1fr; gap: .75rem; }.spark-aboutfirm__description { text-align: left; } }
+@media (prefers-reduced-motion: reduce) { .spark-aboutfirm *, .spark-aboutfirm *::before, .spark-aboutfirm *::after { animation: none !important; transition: none !important; } }

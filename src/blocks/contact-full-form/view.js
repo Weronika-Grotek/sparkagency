@@ -1,3 +1,5 @@
+import { applyNeedsToForm } from "../_shared/needs";
+
 (function () {
   "use strict";
   const draftKey = "sparkagency-contact-draft";
@@ -80,11 +82,17 @@
       if (!form) return;
       const buttons = [...root.querySelectorAll("[data-topic-key]")];
       const hidden = form.querySelector("[data-contact-topics]");
+      const keys = form.querySelector("[data-contact-topic-keys]");
       const syncTopics = () => {
-        hidden.value = buttons
-          .filter((button) => button.getAttribute("aria-pressed") === "true")
+        const pressed = buttons.filter(
+          (button) => button.getAttribute("aria-pressed") === "true",
+        );
+        hidden.value = pressed
           .map((button) => button.dataset.topicLabel)
           .join(", ");
+        // Keys route copies of the message to company addresses (theme settings).
+        if (keys)
+          keys.value = pressed.map((button) => button.dataset.topicKey).join(",");
       };
       buttons.forEach((button) =>
         button.addEventListener("click", () => {
@@ -120,6 +128,8 @@
         );
         syncTopics();
       }
+      // Generator answers win over the draft: they add the company topic and the hidden fields.
+      if (applyNeedsToForm(root, form)) syncTopics();
       [
         "spark_contact_name",
         "spark_contact_company",

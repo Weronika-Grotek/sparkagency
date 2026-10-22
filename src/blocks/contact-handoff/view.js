@@ -1,65 +1,50 @@
+import { NEEDS_FIELDS, readNeeds } from '../_shared/needs';
+
+/**
+ * Shows the Needs Generator answers above the nested contact form.
+ * The form itself receives the hidden spark_need_* fields from its own view script.
+ */
 const initializeContactHandoffs = () => {
-	document.querySelectorAll( '[data-spark-contact-handoff]' ).forEach( ( root ) => {
+	document.querySelectorAll( '[data-spark-contact-handoff]' ).forEach( ( root, index ) => {
 		if ( root.dataset.initialized === 'true' ) return;
 		root.dataset.initialized = 'true';
-		const params = new URLSearchParams( window.location.search );
-		const rawAnswers = params.get( 'spark_answers' ) || '';
-		const result = params.get( 'result' ) || '';
-		const resultName = params.get( 'spark_result_name' ) || '';
-		let answers = [];
-		try {
-			const decoded = JSON.parse( rawAnswers );
-			if ( Array.isArray( decoded ) ) answers = decoded.filter( ( answer ) => answer && typeof answer.question === 'string' && typeof answer.label === 'string' && typeof answer.param === 'string' ).slice( 0, 12 );
-		} catch ( error ) {
-			answers = [];
-		}
-
-		const setFieldValue = ( field, value ) => {
-			if ( field.disabled || ! value ) return;
-			const type = ( field.type || '' ).toLowerCase();
-			if ( type === 'radio' || type === 'checkbox' ) {
-				field.checked = field.value === value;
-			} else if ( field.tagName === 'SELECT' ) {
-				field.value = value;
-			} else if ( ! [ 'submit', 'button', 'reset', 'file' ].includes( type ) ) {
-				field.value = value;
-			}
-			field.dispatchEvent( new Event( 'input', { bubbles: true } ) );
-			field.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-		};
-		const fillFields = ( name, value ) => {
-			if ( ! name || ! value ) return;
-			root.querySelectorAll( '[name]' ).forEach( ( field ) => {
-				if ( field.getAttribute( 'name' ) === name ) setFieldValue( field, value );
-			} );
-		};
 
 		const summary = root.querySelector( '[data-contact-summary]' );
 		const list = root.querySelector( '[data-contact-list]' );
 		const empty = root.querySelector( '[data-contact-empty]' );
-		const resultLabel = root.querySelector( '[data-contact-result]' );
-		if ( answers.length && summary && list ) {
-			summary.hidden = false;
-			empty.hidden = true;
-			answers.forEach( ( answer ) => {
-				const row = document.createElement( 'div' );
-				const question = document.createElement( 'dt' );
-				const response = document.createElement( 'dd' );
-				question.textContent = answer.question;
-				response.textContent = answer.label;
-				row.append( question, response );
-				list.append( row );
-				fillFields( answer.param, answer.value || answer.label );
-			} );
+		const result = root.querySelector( '[data-contact-result]' );
+		const change = root.querySelector( '[data-contact-change]' );
+		const params = new URLSearchParams( window.location.search );
+		const needs = readNeeds();
+
+		// After a successful submission the form shows its own notice.
+		if ( params.get( 'spark_contact_status' ) === 'success' && empty ) empty.hidden = true;
+		if ( ! needs || ! summary || ! list ) return;
+
+		summary.hidden = false;
+		if ( empty ) empty.hidden = true;
+		list.replaceChildren();
+		NEEDS_FIELDS.forEach( ( { key, label } ) => {
+			if ( ! needs[ key ] ) return;
+			const row = document.createElement( 'div' );
+			const term = document.createElement( 'dt' );
+			const description = document.createElement( 'dd' );
+			term.textContent = label;
+			description.textContent = needs[ key ].label;
+			row.append( term, description );
+			list.append( row );
+		} );
+		if ( result && needs.company ) {
+			result.hidden = false;
+			result.textContent = `Rozmowę zaczniesz z zespołem: ${ needs.company.label }`;
 		}
-		if ( resultName && resultLabel ) {
-			resultLabel.hidden = false;
-			resultLabel.textContent = `Rozmowę rozpoczniesz ze: ${ resultName }`;
+		if ( change && needs.returnUrl ) {
+			change.hidden = false;
+			change.href = needs.returnUrl;
 		}
 
-		root.querySelectorAll( 'input[name="spark_answers"], textarea[name="spark_answers"]' ).forEach( ( field ) => { field.value = rawAnswers; } );
-		root.querySelectorAll( 'input[name="result"], textarea[name="result"]' ).forEach( ( field ) => { field.value = result; } );
-		[ 'spark_company', 'spark_company_id', 'spark_information', 'spark_category', 'spark_category_name', 'spark_result_name' ].forEach( ( name ) => fillFields( name, params.get( name ) || '' ) );
+		// Visitors arrive from the generator, possibly on another site: bring the first handoff into view.
+		if ( index === 0 && ! window.location.hash ) root.scrollIntoView( { block: 'start' } );
 	} );
 };
 

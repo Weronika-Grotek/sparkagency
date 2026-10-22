@@ -2,6 +2,10 @@
 /**
  * Front-end template for the Needs Generator block.
  *
+ * Step 1 picks a company, step 2 is a shared informational question and
+ * step 3 lists the scopes of the chosen company. The migration of the older
+ * attribute model mirrors readModel() in src/blocks/needs-generator/model.js.
+ *
  * @package SparkAgency
  *
  * @var array $attributes Block attributes.
@@ -9,98 +13,125 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$sanitize_identifier = static function ( $value, string $fallback ): string {
-	$value = sanitize_key( (string) $value );
-	return '' !== $value ? $value : $fallback;
+$brands = array( 'agency', 'exp', 'warsaw', 'health', 'works', 'studio' );
+$text   = static fn( $value ): string => is_scalar( $value ) ? sanitize_text_field( (string) $value ) : '';
+$items  = static fn( $value ): array => is_array( $value ) ? array_values( array_filter( $value, 'is_array' ) ) : array();
+$slug   = static fn( $value ): string => sanitize_key( sanitize_title( (string) $value ) );
+
+$steps  = $items( $attributes['steps'] ?? array() );
+$titles = array();
+foreach ( array( 0, 1, 2 ) as $index ) {
+	$titles[] = $text( $steps[ $index ]['title'] ?? '' );
+}
+
+$scope_data = static function ( $scope ) use ( $text ): array {
+	return is_array( $scope )
+		? array( 'label' => $text( $scope['label'] ?? '' ), 'value' => $text( $scope['value'] ?? '' ) )
+		: array( 'label' => $text( $scope ), 'value' => '' );
 };
 
-$steps = array();
-foreach ( (array) ( $attributes['steps'] ?? array() ) as $step_index => $step ) {
-	$options = array();
-	foreach ( (array) ( $step['options'] ?? array() ) as $option_index => $option ) {
-		$label = sanitize_text_field( $option['label'] ?? '' );
-		if ( '' === $label ) {
-			continue;
+$raw_companies = $items( $attributes['companies'] ?? array() );
+$legacy_ids    = array();
+if ( empty( $raw_companies ) ) {
+	$results       = $items( $attributes['results'] ?? array() );
+	$groups        = $items( $attributes['serviceGroups'] ?? array() );
+	$first_options = $items( $steps[0]['options'] ?? array() );
+	$find          = static function ( array $list, string $id ): array {
+		foreach ( $list as $item ) {
+			if ( '' !== $id && ( $item['id'] ?? '' ) === $id ) {
+				return $item;
+			}
 		}
-		$options[] = array(
-			'label'     => $label,
-			'value'     => sanitize_text_field( $option['v\
-			/alue'] ?? $label ),
-			'resultId'  => $sanitize_identifier( $option['resultId'] ?? '', '' ),
-			'serviceGroupId' => $sanitize_identifier( $option['serviceGroupId'] ?? '', '' ),
-			'visibleForResultId' => $sanitize_identifier( $option['visibleForResultId'] ?? '', '' ),
-			'nextUrl'   => esc_url_raw( $option['nextUrl'] ?? '' ),
-			'brand'     => $sanitize_identifier( $option['brand'] ?? '', 'agency' ),
-			'position'  => $option_index,
-		);
-	}
+		return array();
+	};
 
-	$options_source = 'serviceGroups' === ( $step['optionsSource'] ?? '' ) ? 'serviceGroups' : '';
-	if ( empty( $options ) && '' === $options_source ) {
-		continue;
+	if ( ! empty( $first_options ) ) {
+		foreach ( $first_options as $option ) {
+			$result_id = (string) ( $option['resultId'] ?? '' );
+			$group_id  = (string) ( $option['serviceGroupId'] ?? '' );
+			$id        = $group_id ?: ( $result_id ?: $slug( $option['label'] ?? '' ) );
+			$result    = $find( $results, $result_id );
+			$group     = $find( $groups, $group_id ?: $result_id );
+			if ( '' !== $result_id ) {
+				$legacy_ids[ $result_id ] = $id;
+			}
+			$raw_companies[] = array(
+				'id'          => $id,
+				'label'       => $option['label'] ?? '',
+				'brand'       => $option['brand'] ?? 'agency',
+				'description' => $result['description'] ?? '',
+				'imageUrl'    => $result['imageUrl'] ?? '',
+				'imageAlt'    => $result['imageAlt'] ?? '',
+				'url'         => ( $result['contactUrl'] ?? '' ) ?: ( $option['nextUrl'] ?? '' ),
+				'scopes'      => (array) ( $group['categories'] ?? array() ),
+			);
+		}
+	} else {
+		foreach ( $groups as $group ) {
+			$raw_companies[] = array(
+				'id'     => ( $group['id'] ?? '' ) ?: $slug( $group['title'] ?? '' ),
+				'label'  => $group['title'] ?? '',
+				'brand'  => $group['id'] ?? 'agency',
+				'scopes' => (array) ( $group['categories'] ?? array() ),
+			);
+		}
 	}
-
-	$steps[] = array(
-		'title'      => sanitize_text_field( $step['title'] ?? '' ),
-		'param'      => $sanitize_identifier( $step['param'] ?? '', 'answer_' . ( $step_index + 1 ) ),
-		'markerMode' => 'brand' === ( $step['markerMode'] ?? '' ) ? 'brand' : 'letters',
-		'optionsSource' => $options_source,
-		'options'    => $options,
-	);
 }
 
-$results = array();
-foreach ( (array) ( $attributes['results'] ?? array() ) as $result_index => $result ) {
-	$id = $sanitize_identifier( $result['id'] ?? '', 'result_' . ( $result_index + 1 ) );
-	$results[] = array(
+$companies = array();
+foreach ( $raw_companies as $company ) {
+	$label = $text( $company['label'] ?? '' );
+	$id    = sanitize_key( (string) ( $company['id'] ?? '' ) ) ?: $slug( $label );
+	if ( '' === $label || '' === $id ) {
+		continue;
+	}
+	$scopes = array();
+	foreach ( (array) ( $company['scopes'] ?? array() ) as $scope ) {
+		$scope = $scope_data( $scope );
+		if ( '' === $scope['label'] ) {
+			continue;
+		}
+		$scope['value'] = '' !== $scope['value'] ? $scope['value'] : $scope['label'];
+		$scopes[]       = $scope;
+	}
+	$brand       = sanitize_key( (string) ( $company['brand'] ?? '' ) );
+	$companies[] = array(
 		'id'          => $id,
-		'title'       => sanitize_text_field( $result['title'] ?? '' ),
-		'description' => wp_strip_all_tags( $result['description'] ?? '' ),
-		'contactUrl'  => esc_url_raw( $result['contactUrl'] ?? '' ),
-		'imageUrl'    => esc_url_raw( $result['imageUrl'] ?? '' ),
-		'imageAlt'    => sanitize_text_field( $result['imageAlt'] ?? '' ),
+		'label'       => $label,
+		'brand'       => in_array( $brand, $brands, true ) ? $brand : 'agency',
+		'description' => sanitize_textarea_field( (string) ( $company['description'] ?? '' ) ),
+		'imageUrl'    => esc_url_raw( (string) ( $company['imageUrl'] ?? '' ) ),
+		'imageAlt'    => $text( $company['imageAlt'] ?? '' ),
+		'url'         => esc_url_raw( (string) ( $company['url'] ?? '' ) ),
+		'scopes'      => $scopes,
 	);
 }
 
-$service_groups = array();
-foreach ( (array) ( $attributes['serviceGroups'] ?? array() ) as $group_index => $group ) {
-	$id = $sanitize_identifier( $group['id'] ?? '', 'company_' . ( $group_index + 1 ) );
-	$categories = array();
-	foreach ( (array) ( $group['categories'] ?? array() ) as $category ) {
-		$label = is_array( $category )
-			? sanitize_text_field( $category['label'] ?? '' )
-			: sanitize_text_field( $category );
-		$value = is_array( $category )
-			? sanitize_text_field( $category['value'] ?? $label )
-			: $label;
-
-		if ( '' === $label ) {
-			continue;
-		}
-
-		$categories[] = array(
-			'label' => $label,
-			'value' => '' !== $value ? $value : $label,
-		);
-	}
-
-	if ( empty( $categories ) ) {
+$information = array();
+foreach ( $items( $steps[1]['options'] ?? array() ) as $option ) {
+	$label = $text( $option['label'] ?? '' );
+	if ( '' === $label ) {
 		continue;
 	}
-
-	$service_groups[] = array(
-		'id'         => $id,
-		'title'      => sanitize_text_field( $group['title'] ?? '' ),
-		'categories' => $categories,
+	$visible_for   = sanitize_key( (string) ( $option['visibleFor'] ?? '' ) );
+	$legacy_filter = sanitize_key( (string) ( $option['visibleForResultId'] ?? '' ) );
+	if ( '' === $visible_for && '' !== $legacy_filter ) {
+		$visible_for = $legacy_ids[ $legacy_filter ] ?? $legacy_filter;
+	}
+	$value         = $text( $option['value'] ?? '' );
+	$information[] = array(
+		'label'      => $label,
+		'value'      => '' !== $value ? $value : $label,
+		'visibleFor' => $visible_for,
 	);
 }
 
 $config = array(
-	'steps'            => $steps,
-	'results'          => $results,
-	'serviceGroups'    => $service_groups,
-	'finalUrl'         => esc_url_raw( $attributes['finalUrl'] ?? '' ),
-	'finalButtonLabel' => sanitize_text_field( $attributes['finalButtonLabel'] ?? __( 'Przejdź dalej', 'sparkagency' ) ),
+	'titles'           => $titles,
+	'companies'        => $companies,
+	'information'      => $information,
+	'finalUrl'         => esc_url_raw( (string) ( $attributes['finalUrl'] ?? '' ) ),
+	'finalButtonLabel' => $text( $attributes['finalButtonLabel'] ?? '' ) ?: __( 'Przejdź dalej', 'sparkagency' ),
 );
 ?>
 <section <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'spark-needs-generator' ) ) ); ?>>
@@ -111,8 +142,8 @@ $config = array(
 			<?php if ( ! empty( $attributes['lede'] ) ) : ?><p class="spark-needs-generator__lede"><?php echo wp_kses_post( $attributes['lede'] ); ?></p><?php endif; ?>
 		</div>
 	</div>
-	<?php if ( empty( $steps ) ) : ?>
-		<p><?php esc_html_e( 'Generator wymaga co najmniej jednego pytania z odpowiedziami.', 'sparkagency' ); ?></p>
+	<?php if ( empty( $companies ) ) : ?>
+		<p><?php esc_html_e( 'Generator wymaga co najmniej jednej firmy.', 'sparkagency' ); ?></p>
 	<?php else : ?>
 		<div class="spark-needs-generator__finder" data-spark-needs-generator data-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>">
 			<ol class="spark-needs-generator__steps" data-needs-steps></ol>

@@ -1,20 +1,27 @@
+import { needsToParams, readNeeds, withNeeds } from '../_shared/needs';
+
+const DEFAULT_TITLES = [ 'Dla której firmy szukasz wsparcia?', 'Jaka informacja jest dla Ciebie najważniejsza?', 'Jakiego zakresu potrzebujesz?' ];
+
 const initializeNeedsGenerators = () => {
 	document.querySelectorAll( '[data-spark-needs-generator]' ).forEach( ( root ) => {
 		if ( root.dataset.initialized === 'true' ) return;
 		let config;
 		try { config = JSON.parse( root.dataset.config || '{}' ); } catch ( error ) { return; }
 
-		const steps = Array.isArray( config.steps ) ? config.steps : [];
-		const serviceGroups = Array.isArray( config.serviceGroups ) ? config.serviceGroups : [];
-		if ( ! steps.length ) return;
+		const companies = Array.isArray( config.companies ) ? config.companies : [];
+		const information = Array.isArray( config.information ) ? config.information : [];
+		const titles = DEFAULT_TITLES.map( ( title, index ) => config.titles?.[ index ] || title );
+		if ( ! companies.length ) return;
 		root.dataset.initialized = 'true';
 
+		const section = root.closest( '.spark-needs-generator' ) || root;
+		if ( ! section.id ) section.id = 'spark-needs-generator';
 		const navigation = root.querySelector( '[data-needs-steps]' );
-		const progress = root.querySelector( '[data-needs-progress]' );
 		const stage = root.querySelector( '[data-needs-stage]' );
 		const back = root.querySelector( '[data-needs-back]' );
 		const count = root.querySelector( '[data-needs-count]' );
-		const answers = [];
+		// Keyed by step: company, information, scope. Each answer is { value, label } plus its source item.
+		const answers = {};
 		let activeStep = 0;
 
 		const create = ( tag, className, text ) => {
@@ -23,137 +30,120 @@ const initializeNeedsGenerators = () => {
 			if ( text ) element.textContent = text;
 			return element;
 		};
-		const firstAnswerResultId = () => answers[ 0 ]?.resultId || '';
-		const firstAnswerServiceGroupId = () => answers[ 0 ]?.serviceGroupId || answers[ 0 ]?.resultId || '';
-		const selectedResult = () => {
-			const resultId = firstAnswerResultId() || [ ...answers ].reverse().find( ( item ) => item?.resultId )?.resultId;
-			return ( config.results || [] ).find( ( result ) => result.id === resultId );
-		};
-		const optionsForStep = ( step ) => {
-			if ( step.optionsSource === 'serviceGroups' ) {
-				const group = serviceGroups.find( ( item ) => item.id === firstAnswerServiceGroupId() );
-				return ( group?.categories || [] ).map( ( category ) => {
-					if ( typeof category === 'object' && category ) return { label: category.label || '', value: category.value || category.label || '' };
-					return { label: category, value: category };
-				} ).filter( ( category ) => category.label );
-			}
+		const company = () => companies.find( ( item ) => item.id === answers.company?.value );
 
-			return ( step.options || [] ).filter( ( option ) => ! option.visibleForResultId || option.visibleForResultId === firstAnswerResultId() );
+		// All three steps are always shown; steps 2 and 3 depend on the chosen company and may be empty.
+		const flow = () => {
+			const selected = company();
+			const informationOptions = selected ? information.filter( ( option ) => ! option.visibleFor || option.visibleFor === selected.id ) : [];
+			return [
+				{ key: 'company', title: titles[ 0 ], options: companies.map( ( item ) => ( { value: item.id, label: item.label, brand: item.brand, item } ) ) },
+				{ key: 'information', title: titles[ 1 ], options: informationOptions.map( ( option ) => ( { value: option.value, label: option.label, item: option } ) ) },
+				{ key: 'scope', title: titles[ 2 ], options: ( selected?.scopes || [] ).map( ( scope ) => ( { value: scope.value, label: scope.label, item: scope } ) ) },
+			];
 		};
-		const query = () => {
-			const params = new URLSearchParams();
-			answers.forEach( ( answer ) => {
-				if ( answer?.param && answer.value ) params.set( answer.param, answer.value );
-			} );
-			const result = selectedResult();
-			if ( result?.id ) {
-				params.set( 'result', result.id );
-				params.set( 'spark_result_name', result.title || result.id );
-			}
-			if ( answers[ 0 ] ) {
-				params.set( 'spark_company', answers[ 0 ].value || answers[ 0 ].label || '' );
-				params.set( 'spark_company_id', firstAnswerServiceGroupId() || firstAnswerResultId() );
-			}
-			if ( answers[ 1 ] ) params.set( 'spark_information', answers[ 1 ].value || answers[ 1 ].label || '' );
-			if ( answers[ 2 ] ) {
-				params.set( 'spark_category', answers[ 2 ].value || answers[ 2 ].label || '' );
-				params.set( 'spark_category_name', answers[ 2 ].label || '' );
-			}
-			params.set( 'spark_answers', JSON.stringify( answers.map( ( answer ) => ( {
-				question: answer.question, param: answer.param, label: answer.label, value: answer.value,
-			} ) ) ) );
-			return params;
+
+		const returnUrl = () => {
+			const url = new URL( window.location.href );
+			[ ...url.searchParams.keys() ].filter( ( key ) => key.startsWith( 'spark_' ) ).forEach( ( key ) => url.searchParams.delete( key ) );
+			needsToParams( answers ).forEach( ( value, key ) => url.searchParams.set( key, value ) );
+			url.hash = section.id;
+			return url.href;
 		};
-		const destination = ( value ) => {
-			if ( ! value ) return null;
-			try {
-				const url = new URL( value, window.location.href );
-				if ( ! [ 'http:', 'https:' ].includes( url.protocol ) ) return null;
-				query().forEach( ( queryValue, key ) => url.searchParams.set( key, queryValue ) );
-				return url.href;
-			} catch ( error ) { return null; }
-		};
-		const renderNavigation = ( isResult ) => {
+		// The company decides the final page; the block-wide link is only a fallback.
+		const destination = () => withNeeds(
+			company()?.url || config.finalUrl,
+			needsToParams( answers, returnUrl() )
+		);
+
+		const renderNavigation = ( steps, isResult ) => {
 			navigation.replaceChildren();
-			[ ...steps, { title: 'Podsumowanie' } ].forEach( ( step, index ) => {
+			[ ...steps, { key: 'result', title: 'Podsumowanie' } ].forEach( ( step, index ) => {
 				const item = create( 'li' );
 				item.classList.toggle( 'is-active', index === activeStep );
-				item.classList.toggle( 'is-done', index < steps.length && Boolean( answers[ index ] ) );
+				item.classList.toggle( 'is-done', Boolean( answers[ step.key ] ) );
 				const button = create( 'button' );
 				button.type = 'button';
-				button.disabled = index > activeStep || ( index === steps.length && ! isResult );
+				button.disabled = index > activeStep || ( step.key === 'result' && ! isResult );
 				button.textContent = `${ String( index + 1 ).padStart( 2, '0' ) } · ${ step.title }`;
 				button.addEventListener( 'click', () => render( index ) );
 				item.append( button );
-				if ( answers[ index ]?.label ) item.append( create( 'small', '', answers[ index ].label ) );
+				if ( answers[ step.key ]?.label ) item.append( create( 'small', '', answers[ step.key ].label ) );
 				navigation.append( item );
 			} );
 		};
-		const renderResult = () => {
+
+		const renderResult = ( steps ) => {
 			stage.replaceChildren();
-			const result = selectedResult();
+			const selected = company();
 			const wrapper = create( 'div', 'spark-needs-generator__result' );
 			const main = create( 'div' );
 			main.append( create( 'p', 'spark-needs-generator__progress', 'Twój punkt startu' ) );
-			main.append( create( 'p', 'spark-needs-generator__result-brand', result?.title || answers[ 0 ]?.label || 'Porozmawiajmy' ) );
-			if ( result?.description ) main.append( create( 'p', 'spark-needs-generator__result-text', result.description ) );
+			main.append( create( 'p', 'spark-needs-generator__result-brand', selected?.label || 'Porozmawiajmy' ) );
+			if ( selected?.description ) main.append( create( 'p', 'spark-needs-generator__result-text', selected.description ) );
 			const summary = create( 'dl', 'spark-needs-generator__result-summary' );
-			answers.forEach( ( answer ) => {
+			steps.forEach( ( step ) => {
+				if ( ! answers[ step.key ] ) return;
 				const row = create( 'div' );
-				row.append( create( 'dt', '', answer.question ), create( 'dd', '', answer.label ) );
+				row.append( create( 'dt', '', step.title ), create( 'dd', '', answers[ step.key ].label ) );
 				summary.append( row );
 			} );
 			main.append( summary );
 			const actions = create( 'div', 'spark-needs-generator__result-actions' );
-			const finalUrl = destination( result?.contactUrl || config.finalUrl );
-			if ( finalUrl ) {
+			const href = destination();
+			if ( href ) {
 				const link = create( 'a', 'spark-needs-generator__final', config.finalButtonLabel || 'Przejdź dalej' );
-				link.href = finalUrl;
+				link.href = href;
 				actions.append( link );
 			}
 			const restart = create( 'button', 'spark-needs-generator__back', '↺ Zacznij od nowa' );
 			restart.type = 'button';
-			restart.addEventListener( 'click', () => { answers.length = 0; render( 0 ); } );
+			restart.addEventListener( 'click', () => {
+				Object.keys( answers ).forEach( ( key ) => delete answers[ key ] );
+				render( 0 );
+			} );
 			actions.append( restart );
 			main.append( actions );
 			wrapper.append( main );
-			if ( result?.imageUrl ) {
+			if ( selected?.imageUrl ) {
 				const image = document.createElement( 'img' );
-				image.src = result.imageUrl;
-				image.alt = result.imageAlt || result.title || '';
+				image.src = selected.imageUrl;
+				image.alt = selected.imageAlt || selected.label || '';
 				wrapper.append( image );
 			}
 			stage.append( wrapper );
 		};
-		const renderQuestion = ( index ) => {
-			const step = steps[ index ];
+
+		const renderQuestion = ( step, index ) => {
 			stage.replaceChildren();
 			const question = create( 'fieldset', 'spark-needs-generator__question' );
-			question.append( create( 'legend', '', step.title || `Pytanie ${ index + 1 }` ) );
+			question.append( create( 'legend', '', step.title ) );
 			const options = create( 'div', 'spark-needs-generator__options' );
-			const visibleOptions = optionsForStep( step );
-			if ( ! visibleOptions.length ) {
-				question.append( create( 'p', 'spark-needs-generator__empty', index === 2 ? 'Brak zakresów dla wybranej firmy. Wróć do kroku 1 lub uzupełnij jej kategorie.' : 'Brak odpowiedzi do wyświetlenia. Uzupełnij konfigurację generatora.' ) );
+			if ( ! step.options.length ) {
+				question.append( create( 'p', 'spark-needs-generator__empty', 'Dla wybranej firmy ten krok nie ma odpowiedzi. Przejdź dalej.' ) );
+				const next = create( 'button', 'spark-needs-generator__final', 'Dalej →' );
+				next.type = 'button';
+				next.addEventListener( 'click', () => render( index + 1 ) );
+				question.append( next );
 			}
-			visibleOptions.forEach( ( option, optionIndex ) => {
+			step.options.forEach( ( option, optionIndex ) => {
 				const button = create( 'button' );
 				button.type = 'button';
-				if ( step.markerMode === 'brand' ) {
+				if ( step.key === 'company' ) {
 					button.classList.add( `is-brand-${ option.brand || 'agency' }` );
 					const marker = create( 'i' );
 					marker.setAttribute( 'aria-hidden', 'true' );
 					button.append( marker );
 				} else button.append( create( 'b', '', String.fromCharCode( 65 + optionIndex ) ) );
+				if ( answers[ step.key ]?.value === option.value ) button.setAttribute( 'aria-pressed', 'true' );
 				button.append( create( 'span', '', option.label ), create( 'em', '', '→' ) );
 				button.addEventListener( 'click', () => {
-					answers[ index ] = {
-						question: step.title || `Pytanie ${ index + 1 }`, param: step.param, value: option.value || option.label, label: option.label,
-						resultId: option.resultId || answers[ index - 1 ]?.resultId || '',
-						serviceGroupId: option.serviceGroupId || answers[ 0 ]?.serviceGroupId || '',
-					};
-					answers.length = index + 1;
-					const nextUrl = destination( option.nextUrl );
-					if ( nextUrl ) { window.location.assign( nextUrl ); return; }
+					// Changing the company invalidates the answers that depend on it.
+					if ( step.key === 'company' && answers.company?.value !== option.value ) {
+						delete answers.information;
+						delete answers.scope;
+					}
+					answers[ step.key ] = { value: option.value, label: option.label, item: option.item };
 					render( index + 1 );
 				} );
 				options.append( button );
@@ -161,19 +151,37 @@ const initializeNeedsGenerators = () => {
 			question.append( options );
 			stage.append( question );
 		};
+
 		const render = ( index ) => {
+			const steps = flow();
 			activeStep = Math.min( Math.max( index, 0 ), steps.length );
 			const isResult = activeStep === steps.length;
+			const answered = Math.min( activeStep, steps.length );
 			root.style.setProperty( '--needs-step-count', String( steps.length + 1 ) );
-			root.style.setProperty( '--needs-progress', String( Math.min( answers.length / steps.length, 1 ) ) );
+			root.style.setProperty( '--needs-progress', String( isResult ? 1 : answered / ( steps.length + 1 ) ) );
 			back.disabled = activeStep === 0;
 			count.textContent = isResult ? 'Gotowe · możesz zmienić odpowiedzi' : `Pytanie ${ activeStep + 1 } z ${ steps.length } · wybierz jedną odpowiedź`;
-			renderNavigation( isResult );
-			if ( isResult ) renderResult(); else renderQuestion( activeStep );
+			renderNavigation( steps, isResult );
+			if ( isResult ) renderResult( steps ); else renderQuestion( steps[ activeStep ], activeStep );
+		};
+
+		// "Zmień odpowiedzi" on the form page links back here with the answers in the query.
+		const restore = () => {
+			const needs = readNeeds();
+			const selected = companies.find( ( item ) => item.id === needs?.company?.value );
+			if ( ! selected ) return 0;
+			answers.company = { value: selected.id, label: selected.label, item: selected };
+			const steps = flow();
+			steps.slice( 1 ).forEach( ( step ) => {
+				const option = step.options.find( ( item ) => item.value === needs[ step.key ]?.value );
+				if ( option ) answers[ step.key ] = { value: option.value, label: option.label, item: option.item };
+			} );
+			const firstMissing = steps.findIndex( ( step ) => step.options.length && ! answers[ step.key ] );
+			return firstMissing === -1 ? steps.length : firstMissing;
 		};
 
 		back.addEventListener( 'click', () => render( activeStep - 1 ) );
-		render( 0 );
+		render( restore() );
 	} );
 };
 

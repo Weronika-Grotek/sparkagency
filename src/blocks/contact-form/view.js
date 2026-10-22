@@ -1,3 +1,5 @@
+import { applyNeedsToForm, needsToParams, withNeeds } from "../_shared/needs";
+
 (function () {
   "use strict";
   const draftKey = "sparkagency-contact-draft";
@@ -79,6 +81,12 @@
       form.querySelector("[data-contact-topics]").value = selectedTopics(root)
         .map((topic) => topic.label)
         .join(", ");
+      // Keys route copies of the message to company addresses (theme settings).
+      const keys = form.querySelector("[data-contact-topic-keys]");
+      if (keys)
+        keys.value = selectedTopics(root)
+          .map((topic) => topic.key)
+          .join(",");
     };
     root.querySelectorAll("[data-topic-key]").forEach((button) =>
       button.addEventListener("click", () => {
@@ -111,6 +119,14 @@
       syncTopics();
       if (!validate(form)) event.preventDefault();
     });
+    // Answers from the Needs Generator travel on to the full form as well.
+    const needs = applyNeedsToForm(root, form);
+    syncTopics();
+    const fullLink = root.querySelector("[data-contact-full-link]");
+    if (needs && fullLink) {
+      const href = withNeeds(fullLink.href, needsToParams(needs, needs.returnUrl));
+      if (href) fullLink.href = href;
+    }
     root
       .querySelector("[data-contact-full-link]")
       ?.addEventListener("click", () => {

@@ -319,10 +319,29 @@
         text-decoration: none;
     }
 
+    &__empty {
+        margin: 0 0 1.5rem;
+        color: vars.$color-subtitle;
+    }
+
     &__editor-option {
         margin: 1.25rem 0;
         padding: 1rem;
         border: 1px solid #ddd;
+    }
+
+    // Editor preview: every company with its steps and final page.
+    &__editor-companies {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    &__editor-company .spark-needs-generator__options {
+        margin-bottom: .75rem;
+    }
+
+    &__editor-company dd {
+        overflow-wrap: anywhere;
     }
 
     &__editor-actions {

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/team",
+  "version": "1.0.0",
+  "title": "Spark Zespół",
+  "category": "design",
+  "icon": "groups",
+  "description": "Karty osób z firmą, stanowiskiem i opisem. Sekcja sparkAGENCY zbiera osoby ze wszystkich firm.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": "Zespół"
+    },
+    "title": {
+      "type": "string",
+      "default": "Ludzie, z którymi będziesz pracować"
+    },
+    "lede": {
+      "type": "string",
+      "default": ""
+    },
+    "brand": {
+      "type": "string",
+      "default": "agency"
+    },
+    "people": {
+      "type": "array",
+      "default": []
+    },
+    "overrides": {
+      "type": "object",
+      "default": {}
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "html": false
+  },
+  "editorScript": "file:./index.jsx",
+  "viewScript": "file:./view.js"
+}

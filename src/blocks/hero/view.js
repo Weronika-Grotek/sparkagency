@@ -66,9 +66,9 @@
 			};
 
 			const isLightTheme = () => {
-				if ( hero.dataset.theme ) return hero.dataset.theme === 'light';
 				const pageTheme = document.documentElement.dataset.theme || document.body.dataset.theme;
 				if ( pageTheme ) return pageTheme === 'light';
+				if ( hero.dataset.theme ) return hero.dataset.theme === 'light';
 				return hero.classList.contains( 'is-theme-light' );
 			};
 

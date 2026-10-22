@@ -1,4 +1,5 @@
 @use "../variables" as vars;
+@use "../needs-summary";
 
 .spark-contact-full-form {
   padding-block: clamp(4rem, 8vw, 7rem);

@@ -6,7 +6,7 @@
   "title": "SparkGenerator",
   "category": "design",
   "icon": "forms",
-  "description": "Kreator potrzeb z dopasowaniem firmy i przekierowaniem GET.",
+  "description": "Kreator potrzeb: firma, informacja i zakres z przekierowaniem do formularza kontaktowego.",
   "textdomain": "sparkagency",
   "attributes": {
     "eyebrow": {
@@ -140,6 +140,10 @@
           ]
         }
       ]
+    },
+    "companies": {
+      "type": "array",
+      "default": []
     },
     "results": {
       "type": "array",

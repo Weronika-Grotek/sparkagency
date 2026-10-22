@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/spark-aboutfirm",
+  "version": "1.0.0",
+  "title": "SparkAboutfirm",
+  "category": "design",
+  "icon": "groups",
+  "description": "Edytowalna lista marek w grupie z animacją hover zgodną z projektem O nas.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "Grupa" },
+    "title": { "type": "string", "default": "Marki w grupie" },
+    "lede": { "type": "string", "default": "Kliknij markę, żeby zobaczyć, jak wygląda jej strona." },
+    "theme": { "type": "string", "default": "dark" },
+    "companies": {
+      "type": "array",
+      "default": [
+        { "prefix": "spark", "name": "WORKS", "description": "Packaging i artwork production.", "url": "#", "brand": "works", "color": "" },
+        { "prefix": "spark", "name": "EXP", "description": "Technologia dla biznesu.", "url": "#", "brand": "exp", "color": "" },
+        { "prefix": "spark", "name": "WARSAW", "description": "Komunikacja na wiele rynków.", "url": "#", "brand": "warsaw", "color": "" },
+        { "prefix": "spark", "name": "HEALTH", "description": "Reklama i marketing dla sektora healthcare.", "url": "#", "brand": "health", "color": "" },
+        { "prefix": "spark", "name": "STUDIO", "description": "Produkcja i postprodukcja video.", "url": "#", "brand": "studio", "color": "" }
+      ]
+    }
+  },
+  "supports": { "align": ["wide", "full"], "anchor": true, "html": false },
+  "editorScript": "file:./index.jsx"
+}
