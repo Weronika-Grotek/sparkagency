@@ -1,6 +1,6 @@
 import { needsToParams, readNeeds, withNeeds } from '../_shared/needs';
 
-const DEFAULT_TITLES = [ 'Dla której firmy szukasz wsparcia?', 'Jaka informacja jest dla Ciebie najważniejsza?', 'Jakiego zakresu potrzebujesz?' ];
+const DEFAULT_TITLES = [ 'Co chcesz zrobić?', 'Skala zadania', 'Czego potrzebujesz?' ];
 
 const initializeNeedsGenerators = () => {
 	document.querySelectorAll( '[data-spark-needs-generator]' ).forEach( ( root ) => {
@@ -9,9 +9,11 @@ const initializeNeedsGenerators = () => {
 		try { config = JSON.parse( root.dataset.config || '{}' ); } catch ( error ) { return; }
 
 		const companies = Array.isArray( config.companies ) ? config.companies : [];
+		const actions = Array.isArray( config.actions ) ? config.actions : [];
 		const information = Array.isArray( config.information ) ? config.information : [];
+		const scope = Array.isArray( config.scope ) ? config.scope : [];
 		const titles = DEFAULT_TITLES.map( ( title, index ) => config.titles?.[ index ] || title );
-		if ( ! companies.length ) return;
+		if ( ! actions.length ) return;
 		root.dataset.initialized = 'true';
 
 		const section = root.closest( '.spark-needs-generator' ) || root;
@@ -30,16 +32,33 @@ const initializeNeedsGenerators = () => {
 			if ( text ) element.textContent = text;
 			return element;
 		};
+		const appendCompanyName = ( element, item, fallback ) => {
+			const label = item?.label || fallback;
+			const highlighted = item?.highlightText || '';
+			const start = highlighted ? label.toLocaleLowerCase().indexOf( highlighted.toLocaleLowerCase() ) : -1;
+			if ( start === -1 ) {
+				element.textContent = label;
+				return;
+			}
+			element.append( document.createTextNode( label.slice( 0, start ) ) );
+			const accent = create( 'span', `spark-needs-generator__company-accent is-brand-${ item.highlightBrand || item.brand || 'agency' }${ item.highlightBold === false ? '' : ' is-bold' }`, label.slice( start, start + highlighted.length ) );
+			element.append( accent, document.createTextNode( label.slice( start + highlighted.length ) ) );
+		};
 		const company = () => companies.find( ( item ) => item.id === answers.company?.value );
 
-		// All three steps are always shown; steps 2 and 3 depend on the chosen company and may be empty.
+		// The selected action determines the company. Steps 2 and 3 can then be
+		// configured per company or shown to every company.
 		const flow = () => {
 			const selected = company();
 			const informationOptions = selected ? information.filter( ( option ) => ! option.visibleFor || option.visibleFor === selected.id ) : [];
+			const scopeOptions = selected ? scope.filter( ( option ) => ! option.visibleFor || option.visibleFor === selected.id ) : [];
 			return [
-				{ key: 'company', title: titles[ 0 ], options: companies.map( ( item ) => ( { value: item.id, label: item.label, brand: item.brand, item } ) ) },
+				{ key: 'company', title: titles[ 0 ], options: actions.map( ( item ) => {
+					const mappedCompany = companies.find( ( companyItem ) => companyItem.id === item.companyId );
+					return { value: mappedCompany?.id || item.value, label: item.label, brand: mappedCompany?.brand || 'agency', item };
+				} ) },
 				{ key: 'information', title: titles[ 1 ], options: informationOptions.map( ( option ) => ( { value: option.value, label: option.label, item: option } ) ) },
-				{ key: 'scope', title: titles[ 2 ], options: ( selected?.scopes || [] ).map( ( scope ) => ( { value: scope.value, label: scope.label, item: scope } ) ) },
+				{ key: 'scope', title: titles[ 2 ], options: scopeOptions.map( ( option ) => ( { value: option.value, label: option.label, item: option } ) ) },
 			];
 		};
 
@@ -79,8 +98,18 @@ const initializeNeedsGenerators = () => {
 			const wrapper = create( 'div', 'spark-needs-generator__result' );
 			const main = create( 'div' );
 			main.append( create( 'p', 'spark-needs-generator__progress', 'Twój punkt startu' ) );
-			main.append( create( 'p', 'spark-needs-generator__result-brand', selected?.label || 'Porozmawiajmy' ) );
+			const companyName = create( 'p', 'spark-needs-generator__result-brand' );
+			appendCompanyName( companyName, selected, 'Porozmawiajmy' );
+			main.append( companyName );
 			if ( selected?.description ) main.append( create( 'p', 'spark-needs-generator__result-text', selected.description ) );
+			if ( selected?.imageUrl ) {
+				const image = document.createElement( 'img' );
+				image.src = selected.imageUrl;
+				image.alt = selected.imageAlt || selected.label || '';
+				main.append( image );
+			}
+			const panel = create( 'aside', 'spark-needs-generator__result-panel' );
+			panel.append( create( 'p', 'spark-needs-generator__result-panel-title', 'Twoje odpowiedzi' ) );
 			const summary = create( 'dl', 'spark-needs-generator__result-summary' );
 			steps.forEach( ( step ) => {
 				if ( ! answers[ step.key ] ) return;
@@ -88,7 +117,7 @@ const initializeNeedsGenerators = () => {
 				row.append( create( 'dt', '', step.title ), create( 'dd', '', answers[ step.key ].label ) );
 				summary.append( row );
 			} );
-			main.append( summary );
+			panel.append( summary );
 			const actions = create( 'div', 'spark-needs-generator__result-actions' );
 			const href = destination();
 			if ( href ) {
@@ -103,14 +132,10 @@ const initializeNeedsGenerators = () => {
 				render( 0 );
 			} );
 			actions.append( restart );
-			main.append( actions );
+			panel.append( actions );
+			panel.append( create( 'p', 'spark-needs-generator__result-note', 'Przeniesiemy te odpowiedzi do formularza. Uzupełnisz tylko opis projektu i dane kontaktowe.' ) );
 			wrapper.append( main );
-			if ( selected?.imageUrl ) {
-				const image = document.createElement( 'img' );
-				image.src = selected.imageUrl;
-				image.alt = selected.imageAlt || selected.label || '';
-				wrapper.append( image );
-			}
+			wrapper.append( panel );
 			stage.append( wrapper );
 		};
 
@@ -130,13 +155,15 @@ const initializeNeedsGenerators = () => {
 				const button = create( 'button' );
 				button.type = 'button';
 				if ( step.key === 'company' ) {
+					button.classList.add( 'is-action' );
 					button.classList.add( `is-brand-${ option.brand || 'agency' }` );
 					const marker = create( 'i' );
 					marker.setAttribute( 'aria-hidden', 'true' );
 					button.append( marker );
 				} else button.append( create( 'b', '', String.fromCharCode( 65 + optionIndex ) ) );
 				if ( answers[ step.key ]?.value === option.value ) button.setAttribute( 'aria-pressed', 'true' );
-				button.append( create( 'span', '', option.label ), create( 'em', '', '→' ) );
+				const optionLabel = create( 'span', '', option.label );
+				button.append( optionLabel, create( 'em', '', '→' ) );
 				button.addEventListener( 'click', () => {
 					// Changing the company invalidates the answers that depend on it.
 					if ( step.key === 'company' && answers.company?.value !== option.value ) {

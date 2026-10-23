@@ -25,6 +25,9 @@ $brand_taxonomy       = sanitize_key( $attributes['brandTaxonomy'] ?? '' );
 $client_meta_key      = sanitize_key( $attributes['clientMetaKey'] ?? 'client' );
 $metric_value_meta_key = sanitize_key( $attributes['metricValueMetaKey'] ?? 'metric_value' );
 $metric_label_meta_key = sanitize_key( $attributes['metricLabelMetaKey'] ?? 'metric_label' );
+$contact_url           = esc_url( $attributes['contactUrl'] ?? '' );
+$contact_label         = trim( wp_strip_all_tags( $attributes['contactLabel'] ?? __( 'Porozmawiajmy o Twoim projekcie', 'sparkagency' ) ) );
+$has_contact_cta       = '' !== $contact_url && '' !== $contact_label;
 $case_query           = new WP_Query(
 	array(
 		'post_type'           => $post_type,
@@ -97,7 +100,7 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 	return array_values( $brands );
 };
 ?>
-<section <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'spark-case-studies' ) ) ); ?> data-spark-case-studies>
+<section <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'spark-case-studies' . ( $has_contact_cta ? ' has-case-studies-contact' : '' ) ) ) ); ?> data-spark-case-studies>
 	<header class="spark-case-studies__header">
 		<?php if ( ! empty( $attributes['eyebrow'] ) ) : ?>
 			<p class="spark-case-studies__eyebrow"><?php echo esc_html( $attributes['eyebrow'] ); ?></p>
@@ -190,8 +193,10 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php if ( ! empty( $attributes['contactUrl'] ) ) : ?>
-		<footer class="spark-case-studies__footer"><a class="spark-case-studies__contact" href="<?php echo esc_url( $attributes['contactUrl'] ); ?>"><?php echo esc_html( $attributes['contactLabel'] ?? __( 'Porozmawiajmy o Twoim projekcie', 'sparkagency' ) ); ?></a></footer>
+	<?php if ( $has_contact_cta ) : ?>
+		<footer class="spark-case-studies__footer">
+			<a class="spark-case-studies__contact" href="<?php echo $contact_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with esc_url above. ?>"<?php echo ! empty( $attributes['contactNewTab'] ) ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>><span><?php echo esc_html( $contact_label ); ?></span><span class="spark-case-studies__contact-icon" aria-hidden="true">→</span></a>
+		</footer>
 	<?php endif; ?>
 </section>
 <?php wp_reset_postdata(); ?>

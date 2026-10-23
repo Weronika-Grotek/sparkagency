@@ -1,7 +1,4 @@
 @use "../variables" as vars;
-[data-theme="dark"] .spark-needs-generator { 
-        --spark-color-text:  #0E1116 !important;
-}
 .spark-needs-generator {
     --needs-gap: clamp(1rem, 2vw, 1.5rem);
     // Generator potrzeb zawsze korzysta z jasnej powierzchni, niezależnie od motywu strony.
@@ -9,7 +6,7 @@
     --spark-color-surface: var(--wp--preset--color--light-surface, #FFFFFF);
     --spark-color-surface-2: var(--wp--preset--color--light-surface-2, #E9EDF1);
     --spark-color-surface-3: var(--wp--preset--color--light-surface-3, #D7DDE3);
-    --spark-color-text: #b5b5b5 !important;
+    --spark-color-text: var(--wp--preset--color--light-text, #484848);
     --spark-color-text-muted: var(--wp--preset--color--light-subtitle, #5A616B);
     --spark-color-text-subtle: var(--wp--preset--color--light-text-subtle, #8B929B);
     --spark-color-line: var(--wp--preset--color--light-line, rgba(14, 17, 22, .12));
@@ -150,7 +147,7 @@
 
     &__options {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
         gap: .75rem;
     }
 
@@ -236,6 +233,11 @@
         font-style: normal;
     }
 
+    &__options button.is-action em,
+    &__preview button.is-action em {
+        display: none;
+    }
+
     &__footer {
         display: flex;
         justify-content: space-between;
@@ -255,12 +257,28 @@
     }
 
     &__result-brand {
-        color: vars.$color-accent;
+        margin: 1.25rem 0 0;
+        color: vars.$color-text;
         font-size: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
-        font-weight: 800;
+        font-weight: 400;
         line-height: .9;
         letter-spacing: -.05em;
     }
+
+    &__company-accent {
+        color: var(--needs-company-accent, vars.$color-accent);
+    }
+
+    &__company-accent.is-bold {
+        font-weight: 800;
+    }
+
+    &__company-accent.is-brand-agency { --needs-company-accent: var(--wp--preset--color--agency, #0E1116); }
+    &__company-accent.is-brand-exp { --needs-company-accent: var(--wp--preset--color--exp, #01B57C); }
+    &__company-accent.is-brand-warsaw { --needs-company-accent: var(--wp--preset--color--warsaw, #43A0ED); }
+    &__company-accent.is-brand-health { --needs-company-accent: var(--wp--preset--color--health, #8E3FA3); }
+    &__company-accent.is-brand-works { --needs-company-accent: var(--wp--preset--color--works, #8C6A2C); }
+    &__company-accent.is-brand-studio { --needs-company-accent: var(--wp--preset--color--studio, #D65251); }
 
     &__result-text {
         max-width: 56ch;
@@ -268,15 +286,12 @@
     }
 
     &__result-summary {
-        max-width: 56ch;
-        margin: 1.5rem 0 0;
+        margin: .75rem 0 0;
         border-top: 1px solid vars.$color-line;
     }
 
     &__result-summary div {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 1rem;
+        display: block;
         padding: .8rem 0;
         border-bottom: 1px solid vars.$color-line;
     }
@@ -288,8 +303,31 @@
 
     &__result-summary dd {
         margin: 0;
+        color: vars.$color-text;
         font-weight: 700;
-        text-align: right;
+    }
+
+    &__result-panel {
+        align-self: start;
+        padding: clamp(1rem, 3vw, 1.5rem);
+        border: 1px solid vars.$color-line;
+        background: vars.$color-surface-2;
+    }
+
+    &__result-panel-title {
+        margin: 0;
+        color: vars.$color-subtitle;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+
+    &__result-note {
+        margin: 1rem 0 0;
+        color: vars.$color-subtitle;
+        font-size: .8rem;
+        line-height: 1.45;
     }
 
     &__result img {
@@ -303,7 +341,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        margin-top: 1.5rem;
+        margin-top: 1rem;
     }
 
     &__final {
@@ -359,7 +397,6 @@
         font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
     }
 }
-
 @media (max-width: 48rem) {
     .spark-needs-generator {
 
@@ -389,25 +426,4 @@
             padding: 0 1rem 1.5rem;
         }
     }
-}
-
-// Sekcja jest jasna domyślnie. W jawnym jasnym motywie strony odwracamy ją do
-// ciemnego wariantu, aby zachować kontrast z resztą układu jak poprzednio.
-html[data-theme="light"] .spark-needs-generator,
-body[data-theme="light"] .spark-needs-generator,
-.is-theme-light .spark-needs-generator,
-.spark-needs-generator.is-theme-light {
-    --spark-color-bg: var(--wp--preset--color--background, #0B0B0D);
-    --spark-color-surface: var(--wp--preset--color--surface, #131316);
-    --spark-color-surface-2: var(--wp--preset--color--surface-2, #1C1C20);
-    --spark-color-surface-3: var(--wp--preset--color--surface-3, #2A2A30);
-    --spark-color-text: var(--wp--preset--color--text, #F3F2EF);
-    --spark-color-text-muted: var(--wp--preset--color--subtitle, #9B9BA3);
-    --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #6C6C75);
-    --spark-color-line: var(--wp--preset--color--line, rgba(243, 242, 239, .12));
-    --spark-color-line-strong: var(--wp--preset--color--line-strong, rgba(243, 242, 239, .28));
-    --spark-color-danger: var(--wp--preset--color--danger, #FF7A6B);
-    --spark-color-scrim: var(--wp--preset--color--scrim, #0B0B0D);
-    --spark-color-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
-    --spark-color-accent-ink: var(--wp--preset--color--agency-dark-ink, #0B0B0D);
 }

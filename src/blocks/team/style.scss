@@ -156,6 +156,16 @@
             transform: translateZ(40px);
         }
 
+        img {
+            position: relative;
+            z-index: 1;
+            width: calc(100% - 1rem);
+            height: calc(100% - 1rem);
+            object-fit: cover;
+            border-radius: calc(#{vars.$radius-card} - .15rem);
+            transform: translateZ(40px);
+        }
+
         em {
             position: absolute;
             left: 10px;
@@ -165,6 +175,13 @@
             font-style: normal;
             letter-spacing: .12em;
             transform: translateZ(30px);
+
+        }
+
+        &.has-image em {
+            z-index: 2;
+            padding: .3rem .4rem;
+            background: color-mix(in srgb, #{vars.$color-background} 75%, transparent);
         }
     }
 

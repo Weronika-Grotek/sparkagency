@@ -33,22 +33,21 @@
       "type": "array",
       "default": [
         {
-          "title": "Dla której firmy szukasz wsparcia?",
+          "title": "Co chcesz zrobić?",
           "param": "company",
           "markerMode": "brand",
           "options": []
         },
         {
-          "title": "Jaka informacja jest dla Ciebie najważniejsza?",
+          "title": "Skala zadania",
           "param": "information",
           "markerMode": "letters",
           "options": []
         },
         {
-          "title": "Jakiego zakresu potrzebujesz?",
+          "title": "Czego potrzebujesz?",
           "param": "scope",
           "markerMode": "letters",
-          "optionsSource": "serviceGroups",
           "options": []
         }
       ]

@@ -37,6 +37,9 @@ $resolve    = static function ( $person, string $source_brand ) use ( $text, $va
 		'brand' => $valid_brand( $person['brand'] ?? '', $source_brand ),
 		'role'  => $text( $person['role'] ?? '' ),
 		'bio'   => $text( $person['bio'] ?? '' ),
+		'image_id'  => absint( $person['imageId'] ?? 0 ),
+		'image_url' => esc_url_raw( $text( $person['imageUrl'] ?? '' ) ),
+		'image_alt' => $text( $person['imageAlt'] ?? '' ),
 	);
 };
 $initials   = static function ( string $name ): string {
@@ -113,11 +116,17 @@ foreach ( $people as $key => $person ) {
 	}
 	$role    = $text( $override['role'] ?? '' );
 	$bio     = $text( $override['bio'] ?? '' );
+	$image_id  = absint( $override['imageId'] ?? $person['image_id'] );
+	$image_url = esc_url_raw( $text( $override['imageUrl'] ?? '' ) );
+	$image_alt = $text( $override['imageAlt'] ?? '' );
 	$cards[] = array(
 		'name'  => $person['name'],
 		'brand' => $valid_brand( $override['brand'] ?? '', $person['brand'] ),
 		'role'  => '' !== $role ? $role : $person['role'],
 		'bio'   => '' !== $bio ? $bio : $person['bio'],
+		'image_id'  => $image_id,
+		'image_url' => '' !== $image_url ? $image_url : $person['image_url'],
+		'image_alt' => '' !== $image_alt ? $image_alt : $person['image_alt'],
 	);
 }
 
@@ -151,7 +160,16 @@ if ( '' !== $text( $attributes['anchor'] ?? '' ) ) {
 			<div class="spark-team__grid">
 				<?php foreach ( $cards as $card ) : ?>
 					<article class="spark-team__person has-brand-<?php echo esc_attr( $card['brand'] ); ?>">
-						<div class="spark-team__avatar" aria-hidden="true"><span><?php echo esc_html( $initials( $card['name'] ) ); ?></span><em><?php echo esc_html( $brands[ $card['brand'] ] ); ?></em></div>
+						<div class="spark-team__avatar<?php echo $card['image_id'] || $card['image_url'] ? ' has-image' : ''; ?>">
+							<?php if ( $card['image_id'] ) : ?>
+								<?php echo wp_get_attachment_image( $card['image_id'], 'medium_large', false, array( 'alt' => $card['image_alt'] ?: $card['name'], 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core escapes image markup. ?>
+							<?php elseif ( $card['image_url'] ) : ?>
+								<img src="<?php echo esc_url( $card['image_url'] ); ?>" alt="<?php echo esc_attr( $card['image_alt'] ?: $card['name'] ); ?>" loading="lazy" />
+							<?php else : ?>
+								<span aria-hidden="true"><?php echo esc_html( $initials( $card['name'] ) ); ?></span>
+							<?php endif; ?>
+							<em aria-hidden="true"><?php echo esc_html( $brands[ $card['brand'] ] ); ?></em>
+						</div>
 						<div>
 							<h3><?php echo esc_html( $card['name'] ); ?></h3>
 							<?php if ( '' !== $card['role'] ) : ?>

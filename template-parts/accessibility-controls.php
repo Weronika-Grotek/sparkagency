@@ -34,7 +34,9 @@ $spark_accessibility_options = array(
 			<p class="p-preferences-panel__eyebrow"><?php esc_html_e( 'Komfort przeglądania', 'sparkagency' ); ?></p>
 			<h2 id="spark-accessibility-title"><?php esc_html_e( 'Dostępność', 'sparkagency' ); ?></h2>
 		</div>
-		<button type="button" class="p-preferences-panel__close" data-accessibility-close aria-label="<?php esc_attr_e( 'Zamknij ustawienia dostępności', 'sparkagency' ); ?>">×</button>
+		<button type="button" class="p-preferences-panel__close" data-accessibility-close aria-label="<?php esc_attr_e( 'Zamknij ustawienia dostępności', 'sparkagency' ); ?>">
+			<span class="p-preferences-panel__close-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></span>
+		</button>
 	</div>
 	<p id="spark-accessibility-description" class="p-preferences-panel__description"><?php esc_html_e( 'Dopasuj wygląd strony do swoich potrzeb. Wybór zostanie zapamiętany tylko w tej przeglądarce.', 'sparkagency' ); ?></p>
 	<div class="p-preferences-panel__list">

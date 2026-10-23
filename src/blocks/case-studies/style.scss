@@ -25,6 +25,10 @@ $case-brand-colors: (
 	background: vars.$color-background;
 	color: vars.$color-text;
 
+	&.has-case-studies-contact {
+		padding-bottom: 2rem;
+	}
+
 	*,
 	*::before,
 	*::after {
@@ -146,6 +150,7 @@ $case-brand-colors: (
 	&__blob--one {
 		top: -18%;
 		left: -12%;
+		display: none;
 	}
 
 	&__blob--two {
@@ -156,7 +161,7 @@ $case-brand-colors: (
 	}
 
 	&__blob--three {
-		top: 28%;
+		top: 68%;
 		left: 32%;
 		width: 42%;
 		opacity: .35;
@@ -382,22 +387,61 @@ $case-brand-colors: (
 
 	&__footer {
 		display: flex;
-		justify-content: flex-end;
-		margin-top: clamp(2rem, 5vw, 4rem);
+		justify-content: flex-start;
+		margin-top: clamp(1.5rem, 3vw, 2.25rem);
 	}
 
+	//kontakt strona glowna - wera
 	&__contact {
 		display: inline-flex;
 		align-items: center;
-		gap: .65rem;
-		color: vars.$color-text;
-		font-size: .88rem;
+		gap: .6rem;
+		margin-top: 3rem;
+		min-height: auto;
+		padding: 0 0 .2rem;
+		border: 0;
+		border-bottom: 1px solid currentColor;
+		border-radius: 0;
+		background: transparent;
+		color: vars.$color-accent;
+		font-size: vars.$font-size-tag;
 		font-weight: vars.$font-weight-extrabold;
+		line-height: 1.2;
 		text-decoration: none;
+		box-shadow: none;
+
+		span {
+			transition: transform .3s cubic-bezier(.2, .7, .1, 1);
+		}
+
+		&:hover span {
+			transform: translateX(.3125rem);
+		}
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: .1875rem;
+		}
 	}
 
-	&__contact::after {
-		content: "↗";
+	&__contact:hover {
+		border-color: var(--spark-color-accent);
+		background: transparent;
+		color: var(--spark-color-accent);
+		box-shadow: none;
+		transform: translateY(-.125rem);
+	}
+
+	&__contact-icon {
+		display: grid;
+		place-items: center;
+		font-size: 1.125rem;
+		line-height: 1;
+		transition: transform .25s var(--case-ease);
+	}
+
+	&__contact:hover &__contact-icon {
+		transform: translateX(.25rem);
 	}
 
 	&__empty,
@@ -510,6 +554,11 @@ $case-brand-colors: (
 		.spark-case-studies__window {
 			overflow: hidden;
 		}
+	}
+
+	.spark-case-studies.has-case-studies-contact.is-case-pinned .spark-case-studies__sticky {
+		height: auto;
+		min-height: 0;
 	}
 }
 

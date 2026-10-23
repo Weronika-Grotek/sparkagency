@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, TextControl } from '@wordpress/components';
+import { PanelBody, RangeControl, TextControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const Edit = ( { attributes, setAttributes } ) => (
@@ -21,14 +21,17 @@ const Edit = ( { attributes, setAttributes } ) => (
 				<TextControl label={ __( 'Meta: wartość rezultatu', 'sparkagency' ) } value={ attributes.metricValueMetaKey } onChange={ ( metricValueMetaKey ) => setAttributes( { metricValueMetaKey } ) } />
 				<TextControl label={ __( 'Meta: opis rezultatu', 'sparkagency' ) } value={ attributes.metricLabelMetaKey } onChange={ ( metricLabelMetaKey ) => setAttributes( { metricLabelMetaKey } ) } />
 			</PanelBody>
-			<PanelBody title={ __( 'Linki', 'sparkagency' ) } initialOpen={ false }>
+			<PanelBody title={ __( 'Link na końcu listy', 'sparkagency' ) } initialOpen={ false }>
 				<TextControl label={ __( 'URL: wszystkie realizacje', 'sparkagency' ) } type="url" value={ attributes.allUrl } onChange={ ( allUrl ) => setAttributes( { allUrl } ) } />
 				<TextControl label={ __( 'Etykieta: wszystkie realizacje', 'sparkagency' ) } value={ attributes.allLabel } onChange={ ( allLabel ) => setAttributes( { allLabel } ) } />
-				<TextControl label={ __( 'URL: kontakt', 'sparkagency' ) } type="url" value={ attributes.contactUrl } onChange={ ( contactUrl ) => setAttributes( { contactUrl } ) } />
-				<TextControl label={ __( 'Etykieta: kontakt', 'sparkagency' ) } value={ attributes.contactLabel } onChange={ ( contactLabel ) => setAttributes( { contactLabel } ) } />
+			</PanelBody>
+			<PanelBody title={ __( 'Przycisk pod kartami', 'sparkagency' ) } initialOpen={ false }>
+				<TextControl label={ __( 'Adres URL', 'sparkagency' ) } type="url" value={ attributes.contactUrl } onChange={ ( contactUrl ) => setAttributes( { contactUrl } ) } help={ __( 'Pozostaw puste, aby ukryć przycisk.', 'sparkagency' ) } />
+				<TextControl label={ __( 'Tekst przycisku', 'sparkagency' ) } value={ attributes.contactLabel } onChange={ ( contactLabel ) => setAttributes( { contactLabel } ) } />
+				<ToggleControl label={ __( 'Otwórz w nowej karcie', 'sparkagency' ) } checked={ attributes.contactNewTab } onChange={ ( contactNewTab ) => setAttributes( { contactNewTab } ) } />
 			</PanelBody>
 		</InspectorControls>
-		<section { ...useBlockProps( { className: 'spark-case-studies spark-case-studies--editor' } ) }>
+		<section { ...useBlockProps( { className: `spark-case-studies spark-case-studies--editor${ attributes.contactUrl && attributes.contactLabel ? ' has-case-studies-contact' : '' }` } ) }>
 			<header className="spark-case-studies__header">
 				<RichText tagName="p" className="spark-case-studies__eyebrow" value={ attributes.eyebrow } placeholder={ __( 'Numer sekcji', 'sparkagency' ) } onChange={ ( eyebrow ) => setAttributes( { eyebrow } ) } />
 				<div>
@@ -40,6 +43,7 @@ const Edit = ( { attributes, setAttributes } ) => (
 				<strong>{ __( 'Podgląd pobiera wpisy na stronie.', 'sparkagency' ) }</strong>
 				<span>{ __( 'Po zapisie blok wyświetli opublikowane wpisy typu:', 'sparkagency' ) } <code>{ attributes.postType || 'case-study' }</code>.</span>
 			</div>
+			{ attributes.contactUrl && attributes.contactLabel && <footer className="spark-case-studies__footer"><span className="spark-case-studies__contact"><RichText tagName="span" value={ attributes.contactLabel } placeholder={ __( 'Tekst przycisku', 'sparkagency' ) } onChange={ ( contactLabel ) => setAttributes( { contactLabel } ) } /><span className="spark-case-studies__contact-icon" aria-hidden="true">→</span></span></footer> }
 		</section>
 	</>
 );

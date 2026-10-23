@@ -21,7 +21,8 @@
 		"allUrl": { "type": "string", "default": "" },
 		"allLabel": { "type": "string", "default": "Wszystkie realizacje" },
 		"contactUrl": { "type": "string", "default": "" },
-		"contactLabel": { "type": "string", "default": "Porozmawiajmy o Twoim projekcie" }
+		"contactLabel": { "type": "string", "default": "Porozmawiajmy o Twoim projekcie" },
+		"contactNewTab": { "type": "boolean", "default": false }
 	},
 	"supports": {
 		"align": [ "wide", "full" ],
