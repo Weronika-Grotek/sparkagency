@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "sparkagency/contact-handoff",
 	"version": "1.0.0",
-	"title": "Kontakt — podsumowanie potrzeb",
+	"title": "Kontakt - podsumowanie potrzeb",
 	"category": "design",
 	"icon": "feedback",
 	"description": "Pokazuje odpowiedzi z Generatora potrzeb przed formularzem kontaktowym.",

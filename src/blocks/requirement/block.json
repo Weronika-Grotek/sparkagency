@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "sparkagency/requirement",
+	"version": "1.0.0",
+	"title": "Spark Requirement",
+	"category": "design",
+	"icon": "yes-alt",
+	"description": "Edytowalna sekcja zakresu pracy lub wymagań z powtarzalną listą punktów.",
+	"textdomain": "sparkagency",
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"items": {
+			"type": "array",
+			"default": []
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"spacing": {
+			"margin": ["top", "bottom"]
+		},
+		"html": false
+	},
+	"editorScript": "file:./index.js"
+}

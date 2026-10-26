@@ -45,7 +45,7 @@ $resolve    = static function ( $person, string $source_brand ) use ( $text, $va
 $initials   = static function ( string $name ): string {
 	$words = preg_split( '/\s+/u', $name, -1, PREG_SPLIT_NO_EMPTY );
 	if ( ! $words ) {
-		return '—';
+		return '-';
 	}
 	$letters = '';
 	foreach ( array_slice( $words, 0, 2 ) as $word ) {

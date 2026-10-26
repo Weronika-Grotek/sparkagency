@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/career-cta",
+  "version": "1.0.0",
+  "title": "Spark Kariera: dołącz do zespołu",
+  "category": "design",
+  "icon": "groups",
+  "description": "Edytowalna sekcja CTA zachęcająca do dołączenia do zespołu.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": "Kariera"
+    },
+    "title": {
+      "type": "string",
+      "default": "Dołącz do zespołu"
+    },
+    "description": {
+      "type": "string",
+      "default": "Oferty pracy publikujemy na stronie Kariera. Jeśli nie widzisz stanowiska dla siebie, wyślij nam CV."
+    },
+    "primaryLabel": {
+      "type": "string",
+      "default": "Zobacz oferty pracy"
+    },
+    "primaryUrl": {
+      "type": "string",
+      "default": "/kariera/"
+    },
+    "secondaryLabel": {
+      "type": "string",
+      "default": "Napisz do nas"
+    },
+    "secondaryUrl": {
+      "type": "string",
+      "default": "/kontakt/"
+    },
+    "brand": {
+      "type": "string",
+      "default": "agency"
+    },
+    "theme": {
+      "type": "string",
+      "default": "dark"
+    },
+    "showPrimaryButton": {
+      "type": "boolean",
+      "default": true
+    },
+    "showSecondaryButton": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "spacing": {
+      "margin": [
+        "top",
+        "bottom"
+      ],
+      "padding": [
+        "top",
+        "bottom"
+      ]
+    },
+    "html": false
+  },
+  "editorScript": "file:./index.js"
+}

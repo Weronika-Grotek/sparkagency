@@ -4,7 +4,8 @@ defined( 'ABSPATH' ) || exit;
 $text = static function ( $value ): string { return is_string( $value ) ? trim( $value ) : ''; };
 $theme = in_array( $attributes['theme'] ?? '', array( 'dark', 'light', 'inherit' ), true ) ? $attributes['theme'] : 'dark';
 $eyebrow = $text( $attributes['eyebrow'] ?? '' ); $title = $text( $attributes['title'] ?? '' ); $lede = $text( $attributes['lede'] ?? '' );
-$label = $text( $attributes['ctaLabel'] ?? '' ); $url = esc_url( $text( $attributes['ctaUrl'] ?? '' ) ); $accent = sanitize_hex_color( $text( $attributes['accentColor'] ?? '' ) ); $steps = array();
+$label = $text( $attributes['ctaLabel'] ?? '' ); $url = esc_url( $text( $attributes['ctaUrl'] ?? '' ) ); $accent = sanitize_hex_color( $text( $attributes['accentColor'] ?? '' ) ); $title_font_size = $text( $attributes['titleFontSize'] ?? '' ); $steps = array();
+if ( ! preg_match( '/^\\d+(?:\\.\\d+)?(?:px|rem|em|%|vw|vh)$/', $title_font_size ) ) { $title_font_size = ''; }
 foreach ( is_array( $attributes['steps'] ?? null ) ? $attributes['steps'] : array() as $step ) {
 	if ( ! is_array( $step ) ) { continue; }
 	$item = array( 'number' => $text( $step['number'] ?? '' ), 'title' => $text( $step['title'] ?? '' ), 'description' => $text( $step['description'] ?? '' ) );
@@ -12,7 +13,7 @@ foreach ( is_array( $attributes['steps'] ?? null ) ? $attributes['steps'] : arra
 }
 if ( '' === $eyebrow && '' === $title && '' === $lede && empty( $steps ) && ( '' === $label || '' === $url ) ) { return; }
 $heading_id = wp_unique_id( 'spark-howstart-title-' ); $wrapper = array( 'class' => 'spark-howstart' . ( 'inherit' !== $theme ? ' is-theme-' . $theme : '' ) );
-if ( $accent ) { $wrapper['style'] = '--howstart-accent:' . $accent . ';'; } if ( '' !== $title ) { $wrapper['aria-labelledby'] = $heading_id; }
+$styles = array(); if ( $accent ) { $styles[] = '--howstart-accent:' . $accent; } if ( '' !== $title_font_size ) { $styles[] = '--howstart-title-font-size:' . $title_font_size; } if ( $styles ) { $wrapper['style'] = implode( ';', $styles ) . ';'; } if ( '' !== $title ) { $wrapper['aria-labelledby'] = $heading_id; }
 ?>
 <section <?php echo get_block_wrapper_attributes( $wrapper ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 	<div class="spark-howstart__inner"><div class="spark-howstart__layout">

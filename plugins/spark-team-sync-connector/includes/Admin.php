@@ -51,7 +51,7 @@ final class Admin {
 				<tr><th>Hub</th><td><?php echo esc_html( $c['hub_name'] ?? '' ); ?><br><code><?php echo esc_html( $c['endpoint'] ); ?></code></td></tr>
 				<tr><th>ID tej strony</th><td><code><?php echo esc_html( $c['site_id'] ); ?></code></td></tr>
 				<tr><th>Ostatni udany kontakt</th><td><?php echo ! empty( $c['last_ok'] ) ? esc_html( wp_date( 'Y-m-d H:i', (int) $c['last_ok'] ) ) : '<span style="color:#d63638">brak</span>'; ?></td></tr>
-				<tr><th>Marki przypisane na hubie</th><td><?php echo $brands ? esc_html( implode( ', ', $brands ) ) : '<em>żadne — ta strona nie będzie otrzymywać wpisów</em>'; ?></td></tr>
+				<tr><th>Marki przypisane na hubie</th><td><?php echo $brands ? esc_html( implode( ', ', $brands ) ) : '<em>żadne - ta strona nie będzie otrzymywać wpisów</em>'; ?></td></tr>
 			</table>
 			<p>
 				<a class="button button-primary" href="<?php echo esc_url( Ui::action_url( 'conn_action', array( 'do' => 'test' ) ) ); ?>">Testuj połączenie</a>

@@ -3,7 +3,7 @@
   "apiVersion": 3,
   "name": "sparkagency/contact-form",
   "version": "2.0.0",
-  "title": "Kontakt — formularz skrócony",
+  "title": "Kontakt - formularz skrócony",
   "category": "design",
   "icon": "email-alt",
   "description": "Dwukolumnowy formularz kontaktowy na stronę główną z przekazaniem danych do pełnego formularza.",

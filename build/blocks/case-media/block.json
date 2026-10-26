@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/case-media",
+  "version": "1.0.0",
+  "title": "Media case study",
+  "category": "design",
+  "icon": "format-gallery",
+  "description": "Galeria zdjęć i materiałów wideo dla case study.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": "Media z realizacji"
+    },
+    "lede": {
+      "type": "string",
+      "default": ""
+    },
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "html": false
+  },
+  "editorScript": "file:./index.js"
+}

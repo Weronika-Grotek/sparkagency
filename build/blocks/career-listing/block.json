@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "sparkagency/career-listing",
+  "version": "1.0.0",
+  "title": "Spark Kariera: lista ofert",
+  "category": "design",
+  "icon": "list-view",
+  "description": "Automatyczna lista opublikowanych ofert pracy.",
+  "textdomain": "sparkagency",
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": "OFERTY PRACY"
+    },
+    "title": {
+      "type": "string",
+      "default": "Aktualne rekrutacje."
+    },
+    "description": {
+      "type": "string",
+      "default": "Sprawdź stanowiska, na które szukamy osób, oraz formę współpracy."
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "Brak otwartych rekrutacji"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "default": "Nowe oferty pojawią się w tym miejscu."
+    },
+    "detailsLabel": {
+      "type": "string",
+      "default": "Szczegóły"
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "spacing": {
+      "margin": [
+        "top",
+        "bottom"
+      ]
+    },
+    "html": false
+  },
+  "editorScript": "file:./index.js"
+}

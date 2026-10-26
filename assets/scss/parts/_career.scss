@@ -1,0 +1,644 @@
+@use "../variables" as vars;
+
+.spark-career {
+  color: vars.$color-text;
+  font-family: vars.$font-family-primary;
+
+  &__wrap,
+  &__content-wrap {
+    width: min(100%, 82.5rem);
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 3.5rem);
+  }
+
+  &__hero {
+    border-bottom: 1px solid vars.$color-line;
+    background:
+      radial-gradient(70% 110% at 90% 20%, color-mix(in srgb, vars.$color-accent 16%, transparent), transparent 65%),
+      vars.$color-background;
+  }
+
+  &__hero .spark-career__wrap {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-block: clamp(2.5rem, 6vw, 5.5rem) clamp(2rem, 4vw, 3.5rem);
+  }
+
+  &__crumbs,
+  &__status,
+  &__section-heading>span {
+    color: vars.$color-subtitle;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  &__crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .375rem;
+  }
+
+  &__crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__crumbs a:hover,
+  &__crumbs a:focus-visible {
+    color: vars.$color-text;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    color: vars.$color-text;
+    text-wrap: balance;
+  }
+
+  h1 {
+    max-width: 13ch;
+    font-size: clamp(3.2rem, 1rem + 9vw, 10rem);
+    font-style: vars.$font-style-display;
+    font-weight: vars.$font-weight-display;
+    letter-spacing: vars.$font-tracking-display;
+    line-height: .86;
+    overflow-wrap: anywhere;
+  }
+
+  &__hero-foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  &__hero-foot>p {
+    max-width: 34ch;
+    margin: 0;
+    font-size: clamp(1.25rem, 1rem + 1.4vw, 2.1rem);
+    line-height: 1.2;
+    letter-spacing: -.015em;
+  }
+
+  &__section {
+    padding-block: clamp(4rem, 9vw, 7.5rem);
+  }
+
+  &__section--steps {
+    border-top: 1px solid vars.$color-line;
+    background: vars.$color-surface;
+  }
+
+  &__section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  &__section-heading h2 {
+    font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+  }
+
+  &__section-heading p {
+    max-width: 56ch;
+    margin: 1rem 0 0;
+    color: vars.$color-subtitle;
+  }
+
+  // Mirrors the job-card proportions from the supplied career prototype.
+  &__jobs {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  &__listing-heading {
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  &__listing-eyebrow {
+    margin: .5rem 0 0;
+    color: vars.$color-subtitle;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  &__listing-heading-copy {
+    min-width: 0;
+  }
+
+  &__listing-title {
+    margin: 0;
+    color: vars.$color-text;
+    font-size: clamp(2.6rem, 1.2rem + 5vw, 5rem);
+    font-style: vars.$font-style-display;
+    font-weight: vars.$font-weight-display;
+    line-height: .95;
+    letter-spacing: vars.$font-tracking-display;
+    text-wrap: balance;
+  }
+
+  &__listing-description {
+    max-width: 60ch;
+    margin: 1rem 0 0;
+    color: vars.$color-subtitle;
+    font-size: clamp(1rem, .95rem + .4vw, 1.25rem);
+    line-height: 1.5;
+  }
+
+  &__job {
+    display: grid;
+    gap: 1rem;
+    padding: 2rem;
+    border: 1px solid vars.$color-line;
+    border-radius: vars.$radius-card;
+    background: vars.$color-surface;
+  }
+
+  &__job-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .4rem .55rem;
+    border: 1px solid vars.$color-line;
+    border-radius: vars.$radius-sm;
+    background: color-mix(in srgb, vars.$color-background 70%, transparent);
+    color: vars.$color-text;
+    font-size: .625rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  &__brand i {
+    display: block;
+    width: .4375rem;
+    height: .4375rem;
+    border-radius: 50%;
+    background: vars.$color-accent;
+  }
+
+  &__brand--works i,
+  &__brand--sparkworks i {
+    background: vars.$color-works-dark;
+  }
+
+  &__brand--exp i,
+  &__brand--sparkexp i {
+    background: vars.$color-exp;
+  }
+
+  &__brand--warsaw i,
+  &__brand--sparkwarsaw i {
+    background: vars.$color-warsaw;
+  }
+
+  &__brand--health i,
+  &__brand--sparkhealth i {
+    background: vars.$color-health-dark;
+  }
+
+  &__brand--studio i,
+  &__brand--sparkstudio i {
+    background: vars.$color-studio;
+  }
+
+  &__status {
+    color: vars.$color-accent;
+  }
+
+  &__job :is(h2, h3) {
+    font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -.025em;
+  }
+
+  &__job :is(h2, h3) a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__job :is(h2, h3) a:hover {
+    color: vars.$color-accent;
+  }
+
+  &__details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__details li {
+    padding: .4rem .75rem;
+    border: 1px solid vars.$color-line-strong;
+    border-radius: vars.$radius-btn;
+    background: color-mix(in srgb, vars.$color-background 45%, transparent);
+    color: vars.$color-text;
+    font-size: .875rem;
+    font-weight: 500;
+  }
+
+  &__summary {
+    max-width: 70ch;
+    margin: 0;
+    color: vars.$color-subtitle;
+    line-height: 1.6;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    width: fit-content;
+    padding: .9rem 1.25rem;
+    border-radius: vars.$radius-btn;
+    background: white;
+    color: vars.$color-accent-ink;
+    font-size: .875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  &__button span {
+    transition: transform .25s ease;
+  }
+
+  &__button:hover span {
+    transform: translateX(.25rem);
+  }
+
+  &__button:focus-visible {
+    outline: 2px solid vars.$color-accent;
+    outline-offset: .2rem;
+  }
+
+  &__button--small {
+    min-height: auto;
+  }
+
+  &__button--ghost {
+    border-color: vars.$color-line-strong;
+    background: transparent;
+    color: vars.$color-text;
+  }
+
+  &__empty {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border: 1px dashed vars.$color-line-strong;
+  }
+
+  &__empty>span {
+    color: vars.$color-subtitle;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  &__empty p {
+    max-width: 48ch;
+    margin: 0;
+    color: vars.$color-subtitle;
+  }
+
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: career-step;
+  }
+
+  &__steps li {
+    display: grid;
+    gap: .75rem;
+    padding: 1.5rem 1.25rem 1.5rem 0;
+    border-top: 1px solid vars.$color-line;
+    counter-increment: career-step;
+  }
+
+  &__steps li::before {
+    color: vars.$color-accent;
+    content: "0" counter(career-step);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+  }
+
+  &__steps strong {
+    font-size: 1.15rem;
+  }
+
+  &__steps p {
+    margin: 0;
+    color: vars.$color-subtitle;
+    font-size: .95rem;
+    line-height: 1.6;
+  }
+
+  // Single offer hero follows the structure and proportions of the supplied prototype.
+  &__job-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-bottom: 1px solid vars.$color-line;
+    background: vars.$color-background;
+  }
+
+  &__particles {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__particles canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__job-hero-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-block: clamp(2.5rem, 6vw, 5.5rem) clamp(2rem, 4vw, 3.5rem);
+  }
+
+  &__job-hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__job-hero-title {
+    max-width: 17ch;
+    font-size: clamp(2.6rem, 1.4rem + 4.2vw, 5.6rem);
+    line-height: .95;
+    hyphens: manual;
+    overflow-wrap: normal;
+  }
+
+  &__job-hero-foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: end;
+  }
+
+  &__job-hero-copy {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  &__job-hero-lead {
+    max-width: 26ch;
+    margin: 0;
+    font-size: clamp(1.25rem, 1rem + 1.4vw, 2.1rem);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -.015em;
+    text-wrap: balance;
+  }
+
+  &__job-hero-sub {
+    display: grid;
+    gap: .5rem;
+    max-width: 60ch;
+    color: vars.$color-subtitle;
+    font-size: clamp(1rem, .95rem + .25vw, 1.15rem);
+    line-height: 1.5;
+  }
+
+  &__job-hero-sub p {
+    margin: 0;
+  }
+
+  &__job-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__content-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    align-items: start;
+    padding-block: 0;
+  }
+
+  &__content-wrap>.wp-block-group__inner-container {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 0;
+    width: 100%;
+    max-width: none;
+    padding-block: 0;
+  }
+
+  &__content-wrap:not(:has(> .wp-block-group__inner-container)) {
+    padding-block: 0;
+  }
+
+  &__page-content {
+    margin-bottom: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  &__listing {
+    scroll-margin-top: 6rem;
+  }
+
+  &--page &__listing {
+    padding-bottom: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  &__content {
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__content>* {
+    max-width: 62ch;
+  }
+
+  &__content>.wp-block-group__inner-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  &__content .spark-requirement {
+    width: min(calc(100% - 2rem), 75rem);
+    max-width: 75rem;
+    margin: 0 auto;
+    padding-block: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  &__content .spark-requirement__title {
+    margin: 0 0 clamp(1.5rem, 3vw, 3rem);
+    font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem);
+    font-style: vars.$font-style-display;
+    font-weight: vars.$font-weight-display;
+    letter-spacing: vars.$font-tracking-display;
+    line-height: .95;
+  }
+
+  &__content .spark-requirement__list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__content .spark-requirement__item {
+    font-size: clamp(1rem, .95rem + .4vw, 1.25rem);
+    line-height: 1.5;
+  }
+
+  &__content>*+* {
+    margin-top: 1.5rem;
+  }
+
+  &__content :is(p, li) {
+    font-size: clamp(1.05rem, 1rem + .35vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  &__content :is(h2, h3, h4) {
+    margin-top: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(1.5rem, 1.2rem + 1.8vw, 2.6rem);
+    line-height: 1.05;
+    letter-spacing: -.035em;
+  }
+
+  &__content ul,
+  &__content ol {
+    display: grid;
+    gap: .8rem;
+    padding-left: 1.3rem;
+  }
+
+  &__content li::marker {
+    color: vars.$color-accent;
+  }
+
+  &__apply {
+    position: static;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 1rem;
+    height: fit-content;
+    padding: 1.5rem;
+    border: 1px solid vars.$color-line;
+    border-radius: vars.$radius-card;
+    background: vars.$color-surface;
+  }
+
+  &__apply>span {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  &__apply p {
+    margin: 0;
+    color: vars.$color-subtitle;
+    line-height: 1.6;
+  }
+
+  &__apply-copy {
+    display: grid;
+    gap: .75rem;
+    color: vars.$color-subtitle;
+  }
+
+  &__apply-copy p {
+    margin: 0;
+  }
+
+  @media (max-width: 48rem) {
+    &__listing-heading {
+      grid-template-columns: 1fr;
+      gap: .75rem;
+    }
+
+    &__listing-eyebrow {
+      margin-top: 0;
+    }
+
+    &__section-heading {
+      grid-template-columns: 1fr;
+    }
+
+    &__steps {
+      grid-template-columns: 1fr;
+    }
+
+    &__content-wrap {
+      grid-template-columns: 1fr;
+    }
+
+    &__content-wrap>.wp-block-group__inner-container {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    &__apply {
+      position: static;
+    }
+
+    &__job-hero-foot {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark-career__button span {
+    transition: none;
+  }
+}

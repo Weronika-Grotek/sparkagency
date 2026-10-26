@@ -94,6 +94,298 @@ function sparkagency_register_case_study_post_type() {
 add_action( 'init', 'sparkagency_register_case_study_post_type' );
 
 /**
+ * Keep older CPT UI case_study entries available in the same public archive.
+ * The theme previously shipped templates for both the underscore and hyphen
+ * post type names, and existing sites can still have records under either.
+ */
+function sparkagency_include_legacy_case_studies_in_archive( WP_Query $query ): void {
+	if ( is_admin() || ! $query->is_main_query() || ! $query->is_post_type_archive( array( 'case-study', 'case_study' ) ) ) {
+		return;
+	}
+
+	$case_types = array_values( array_filter( array( 'case_study', 'case-study' ), 'post_type_exists' ) );
+	if ( ! empty( $case_types ) ) {
+		$query->set( 'post_type', $case_types );
+	}
+}
+add_action( 'pre_get_posts', 'sparkagency_include_legacy_case_studies_in_archive' );
+
+/** Point case study menu links to the archive URL registered by WordPress. */
+function sparkagency_fix_case_studies_menu_link( array $items ): array {
+	$case_types = array_values( array_filter( array( 'case_study', 'case-study' ), 'post_type_exists' ) );
+	if ( empty( $case_types ) ) {
+		return $items;
+	}
+
+	$target_type = $case_types[0];
+	foreach ( $case_types as $candidate ) {
+		$counts = wp_count_posts( $candidate );
+		if ( $counts && (int) $counts->publish > 0 ) {
+			$target_type = $candidate;
+			break;
+		}
+	}
+	$archive_url = get_post_type_archive_link( $target_type );
+	if ( ! $archive_url ) {
+		foreach ( $case_types as $candidate ) {
+			$archive_url = get_post_type_archive_link( $candidate );
+			if ( $archive_url ) {
+				break;
+			}
+		}
+	}
+	if ( ! $archive_url ) {
+		return $items;
+	}
+
+	foreach ( $items as $item ) {
+		$title = strtolower( trim( wp_strip_all_tags( $item->title ) ) );
+		$url   = strtolower( (string) $item->url );
+		if ( in_array( $title, array( 'case studies', 'case study', 'realizacje', 'nasze realizacje' ), true ) || preg_match( '#/(case[-_]stud(?:y|ies)|realizacje)/?$#', $url ) ) {
+			$item->url = $archive_url;
+		}
+	}
+
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'sparkagency_fix_case_studies_menu_link' );
+
+/** Registers the career offers post type. */
+function sparkagency_register_career_post_type() {
+	if ( ! post_type_exists( 'career' ) ) {
+		$labels = array(
+			'name'                  => __( 'Oferty pracy', 'sparkagency' ),
+			'singular_name'         => __( 'Oferta pracy', 'sparkagency' ),
+			'menu_name'             => __( 'Kariera', 'sparkagency' ),
+			'name_admin_bar'        => __( 'Oferta pracy', 'sparkagency' ),
+			'add_new'               => __( 'Dodaj ofertę', 'sparkagency' ),
+			'add_new_item'          => __( 'Dodaj ofertę pracy', 'sparkagency' ),
+			'new_item'              => __( 'Nowa oferta pracy', 'sparkagency' ),
+			'edit_item'             => __( 'Edytuj ofertę pracy', 'sparkagency' ),
+			'view_item'             => __( 'Zobacz ofertę pracy', 'sparkagency' ),
+			'all_items'             => __( 'Wszystkie oferty', 'sparkagency' ),
+			'search_items'          => __( 'Szukaj ofert pracy', 'sparkagency' ),
+			'not_found'             => __( 'Nie znaleziono ofert pracy.', 'sparkagency' ),
+			'not_found_in_trash'    => __( 'Nie znaleziono ofert pracy w koszu.', 'sparkagency' ),
+			'featured_image'        => __( 'Obrazek wyróżniający', 'sparkagency' ),
+			'set_featured_image'    => __( 'Ustaw obrazek wyróżniający', 'sparkagency' ),
+			'remove_featured_image' => __( 'Usuń obrazek wyróżniający', 'sparkagency' ),
+			'use_featured_image'    => __( 'Użyj jako obrazka wyróżniającego', 'sparkagency' ),
+			'archives'              => __( 'Archiwum ofert pracy', 'sparkagency' ),
+		);
+
+		register_post_type(
+			'career',
+			array(
+				'labels'             => $labels,
+				'public'             => true,
+				'publicly_queryable' => true,
+				'show_ui'            => true,
+				'show_in_menu'       => true,
+				'show_in_nav_menus'  => true,
+				'show_in_admin_bar'  => true,
+				'show_in_rest'       => true,
+				// The public /kariera/ address is an ordinary WordPress Page so that
+				// editors can build and change its content in Gutenberg. Job entries
+				// remain available below it, e.g. /kariera/front-end-developer/.
+				'has_archive'        => false,
+				'rewrite'            => array(
+					'slug'       => 'kariera',
+					'with_front' => false,
+				),
+				'query_var'          => true,
+				'hierarchical'       => false,
+				'capability_type'    => 'post',
+				'map_meta_cap'       => true,
+				'menu_icon'          => 'dashicons-businessperson',
+				'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions' ),
+				'template'           => array(
+					array( 'sparkagency/career-single-header', array() ),
+					array(
+						'core/group',
+						array( 'className' => 'spark-career__content-wrap' ),
+						array(
+							array(
+								'core/group',
+								array( 'className' => 'spark-career__content' ),
+								array(
+									array( 'sparkagency/requirement', array() ),
+									array( 'core/paragraph', array( 'placeholder' => __( 'Dodaj opis stanowiska.', 'sparkagency' ) ) ),
+								),
+							),
+							array( 'sparkagency/career-single-apply', array() ),
+						),
+					),
+				),
+			)
+		);
+	}
+
+}
+add_action( 'init', 'sparkagency_register_career_post_type', 5 );
+
+/** Options shown when editors create a career offer. */
+function sparkagency_career_options(): array {
+	return array(
+		'company' => array(
+			'agency' => __( 'sparkAGENCY', 'sparkagency' ),
+			'works'  => __( 'sparkWORKS', 'sparkagency' ),
+			'exp'    => __( 'sparkEXP', 'sparkagency' ),
+			'warsaw' => __( 'sparkWARSAW', 'sparkagency' ),
+			'health' => __( 'sparkHEALTH', 'sparkagency' ),
+			'studio' => __( 'sparkSTUDIO', 'sparkagency' ),
+		),
+		'contract' => array(
+			'b2b'            => __( 'B2B', 'sparkagency' ),
+			'zlecenie'       => __( 'Umowa zlecenie', 'sparkagency' ),
+			'umowa-o-prace'  => __( 'Umowa o pracę', 'sparkagency' ),
+		),
+		'work_mode' => array(
+			'zdalnie'     => __( 'Zdalnie', 'sparkagency' ),
+			'hybrydowo'   => __( 'Hybrydowo', 'sparkagency' ),
+			'stacjonarnie' => __( 'Stacjonarnie', 'sparkagency' ),
+		),
+		'status' => array(
+			'otwarta'    => __( 'Otwarta rekrutacja', 'sparkagency' ),
+			'planowana'  => __( 'Planowana rekrutacja', 'sparkagency' ),
+			'zamknieta'  => __( 'Zamknięta rekrutacja', 'sparkagency' ),
+		),
+	);
+}
+
+/** Returns the selected company for a job card. */
+function sparkagency_get_career_company( int $post_id ): ?array {
+	$options = sparkagency_career_options()['company'];
+	$company = sanitize_key( (string) get_post_meta( $post_id, 'career_company', true ) );
+
+	if ( ! isset( $options[ $company ] ) ) {
+		return null;
+	}
+
+	return array(
+		'slug' => $company,
+		'name' => $options[ $company ],
+	);
+}
+
+/** Returns a selected option label, retaining existing hand-entered data safely. */
+function sparkagency_get_career_option_label( int $post_id, string $field, string $group ): string {
+	$options = sparkagency_career_options();
+	$value   = (string) get_post_meta( $post_id, $field, true );
+	$key     = sanitize_key( $value );
+
+	if ( isset( $options[ $group ][ $key ] ) ) {
+		return $options[ $group ][ $key ];
+	}
+
+	$legacy_statuses = array(
+		'otwarta-rekrutacja'   => 'otwarta',
+		'planowana-rekrutacja' => 'planowana',
+		'zamknieta-rekrutacja' => 'zamknieta',
+	);
+	if ( 'status' === $group && isset( $legacy_statuses[ $key ] ) ) {
+		return $options['status'][ $legacy_statuses[ $key ] ];
+	}
+
+	return $value;
+}
+
+/** Returns only the filled labels displayed below a job title. */
+function sparkagency_get_career_details( int $post_id ): array {
+	$details = array(
+		sparkagency_get_career_option_label( $post_id, 'career_contract', 'contract' ),
+		sparkagency_get_career_option_label( $post_id, 'career_work_mode', 'work_mode' ),
+		(string) get_post_meta( $post_id, 'career_experience', true ),
+	);
+
+	return array_values( array_filter( $details ) );
+}
+
+/** Adds the concise career-card fields to the job editor. */
+function sparkagency_add_career_meta_box() {
+	add_meta_box(
+		'sparkagency-career-details',
+		__( 'Szczegóły oferty', 'sparkagency' ),
+		'sparkagency_render_career_meta_box',
+		'career',
+		'normal',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes_career', 'sparkagency_add_career_meta_box' );
+
+/** Renders job card metadata fields. */
+function sparkagency_render_career_meta_box( WP_Post $post ) {
+	$options = sparkagency_career_options();
+	$values  = array(
+		'career_company'   => sanitize_key( (string) get_post_meta( $post->ID, 'career_company', true ) ),
+		'career_contract'  => sanitize_key( (string) get_post_meta( $post->ID, 'career_contract', true ) ),
+		'career_work_mode' => sanitize_key( (string) get_post_meta( $post->ID, 'career_work_mode', true ) ),
+		'career_status'    => sanitize_key( (string) get_post_meta( $post->ID, 'career_status', true ) ),
+	);
+
+	wp_nonce_field( 'sparkagency_save_career_details', 'sparkagency_career_details_nonce' );
+	?>
+	<p><?php esc_html_e( 'Na karcie pojawią się wyłącznie pola, które zostały uzupełnione. Zajawkę wpisz w polu „Zajawka” w panelu ustawień wpisu.', 'sparkagency' ); ?></p>
+	<table class="form-table" role="presentation">
+		<tbody>
+			<?php foreach ( array( 'career_company' => 'company', 'career_contract' => 'contract', 'career_work_mode' => 'work_mode', 'career_status' => 'status' ) as $field => $group ) : ?>
+				<tr>
+					<th scope="row"><label for="<?php echo esc_attr( $field ); ?>"><?php echo esc_html( array( 'career_company' => __( 'Firma rekrutująca', 'sparkagency' ), 'career_contract' => __( 'Rodzaj umowy', 'sparkagency' ), 'career_work_mode' => __( 'Typ pracy', 'sparkagency' ), 'career_status' => __( 'Status rekrutacji', 'sparkagency' ) )[ $field ] ); ?></label></th>
+					<td><select id="<?php echo esc_attr( $field ); ?>" name="<?php echo esc_attr( $field ); ?>"><option value=""><?php esc_html_e( '— Wybierz —', 'sparkagency' ); ?></option><?php foreach ( $options[ $group ] as $value => $label ) : ?><option value="<?php echo esc_attr( $value ); ?>"<?php selected( $values[ $field ], $value ); ?>><?php echo esc_html( $label ); ?></option><?php endforeach; ?></select></td>
+				</tr>
+			<?php endforeach; ?>
+			<tr>
+				<th scope="row"><label for="career_experience"><?php esc_html_e( 'Wymaganie', 'sparkagency' ); ?></label></th>
+				<td><input class="regular-text" type="text" id="career_experience" name="career_experience" value="<?php echo esc_attr( get_post_meta( $post->ID, 'career_experience', true ) ); ?>" placeholder="<?php esc_attr_e( 'np. Min. 1 rok doświadczenia', 'sparkagency' ); ?>"></td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="career_email"><?php esc_html_e( 'E-mail do aplikacji', 'sparkagency' ); ?></label></th>
+				<td><input class="regular-text" type="email" id="career_email" name="career_email" value="<?php echo esc_attr( get_post_meta( $post->ID, 'career_email', true ) ); ?>" placeholder="<?php esc_attr_e( 'np. kariera@sparkagency.pl', 'sparkagency' ); ?>"></td>
+			</tr>
+		</tbody>
+	</table>
+	<?php
+}
+
+/** Saves career card metadata. */
+function sparkagency_save_career_meta( int $post_id ) {
+	if ( ! isset( $_POST['sparkagency_career_details_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['sparkagency_career_details_nonce'] ) ), 'sparkagency_save_career_details' ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	$options = sparkagency_career_options();
+	foreach ( array( 'career_company' => 'company', 'career_contract' => 'contract', 'career_work_mode' => 'work_mode', 'career_status' => 'status' ) as $field => $group ) {
+		$value = isset( $_POST[ $field ] ) ? sanitize_key( wp_unslash( $_POST[ $field ] ) ) : '';
+		if ( isset( $options[ $group ][ $value ] ) ) {
+			update_post_meta( $post_id, $field, $value );
+		} else {
+			delete_post_meta( $post_id, $field );
+		}
+	}
+
+	$requirement = isset( $_POST['career_experience'] ) ? sanitize_text_field( wp_unslash( $_POST['career_experience'] ) ) : '';
+	$email       = isset( $_POST['career_email'] ) ? sanitize_email( wp_unslash( $_POST['career_email'] ) ) : '';
+
+	if ( '' !== $requirement ) {
+		update_post_meta( $post_id, 'career_experience', $requirement );
+	} else {
+		delete_post_meta( $post_id, 'career_experience' );
+	}
+
+	if ( '' !== $email ) {
+		update_post_meta( $post_id, 'career_email', $email );
+	} else {
+		delete_post_meta( $post_id, 'career_email' );
+	}
+}
+add_action( 'save_post_career', 'sparkagency_save_career_meta' );
+
+/**
  * Registers team content and the brand taxonomy used to route it in Team Sync.
  */
 function sparkagency_register_team_post_type() {

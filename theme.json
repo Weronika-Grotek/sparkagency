@@ -72,7 +72,7 @@
       "fontWeight": true,
       "lineHeight": true,
       "fontFamilies": [
-        { "name": "Primary Font — Plus Jakarta Sans", "slug": "primary", "fontFamily": "Plus Jakarta Sans, sans-serif" }
+        { "name": "Primary Font - Plus Jakarta Sans", "slug": "primary", "fontFamily": "Plus Jakarta Sans, sans-serif" }
       ],
       "fontSizes": [
         { "slug": "tag", "name": "Tag", "size": "11.5px" },

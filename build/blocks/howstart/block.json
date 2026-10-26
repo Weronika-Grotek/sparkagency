@@ -37,6 +37,10 @@
       "type": "string",
       "default": ""
     },
+    "titleFontSize": {
+      "type": "string",
+      "default": ""
+    },
     "steps": {
       "type": "array",
       "default": []

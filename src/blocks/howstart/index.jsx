@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
-import { Button, ColorPalette, PanelBody, SelectControl, TextControl, TextareaControl } from '@wordpress/components';
+import { BaseControl, Button, ColorPalette, FontSizePicker, PanelBody, SelectControl, TextControl, TextareaControl } from '@wordpress/components';
 import { Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 const domain = 'sparkagency';
@@ -9,6 +9,27 @@ const newStep = index => ({
   title: '',
   description: ''
 });
+const titleFontSizes = [{
+  name: __('Tag', domain),
+  slug: 'tag',
+  size: '11.5px'
+}, {
+  name: __('Tekst', domain),
+  slug: 'body',
+  size: '20px'
+}, {
+  name: __('Podtytuł', domain),
+  slug: 'subtitle',
+  size: '33.6px'
+}, {
+  name: __('H2', domain),
+  slug: 'h2',
+  size: '73.6px'
+}, {
+  name: __('H1', domain),
+  slug: 'h1',
+  size: '145.5px'
+}];
 function Edit({
   attributes,
   setAttributes
@@ -35,9 +56,14 @@ function Edit({
   });
   const props = useBlockProps({
     className: 'spark-howstart spark-howstart--editor' + (theme === 'inherit' ? '' : ' is-theme-' + theme),
-    style: attributes.accentColor ? {
-      '--howstart-accent': attributes.accentColor
-    } : undefined
+    style: {
+      ...(attributes.accentColor ? {
+        '--howstart-accent': attributes.accentColor
+      } : {}),
+      ...(attributes.titleFontSize ? {
+        '--howstart-title-font-size': attributes.titleFontSize
+      } : {})
+    }
   });
   return <Fragment><InspectorControls><PanelBody title={__('Ustawienia sekcji', domain)} initialOpen={true}><TextControl label={__('Etykieta', domain)} value={attributes.eyebrow || ''} onChange={eyebrow => setAttributes({
     eyebrow
@@ -58,7 +84,9 @@ function Edit({
     theme: value
   })} /><p>{__('Kolor akcentu', domain)}</p><ColorPalette value={attributes.accentColor || undefined} clearable={true} disableCustomColors={false} onChange={accentColor => setAttributes({
     accentColor: accentColor || ''
-  })} /></PanelBody>{steps.map((step, index) => <PanelBody key={index} title={index + 1 + '. ' + (step.title || __('Nowy krok', domain))} initialOpen={false}><TextControl label={__('Numer kroku', domain)} value={step.number || ''} onChange={number => updateStep(index, {
+  })} /><BaseControl label={__('Rozmiar czcionki nagłówka', domain)}><FontSizePicker fontSizes={titleFontSizes} value={attributes.titleFontSize || undefined} onChange={titleFontSize => setAttributes({
+    titleFontSize: titleFontSize || ''
+  })} /></BaseControl></PanelBody>{steps.map((step, index) => <PanelBody key={index} title={index + 1 + '. ' + (step.title || __('Nowy krok', domain))} initialOpen={false}><TextControl label={__('Numer kroku', domain)} value={step.number || ''} onChange={number => updateStep(index, {
     number
   })} /><TextControl label={__('Tytuł kroku', domain)} value={step.title || ''} onChange={title => updateStep(index, {
     title

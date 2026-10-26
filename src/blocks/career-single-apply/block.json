@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "sparkagency/career-single-apply",
+	"version": "1.0.0",
+	"title": "Spark Kariera: aplikowanie",
+	"category": "design",
+	"icon": "email-alt",
+	"description": "Edytowalny panel kontaktu dla bieżącej oferty pracy.",
+	"textdomain": "sparkagency",
+	"attributes": {
+		"eyebrow": { "type": "string", "default": "Zainteresowała Cię ta oferta?" },
+		"description": { "type": "string", "default": "Prześlij CV i — jeśli masz — portfolio lub link do repozytorium." },
+		"buttonLabel": { "type": "string", "default": "Aplikuj" }
+	},
+	"supports": { "anchor": true, "spacing": { "margin": ["top", "bottom"] }, "html": false },
+	"editorScript": "file:./index.js"
+}

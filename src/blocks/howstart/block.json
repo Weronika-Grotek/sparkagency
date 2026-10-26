@@ -16,6 +16,7 @@
     "ctaUrl": { "type": "string", "default": "" },
     "theme": { "type": "string", "default": "dark" },
     "accentColor": { "type": "string", "default": "" },
+    "titleFontSize": { "type": "string", "default": "" },
     "steps": { "type": "array", "default": [] }
   },
   "supports": {

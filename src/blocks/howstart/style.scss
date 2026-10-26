@@ -8,6 +8,7 @@
   background: vars.$color-background;
   color: vars.$color-text;
   font-family: vars.$font-family-primary;
+  font-size: var(--howstart-title-font-size, clamp(2.2rem, 1.2rem + 4vw, #{vars.$font-size-h2}));
 
   &.is-theme-dark {
     color-scheme: dark;
@@ -59,9 +60,12 @@
 
   h2 {
     color: vars.$color-text;
-    font: vars.$font-weight-display clamp(2.2rem, 1.2rem + 4vw, #{vars.$font-size-h2}) / #{vars.$line-height-h2} vars.$font-family-primary;
+    font-family: vars.$font-family-primary;
+    font-size: inherit;
     font-style: vars.$font-style-display;
+    font-weight: vars.$font-weight-display;
     letter-spacing: vars.$font-tracking-display;
+    line-height: vars.$line-height-h2;
     overflow-wrap: anywhere;
     text-wrap: balance;
   }

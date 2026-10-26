@@ -41,7 +41,8 @@ final class Assets {
 	 */
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_case_study_fireworks' ), 25 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_case_study_archive_assets' ), 25 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_native_hero_animation' ), 25 );
 	}
 
 	/**
@@ -66,15 +67,36 @@ final class Assets {
 		);
 	}
 
-	/**
-	 * Reuse the Hero block's fireworks controller for a native single case
-	 * study template. The script is registered automatically with the block.
-	 */
-	public function enqueue_case_study_fireworks(): void {
-		if ( ! is_singular( array( 'case-study', 'case_study' ) ) ) {
+	/** Load archive-specific presentation and filters on the case study archive. */
+	public function enqueue_case_study_archive_assets(): void {
+		if ( ! is_post_type_archive( array( 'case-study', 'case_study' ) ) ) {
 			return;
 		}
 
-		wp_enqueue_script( 'sparkagency-hero-view-script' );
+		$style_path = '/assets/css/case-study-archive.css';
+		$style_file = $this->directory . $style_path;
+		if ( is_readable( $style_file ) ) {
+			wp_enqueue_style( 'sparkagency-case-study-archive', $this->uri . $style_path, array( 'sparkagency-main' ), (string) filemtime( $style_file ) );
+		}
+
+		$script_path = '/assets/js/case-study-archive.js';
+		$script_file = $this->directory . $script_path;
+		if ( is_readable( $script_file ) ) {
+			wp_enqueue_script( 'sparkagency-case-study-archive', $this->uri . $script_path, array(), (string) filemtime( $script_file ), true );
+		}
+	}
+
+	/**
+	 * Reuse the Hero block controller in native single templates.
+	 *
+	 * The script is registered automatically with the Hero block.
+	 */
+	public function enqueue_native_hero_animation(): void {
+		if ( ! is_singular( array( 'case-study', 'case_study', 'career' ) ) ) {
+			return;
+		}
+
+		$script = is_singular( 'career' ) ? 'sparkagency-hero-second-view-script' : 'sparkagency-hero-view-script';
+		wp_enqueue_script( $script );
 	}
 }

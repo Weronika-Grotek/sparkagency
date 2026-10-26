@@ -1,0 +1,196 @@
+@use "../variables" as vars;
+
+.spark-career-cta {
+	--career-ink: #0b0b0d;
+	--career-surface: #131316;
+	--career-paper: #f3f2ef;
+	--career-muted: #9b9ba3;
+	--career-line: rgba(243, 242, 239, .12);
+	--career-line-strong: rgba(243, 242, 239, .28);
+	--career-accent: #fff;
+	--career-accent-ink: #0b0b0d;
+	--career-radius-card: 4px;
+	--career-radius-button: 2px;
+	--career-display-weight: 800;
+	--career-display-track: -.035em;
+	--career-display-style: normal;
+	--career-font: #{vars.$font-family-primary};
+	--career-ease: cubic-bezier(.2, .7, .1, 1);
+
+	padding-block: 7.5rem;
+	border-top: 1px solid var(--career-line);
+	background: var(--career-ink);
+	color: var(--career-paper);
+	font: 400 1rem / 1.6 var(--career-font);
+	-webkit-font-smoothing: antialiased;
+
+	&,
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	&[data-brand="works"] {
+		--career-accent: #d8ab52;
+		--career-accent-ink: #1b1406;
+		--career-radius-card: 0;
+		--career-radius-button: 0;
+		--career-display-weight: 700;
+		--career-display-track: -.03em;
+	}
+
+	&[data-brand="exp"] {
+		--career-accent: #01b57c;
+		--career-accent-ink: #00150e;
+		--career-radius-card: 12px;
+		--career-radius-button: 8px;
+		--career-display-weight: 650;
+		--career-display-track: -.04em;
+	}
+
+	&[data-brand="warsaw"] {
+		--career-accent: #43a0ed;
+		--career-accent-ink: #04121f;
+		--career-radius-card: 0;
+		--career-radius-button: 0;
+		--career-display-track: -.055em;
+	}
+
+	&[data-brand="health"] {
+		--career-accent: #a857bc;
+		--career-accent-ink: #17071b;
+		--career-radius-card: 28px;
+		--career-radius-button: 999px;
+		--career-display-weight: 500;
+		--career-display-track: -.02em;
+	}
+
+	&[data-brand="studio"] {
+		--career-accent: #d65251;
+		--career-accent-ink: #1e0707;
+		--career-radius-card: 2px;
+		--career-display-track: -.04em;
+		--career-display-style: italic;
+	}
+
+	&[data-theme="light"] {
+		--career-ink: #f4f6f8;
+		--career-surface: #fff;
+		--career-paper: #0e1116;
+		--career-muted: #5a616b;
+		--career-line: rgba(14, 17, 22, .12);
+		--career-line-strong: rgba(14, 17, 22, .28);
+		--career-accent-ink: #fff;
+	}
+
+	&[data-theme="light"][data-brand="agency"] { --career-accent: #0e1116; }
+	&[data-theme="light"][data-brand="works"] { --career-accent: #8c6a2c; }
+	&[data-theme="light"][data-brand="exp"] { --career-accent: #007a53; }
+	&[data-theme="light"][data-brand="warsaw"] { --career-accent: #1f72bf; }
+	&[data-theme="light"][data-brand="studio"] { --career-accent: #b83a39; }
+
+	&[data-theme="light"][data-brand="health"] {
+		--career-accent: #8e3fa3;
+		--career-ink: #f8f5f8;
+		--career-paper: #1a1320;
+		--career-muted: #655c6b;
+		--career-line: rgba(26, 19, 32, .12);
+		--career-line-strong: rgba(26, 19, 32, .26);
+	}
+
+	&__wrap {
+		width: 100%;
+		max-width: 82.5rem;
+		margin-inline: auto;
+		padding-inline: clamp(1rem, 4vw, 3.5rem);
+	}
+
+	&__band {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+		padding: clamp(2rem, 5vw, 4rem);
+		border: 1px solid var(--career-line);
+		border-radius: var(--career-radius-card);
+		background: radial-gradient(90% 140% at 100% 100%, color-mix(in srgb, var(--career-accent) 30%, transparent), transparent 60%), var(--career-surface);
+	}
+
+	&__copy { max-width: 64ch; min-width: 0; }
+
+	&__eyebrow {
+		display: block;
+		color: var(--career-muted);
+		font: 600 .72rem / 1.6 var(--career-font);
+		letter-spacing: .14em;
+		text-transform: uppercase;
+	}
+
+	& h2 {
+		margin: 1rem 0 0;
+		color: var(--career-paper);
+		font: var(--career-display-weight) clamp(2.2rem, 1.2rem + 4vw, 4.6rem) / .95 var(--career-font);
+		font-style: var(--career-display-style);
+		letter-spacing: var(--career-display-track);
+		text-wrap: balance;
+	}
+
+	&__description {
+		margin: 1rem 0 0;
+		color: var(--career-muted);
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 1rem;
+	}
+
+	&__button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 3rem;
+		padding: .9rem 1.25rem;
+		border: 1px solid var(--career-accent);
+		border-radius: var(--career-radius-button);
+		font: 700 .875rem / 1.2 var(--career-font);
+		text-align: center;
+		text-decoration: none;
+	}
+
+	&__button--primary {
+		background: var(--career-accent);
+		color: var(--career-accent-ink);
+	}
+
+	&__button--primary::after {
+		margin-inline-start: .6rem;
+		content: "→";
+		transition: transform .25s var(--career-ease);
+	}
+
+	&__button--primary:hover::after { transform: translateX(.25rem); }
+
+	&__button:focus-visible {
+		outline: 2px solid var(--career-accent);
+		outline-offset: .1875rem;
+	}
+
+	&__button--secondary {
+		border-color: var(--career-line-strong);
+		background: transparent;
+		color: var(--career-paper);
+	}
+
+	@media (max-width: 47.5rem) {
+		&__actions { justify-content: flex-start; }
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.spark-career-cta__button--primary::after { transition: none; }
+}

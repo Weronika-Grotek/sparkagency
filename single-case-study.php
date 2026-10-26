@@ -35,6 +35,8 @@ get_header();
 		);
 		$excerpt         = get_post_field( 'post_excerpt', $case_id );
 		$metadata        = array();
+		$next_case       = get_adjacent_post( false, '', true );
+		$next_brand      = 'agency';
 
 		foreach ( $taxonomies as $taxonomy ) {
 			if ( ! $taxonomy->public || 'post_format' === $taxonomy->name ) {
@@ -154,6 +156,37 @@ get_header();
 					<?php the_content(); ?>
 				</div>
 			</div>
+
+			<?php
+			if ( $next_case ) {
+				foreach ( $taxonomies as $taxonomy ) {
+					$next_terms = get_the_terms( $next_case->ID, $taxonomy->name );
+
+					if ( is_array( $next_terms ) ) {
+						foreach ( $next_terms as $next_term ) {
+							foreach ( $brand_aliases as $candidate_brand => $aliases ) {
+								if ( in_array( sanitize_key( $next_term->slug ), $aliases, true ) ) {
+									$next_brand = $candidate_brand;
+									break 3;
+								}
+							}
+						}
+					}
+				}
+			}
+			?>
+
+			<a
+				class="spark-single-case-study__next"
+				href="<?php echo esc_url( $next_case ? get_permalink( $next_case ) : ( $archive_url ?: home_url( '/' ) ) ); ?>"
+				data-brand="<?php echo esc_attr( $next_case ? $next_brand : 'agency' ); ?>"
+				aria-label="<?php echo esc_attr( $next_case ? sprintf( __( 'Następne case study: %s', 'sparkagency' ), get_the_title( $next_case ) ) : __( 'Wróć do wszystkich case studies', 'sparkagency' ) ); ?>"
+			>
+				<span class="spark-single-case-study__next-inner">
+					<span class="spark-single-case-study__next-label"><?php echo esc_html( $next_case ? __( 'Następny case →', 'sparkagency' ) : __( 'Wróć do listy', 'sparkagency' ) ); ?></span>
+					<span class="spark-single-case-study__next-title"><?php echo esc_html( $next_case ? get_the_title( $next_case ) : __( 'Wszystkie realizacje', 'sparkagency' ) ); ?></span>
+				</span>
+			</a>
 		</article>
 	<?php endwhile; ?>
 </main>

@@ -1,0 +1,110 @@
+.spark-requirement {
+  display: grid;
+  width: min(calc(100% - 2rem), 75rem);
+  margin-inline: auto;
+  grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
+  column-gap: 2rem;
+  align-items: start;
+  padding-block: clamp(3rem, 7vw, 6rem);
+  color: var(--spark-color-text, #f3f2ef);
+}
+
+.spark-requirement.alignwide,
+.spark-requirement.alignfull {
+  width: min(calc(100% - 2rem), 75rem);
+  max-width: 75rem;
+  margin-inline: auto;
+}
+
+.spark-requirement__eyebrow {
+  align-self: start;
+  padding-top: .35rem;
+  color: var(--spark-color-text-muted, #9b9ba3);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.spark-requirement__title {
+  margin: 0;
+  color: inherit;
+  margin-bottom: clamp(1.5rem, 3vw, 3rem);
+  font-size: clamp(2.2rem, 1.2rem + 4vw, 4.6rem);
+  font-style: var(--spark-display-style, normal);
+  font-weight: var(--spark-display-weight, 800);
+  letter-spacing: var(--spark-display-track, -.035em);
+  line-height: .95;
+}
+
+.spark-requirement__content {
+  min-width: 0;
+}
+
+.spark-requirement__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.spark-requirement__item {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--spark-color-line, rgba(243, 242, 239, .12));
+  font-size: clamp(1rem, .95rem + .4vw, 1.25rem);
+  line-height: 1.5;
+}
+
+.spark-requirement__item:last-child {
+  border-bottom: 1px solid var(--spark-color-line, rgba(243, 242, 239, .12));
+}
+
+.spark-requirement__item > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.spark-requirement__icon {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-top: 2px;
+  fill: none;
+  stroke: var(--spark-color-accent, #fff);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+.spark-requirement__remove {
+  flex: none;
+  opacity: .65;
+}
+
+.spark-requirement__add {
+  margin-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  .spark-requirement {
+    grid-template-columns: 1fr;
+    row-gap: .75rem;
+  }
+
+  .spark-requirement__eyebrow {
+    padding-top: 0;
+  }
+
+  .spark-requirement__item {
+    font-size: 1rem;
+  }
+
+  .spark-requirement__title {
+    margin-bottom: 1.5rem;
+  }
+}
