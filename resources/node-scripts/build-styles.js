@@ -23,6 +23,10 @@ const build = () => {
 		path.join( root, 'assets', 'scss', 'main.scss' ),
 		path.join( root, 'assets', 'css', 'main.css' )
 	);
+	compile(
+		path.join( root, 'assets', 'scss', 'case-study-archive.scss' ),
+		path.join( root, 'assets', 'css', 'case-study-archive.css' )
+	);
 
 	if ( ! fs.existsSync( blockRoot ) ) {
 		return;

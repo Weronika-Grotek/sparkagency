@@ -1,0 +1,522 @@
+.spark-case-archive {
+	--case-archive-gutter: clamp(1rem, 4vw, 3.5rem);
+	--case-archive-width: 82.5rem;
+	padding-block: clamp(2rem, 5vw, 4rem) clamp(4rem, 8vw, 8rem);
+	background: var(--wp--preset--color--background, #0B0B0D);
+	color: var(--wp--preset--color--text, #B5B5B5);
+}
+
+.spark-case-archive,
+.spark-case-archive * {
+	box-sizing: border-box;
+}
+
+.spark-case-archive__wrap {
+	width: min(100%, var(--case-archive-width));
+	margin-inline: auto;
+	padding-inline: var(--case-archive-gutter);
+}
+
+.spark-case-archive__filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	margin-bottom: clamp(2rem, 5vw, 4.5rem);
+}
+
+.spark-case-archive__filter {
+	display: inline-flex;
+	align-items: center;
+	gap: .55rem;
+	min-height: 2.6rem;
+	padding: .6rem 1rem;
+	border: 1px solid var(--wp--preset--color--line-strong, #6C6C6C);
+	border-radius: var(--spark-radius-btn, 2px);
+	background: transparent;
+	color: var(--wp--preset--color--text, #F3F2EF);
+	font: inherit;
+	font-size: .84rem;
+	font-weight: 650;
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.spark-case-archive__filter:hover,
+.spark-case-archive__filter[aria-pressed="true"] {
+	border-color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+}
+
+.spark-case-archive__filter[aria-pressed="true"] {
+	background: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+	color: var(--case-archive-ink, var(--wp--preset--color--agency-dark-ink, #0B0B0D));
+}
+
+.spark-case-archive__filter i {
+	width: .5rem;
+	height: .5rem;
+	border-radius: 50%;
+	background: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+}
+
+.spark-case-archive__filter sup {
+	opacity: .65;
+	font-size: .68em;
+}
+
+.spark-case-archive__grid {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	align-items: start;
+	gap: clamp(3rem, 7vw, 6.5rem) clamp(1rem, 2vw, 1.75rem);
+}
+
+.spark-case-archive__card {
+	display: grid;
+	grid-column: span 5;
+	gap: 1rem;
+	align-content: start;
+	color: inherit;
+	text-decoration: none;
+}
+
+.spark-case-archive__card.is-wide {
+	grid-column: span 7;
+}
+
+.spark-case-archive__card:nth-child(even) {
+	margin-top: clamp(2rem, 7vw, 6rem);
+}
+
+.spark-case-archive__art {
+	position: relative;
+	height: clamp(17rem, 34vw, 33rem);
+	overflow: hidden;
+	isolation: isolate;
+	border: 1px solid var(--wp--preset--color--line, #505050);
+	border-radius: var(--spark-radius-card, 4px);
+	background: var(--wp--preset--color--surface, #131316);
+	transition: border-color .3s ease;
+}
+
+.spark-case-archive__art-grid {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	background-image: linear-gradient(90deg, color-mix(in srgb, var(--wp--preset--color--text, #fff) 8%, transparent) 1px, transparent 1px);
+	background-size: 1.75rem 100%;
+	pointer-events: none;
+}
+
+.spark-case-archive__image {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: .9;
+	transition: transform .8s cubic-bezier(.2, .7, .1, 1), opacity .3s ease;
+}
+
+.spark-case-archive__art.has-image::after {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(180deg, transparent 38%, color-mix(in srgb, var(--wp--preset--color--background, #0B0B0D) 72%, transparent));
+	content: "";
+}
+
+.spark-case-archive__chips {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	z-index: 3;
+	display: flex;
+	flex-wrap: wrap;
+	gap: .4rem;
+}
+
+.spark-case-archive__chips span {
+	padding: .42rem .6rem;
+	border: 1px solid var(--wp--preset--color--line-strong, #6C6C6C);
+	border-radius: var(--spark-radius-sm, 2px);
+	background: color-mix(in srgb, var(--wp--preset--color--background, #0B0B0D) 76%, transparent);
+	color: var(--wp--preset--color--text, #fff);
+	font-size: .62rem;
+	font-weight: 800;
+	letter-spacing: .1em;
+	line-height: 1;
+	text-transform: uppercase;
+	backdrop-filter: blur(6px);
+}
+
+.spark-case-archive__number {
+	position: absolute;
+	right: 1.25rem;
+	bottom: .75rem;
+	z-index: 3;
+	color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+	font-size: clamp(4rem, 2rem + 7vw, 8.5rem);
+	font-weight: 800;
+	letter-spacing: -.07em;
+	line-height: .8;
+	mix-blend-mode: screen;
+}
+
+.spark-case-archive__body {
+	display: grid;
+	gap: .75rem;
+}
+
+.spark-case-archive__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .45rem 1rem;
+	color: var(--wp--preset--color--subtitle, #909090);
+	font-size: .65rem;
+	font-weight: 700;
+	letter-spacing: .12em;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+.spark-case-archive__card-title {
+	margin: 0;
+	color: var(--wp--preset--color--text, #fff);
+	font-size: clamp(1.5rem, 1.15rem + 1.1vw, 2.25rem);
+	font-weight: 750;
+	letter-spacing: -.04em;
+	line-height: 1.04;
+}
+
+.spark-case-archive__excerpt {
+	max-width: 62ch;
+	margin: 0;
+	color: var(--wp--preset--color--subtitle, #909090);
+	font-size: .94rem;
+	line-height: 1.6;
+}
+
+.spark-case-archive__more {
+	color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+	font-size: .8rem;
+	font-weight: 800;
+}
+
+.spark-case-archive__more::after {
+	display: inline-block;
+	margin-left: .45rem;
+	content: "→";
+	transition: transform .25s ease;
+}
+
+.spark-case-archive__metric {
+	display: flex;
+	align-items: baseline;
+	gap: .7rem;
+	padding-top: .75rem;
+	border-top: 1px solid var(--wp--preset--color--line, #505050);
+}
+
+.spark-case-archive__metric strong {
+	color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+	font-size: 1.35rem;
+	line-height: 1;
+}
+
+.spark-case-archive__metric span {
+	color: var(--wp--preset--color--subtitle, #909090);
+	font-size: .75rem;
+}
+
+.spark-case-archive__card:hover .spark-case-archive__art {
+	border-color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+}
+
+.spark-case-archive__card:hover .spark-case-archive__image {
+	transform: scale(1.04);
+	opacity: 1;
+}
+
+.spark-case-archive__card:hover .spark-case-archive__number {
+	transform: translateY(-.5rem) scale(1.04);
+}
+
+.spark-case-archive__card:hover .spark-case-archive__more::after {
+	transform: translateX(.3rem);
+}
+
+.spark-case-archive__card:focus-visible,
+.spark-case-archive__filter:focus-visible {
+	outline: 2px solid var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+	outline-offset: 4px;
+}
+
+.spark-case-archive__card[hidden] {
+	display: none;
+}
+
+.spark-case-archive__empty {
+	padding-block: 2rem;
+	color: var(--wp--preset--color--subtitle, #909090);
+}
+
+.spark-case-archive [data-brand="agency"] {
+	--case-archive-accent: var(--wp--preset--color--agency-dark, #fff);
+	--case-archive-ink: var(--wp--preset--color--agency-dark-ink, #0B0B0D);
+}
+
+.spark-case-archive [data-brand="exp"] {
+	--case-archive-accent: var(--wp--preset--color--exp, #01B57C);
+	--case-archive-ink: var(--wp--preset--color--exp-ink, #00150E);
+}
+
+.spark-case-archive [data-brand="warsaw"] {
+	--case-archive-accent: var(--wp--preset--color--warsaw, #43A0ED);
+	--case-archive-ink: var(--wp--preset--color--warsaw-ink, #04121F);
+}
+
+.spark-case-archive [data-brand="health"] {
+	--case-archive-accent: var(--wp--preset--color--health-dark, #A857BC);
+	--case-archive-ink: var(--wp--preset--color--health-dark-ink, #B5B5B5);
+}
+
+.spark-case-archive [data-brand="studio"] {
+	--case-archive-accent: var(--wp--preset--color--studio, #D65251);
+	--case-archive-ink: var(--wp--preset--color--studio-ink, #1E0707);
+}
+
+.spark-case-archive [data-brand="works"] {
+	--case-archive-accent: var(--wp--preset--color--works-dark, #D8AB52);
+	--case-archive-ink: var(--wp--preset--color--works-dark-ink, #1B1406);
+}
+
+.spark-case-archive__editor {
+	padding: 1.5rem;
+	border: 1px dashed var(--wp--preset--color--line-strong, #6C6C6C);
+	color: var(--wp--preset--color--text, #B5B5B5);
+}
+
+.spark-case-archive__editor p {
+	margin-bottom: 0;
+	color: var(--wp--preset--color--subtitle, #909090);
+}
+
+@media (max-width: 48rem) {
+	.spark-case-archive__grid {
+		gap: 3rem 1rem;
+	}
+
+	.spark-case-archive__card,
+	.spark-case-archive__card.is-wide {
+		grid-column: span 12;
+	}
+
+	.spark-case-archive__card:nth-child(even) {
+		margin-top: 0;
+	}
+
+	.spark-case-archive__art {
+		height: 20rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.spark-case-archive *,
+	.spark-case-archive *::before,
+	.spark-case-archive *::after {
+		scroll-behavior: auto !important;
+		transition-duration: .01ms !important;
+	}
+}
+
+/* The archive uses the same brand-driven color and motion language as the Hub case cards. */
+.spark-case-archive {
+	--case-archive-accent: var(--wp--preset--color--agency-dark, #fff);
+	--case-archive-accent-secondary: var(--case-archive-accent);
+	--case-archive-ease: cubic-bezier(.2, .7, .1, 1);
+}
+
+.spark-case-archive__card {
+	animation: spark-case-archive-reveal .6s var(--case-archive-ease) both;
+	animation-delay: min(calc(var(--case-index, 0) * 70ms), 350ms);
+}
+
+.spark-case-archive__art {
+	border: 1px solid transparent;
+	background:
+		linear-gradient(var(--wp--preset--color--surface, #131316), var(--wp--preset--color--surface, #131316)) padding-box,
+		linear-gradient(135deg, var(--case-archive-accent), var(--case-archive-accent-secondary)) border-box;
+}
+
+.spark-case-archive__glow {
+	position: absolute;
+	z-index: 2;
+	width: 70%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--case-archive-accent);
+	filter: blur(3rem);
+	opacity: .58;
+	mix-blend-mode: screen;
+	animation: spark-case-archive-drift 14s ease-in-out infinite alternate;
+	transition: transform 1s var(--case-archive-ease), opacity .6s var(--case-archive-ease);
+	pointer-events: none;
+}
+
+.spark-case-archive__glow--one {
+    top: 33%;
+    left: 34%;
+}
+
+
+.spark-case-archive__glow--two {
+	right: -18%;
+	bottom: -22%;
+	animation-duration: 18s;
+	animation-direction: alternate-reverse;
+}
+
+.spark-case-archive__glow--three {
+	top: 68%;
+	left: 32%;
+	width: 42%;
+	animation-duration: 22s;
+}
+
+.spark-case-archive__glow--four {
+	top: -12%;
+	right: 5%;
+	width: 38%;
+	animation-duration: 17s;
+	animation-direction: alternate-reverse;
+}
+
+.spark-case-archive__art-grid {
+	z-index: 3;
+}
+
+.spark-case-archive__chips,
+.spark-case-archive__number {
+	z-index: 4;
+}
+
+.spark-case-archive__chips span {
+	display: inline-flex;
+	align-items: center;
+	gap: .35rem;
+}
+
+.spark-case-archive__chips span i {
+	width: .4375rem;
+	height: .4375rem;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	background: var(--case-archive-accent);
+}
+
+.spark-case-archive__card:hover .spark-case-archive__glow {
+	opacity: .82;
+	transform: scale(1.22);
+}
+
+.spark-case-archive [data-brand="agency"] {
+	--case-archive-accent: var(--wp--preset--color--agency-dark, #fff);
+}
+
+.spark-case-archive [data-brand="exp"] {
+	--case-archive-accent: var(--wp--preset--color--exp, #01B57C);
+}
+
+.spark-case-archive [data-brand="warsaw"] {
+	--case-archive-accent: var(--wp--preset--color--warsaw, #43A0ED);
+}
+
+.spark-case-archive [data-brand="health"] {
+	--case-archive-accent: var(--wp--preset--color--health-dark, #A857BC);
+}
+
+.spark-case-archive [data-brand="studio"] {
+	--case-archive-accent: var(--wp--preset--color--studio, #D65251);
+}
+
+.spark-case-archive [data-brand="works"] {
+	--case-archive-accent: var(--wp--preset--color--works-dark, #D8AB52);
+}
+
+.spark-case-archive [data-brand-secondary="agency"] {
+	--case-archive-accent-secondary: var(--wp--preset--color--agency-dark, #fff);
+}
+
+.spark-case-archive [data-brand-secondary="exp"] {
+	--case-archive-accent-secondary: var(--wp--preset--color--exp, #01B57C);
+}
+
+.spark-case-archive [data-brand-secondary="warsaw"] {
+	--case-archive-accent-secondary: var(--wp--preset--color--warsaw, #43A0ED);
+}
+
+.spark-case-archive [data-brand-secondary="health"] {
+	--case-archive-accent-secondary: var(--wp--preset--color--health-dark, #A857BC);
+}
+
+.spark-case-archive [data-brand-secondary="studio"] {
+	--case-archive-accent-secondary: var(--wp--preset--color--studio, #D65251);
+}
+
+.spark-case-archive [data-brand-secondary="works"] {
+	--case-archive-accent-secondary: var(--wp--preset--color--works-dark, #D8AB52);
+}
+
+@keyframes spark-case-archive-drift {
+	0% {
+		transform: translate3d(-10%, -5%, 0) scale(.96);
+	}
+
+	50% {
+		transform: translate3d(25%, 20%, 0) scale(1.08);
+	}
+
+	100% {
+		transform: translate3d(5%, 45%, 0) scale(1);
+	}
+}
+
+@keyframes spark-case-archive-reveal {
+	from {
+		opacity: .001;
+		transform: translateY(1.25rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.spark-case-archive__card,
+	.spark-case-archive__glow {
+		animation: none;
+	}
+}
+
+/* Keep the archive frame visible at rest and use one radius for every brand. */
+.spark-case-archive__filter,
+.spark-case-archive__card,
+.spark-case-archive__art,
+.spark-case-archive__chips span {
+	border-radius: 0.20rem;
+}
+
+.spark-case-archive__art {
+	    border: 1px solid var(--spark-color-line);
+	/* border: 1px solid color-mix(in srgb, var(--case-archive-accent) 62%, var(--wp--preset--color--line, #505050)); */
+	background: var(--wp--preset--color--surface, #131316);
+}
+
+.spark-case-archive__card:hover .spark-case-archive__art {
+	border-color: var(--case-archive-accent);
+}

@@ -69,7 +69,7 @@ final class Assets {
 
 	/** Load archive-specific presentation and filters on the case study archive. */
 	public function enqueue_case_study_archive_assets(): void {
-		if ( ! is_post_type_archive( array( 'case-study', 'case_study' ) ) ) {
+		if ( ! is_post_type_archive( array( 'case-study', 'case_study' ) ) && ! is_page( 'case-studies' ) ) {
 			return;
 		}
 

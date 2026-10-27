@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "sparkagency/case-studies-archive",
+	"version": "1.0.0",
+	"title": "Spark Case Studies — archiwum",
+	"category": "design",
+	"icon": "portfolio",
+	"description": "Automatyczna lista case studies z filtrami według firm przypisanych w Hubie.",
+	"textdomain": "sparkagency",
+	"editorScript": "sparkagency-case-studies-archive-editor",
+	"supports": {
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"spacing": { "margin": [ "top", "bottom" ], "padding": [ "top", "bottom" ] },
+		"html": false
+	}
+}

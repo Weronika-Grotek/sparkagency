@@ -93,6 +93,173 @@ function sparkagency_register_case_study_post_type() {
 }
 add_action( 'init', 'sparkagency_register_case_study_post_type' );
 
+/** Keep the public case study archive available even when CPT UI registers the type first. */
+function sparkagency_enable_case_study_post_type_archives( array $args, string $post_type ): array {
+	if ( ! in_array( $post_type, array( 'case-study', 'case_study' ), true ) ) {
+		return $args;
+	}
+
+	$args['public']             = true;
+	$args['publicly_queryable'] = true;
+	$args['has_archive']        = true;
+	if ( false === ( $args['rewrite'] ?? true ) ) {
+		$args['rewrite'] = array(
+			'slug'       => 'case_study' === $post_type ? 'case_studies' : 'case-study',
+			'with_front' => false,
+		);
+	}
+	return $args;
+}
+add_filter( 'register_post_type_args', 'sparkagency_enable_case_study_post_type_archives', 99, 2 );
+
+/** Register the Hub's company/branch taxonomy and attach it to both case study types. */
+function sparkagency_register_case_study_branches_taxonomy(): void {
+	$case_types = array_values( array_filter( array( 'case-study', 'case_study' ), 'post_type_exists' ) );
+	if ( empty( $case_types ) ) {
+		return;
+	}
+
+	if ( taxonomy_exists( 'branches' ) ) {
+		foreach ( $case_types as $post_type ) {
+			if ( ! is_object_in_taxonomy( $post_type, 'branches' ) ) {
+				register_taxonomy_for_object_type( 'branches', $post_type );
+			}
+		}
+		return;
+	}
+
+	register_taxonomy(
+		'branches',
+		$case_types,
+		array(
+			'labels'            => array(
+				'name'          => __( 'Branże', 'sparkagency' ),
+				'singular_name' => __( 'Branża', 'sparkagency' ),
+				'menu_name'     => __( 'Branże', 'sparkagency' ),
+				'all_items'     => __( 'Wszystkie firmy', 'sparkagency' ),
+				'edit_item'     => __( 'Edytuj firmę', 'sparkagency' ),
+				'add_new_item'  => __( 'Dodaj firmę', 'sparkagency' ),
+			),
+			'public'            => true,
+			'publicly_queryable' => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'hierarchical'      => false,
+			'rewrite'           => array(
+				'slug'       => 'branches',
+				'with_front' => false,
+			),
+		)
+	);
+}
+add_action( 'init', 'sparkagency_register_case_study_branches_taxonomy', 20 );
+
+/** Register the full case study archive as an editable Gutenberg block. */
+function sparkagency_register_case_studies_archive_block(): void {
+	$metadata = get_theme_file_path( '/src/blocks/case-studies-archive/block.json' );
+	if ( ! is_readable( $metadata ) ) {
+		return;
+	}
+
+	$script_path = '/assets/js/case-studies-archive-block.js';
+	$script_file = get_theme_file_path( $script_path );
+	if ( is_readable( $script_file ) ) {
+		wp_register_script(
+			'sparkagency-case-studies-archive-editor',
+			get_theme_file_uri( $script_path ),
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n' ),
+			(string) filemtime( $script_file ),
+			true
+		);
+	}
+
+	register_block_type(
+		$metadata,
+		array( 'render_callback' => 'sparkagency_render_case_studies_archive_block' )
+	);
+}
+add_action( 'init', 'sparkagency_register_case_studies_archive_block', 20 );
+
+/** Render the archive block from current case study posts and Hub branch terms. */
+function sparkagency_render_case_studies_archive_block( array $attributes = array() ): string {
+	$template = get_theme_file_path( '/template-parts/blocks/case-studies-archive.php' );
+	if ( ! is_readable( $template ) ) {
+		return '';
+	}
+
+	ob_start();
+	require $template;
+	return (string) ob_get_clean();
+}
+
+/** Create a Gutenberg-managed archive page once, without replacing existing page content. */
+function sparkagency_ensure_case_studies_page(): void {
+	$version = '2';
+	if ( get_option( 'sparkagency_case_studies_page_version' ) === $version ) {
+		return;
+	}
+
+	$page = get_page_by_path( 'case-studies', OBJECT, 'page' );
+	if ( ! $page ) {
+		$page_id = wp_insert_post(
+			array(
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_title'   => __( 'Case Studies', 'sparkagency' ),
+				'post_name'    => 'case-studies',
+				'post_content' => '<!-- wp:sparkagency/case-studies-archive /-->',
+			),
+			true
+		);
+		if ( is_wp_error( $page_id ) ) {
+			return;
+		}
+	} else {
+		$blocks        = parse_blocks( $page->post_content );
+		$archive_block = null;
+		$page_blocks   = array();
+		foreach ( $blocks as $block ) {
+			if ( 'sparkagency/case-studies-archive' === ( $block['blockName'] ?? '' ) ) {
+				$archive_block = $archive_block ?: $block;
+				continue;
+			}
+			$page_blocks[] = $block;
+		}
+
+		if ( null === $archive_block ) {
+			$archive_block = parse_blocks( '<!-- wp:sparkagency/case-studies-archive /-->' )[0];
+		}
+		// The archive is a long list. Keep every editable block, especially Hero,
+		// before it so a Hero inserted after the starter block is still at the top.
+		$page_blocks[] = $archive_block;
+		$updated_content = serialize_blocks( $page_blocks );
+		if ( $updated_content !== $page->post_content ) {
+			wp_update_post(
+				array(
+					'ID'           => $page->ID,
+					'post_content' => $updated_content,
+				)
+			);
+		}
+	}
+
+	update_option( 'sparkagency_case_studies_page_version', $version );
+	flush_rewrite_rules( false );
+}
+add_action( 'admin_init', 'sparkagency_ensure_case_studies_page', 30 );
+
+/** Refresh rewrite rules once after enabling the public case study archive. */
+function sparkagency_refresh_case_study_archive_rewrites(): void {
+	$version = '3';
+	if ( get_option( 'sparkagency_case_archive_rewrite_version' ) === $version ) {
+		return;
+	}
+	flush_rewrite_rules( false );
+	update_option( 'sparkagency_case_archive_rewrite_version', $version );
+}
+add_action( 'admin_init', 'sparkagency_refresh_case_study_archive_rewrites', 20 );
+
 /**
  * Keep older CPT UI case_study entries available in the same public archive.
  * The theme previously shipped templates for both the underscore and hyphen
@@ -110,14 +277,16 @@ function sparkagency_include_legacy_case_studies_in_archive( WP_Query $query ): 
 }
 add_action( 'pre_get_posts', 'sparkagency_include_legacy_case_studies_in_archive' );
 
-/** Point case study menu links to the archive URL registered by WordPress. */
+/** Point case study menu links to the editable archive page. */
 function sparkagency_fix_case_studies_menu_link( array $items ): array {
+	$archive_page = get_page_by_path( 'case-studies', OBJECT, 'page' );
+	$archive_url  = $archive_page && 'publish' === $archive_page->post_status ? get_permalink( $archive_page ) : false;
 	$case_types = array_values( array_filter( array( 'case_study', 'case-study' ), 'post_type_exists' ) );
-	if ( empty( $case_types ) ) {
+	if ( ! $archive_url && empty( $case_types ) ) {
 		return $items;
 	}
 
-	$target_type = $case_types[0];
+	$target_type = $case_types[0] ?? '';
 	foreach ( $case_types as $candidate ) {
 		$counts = wp_count_posts( $candidate );
 		if ( $counts && (int) $counts->publish > 0 ) {
@@ -125,7 +294,7 @@ function sparkagency_fix_case_studies_menu_link( array $items ): array {
 			break;
 		}
 	}
-	$archive_url = get_post_type_archive_link( $target_type );
+	$archive_url = $archive_url ?: ( '' !== $target_type ? get_post_type_archive_link( $target_type ) : false );
 	if ( ! $archive_url ) {
 		foreach ( $case_types as $candidate ) {
 			$archive_url = get_post_type_archive_link( $candidate );
