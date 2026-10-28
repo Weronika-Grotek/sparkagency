@@ -12,7 +12,6 @@ const initializeContactHandoffs = () => {
 		const summary = root.querySelector( '[data-contact-summary]' );
 		const list = root.querySelector( '[data-contact-list]' );
 		const empty = root.querySelector( '[data-contact-empty]' );
-		const result = root.querySelector( '[data-contact-result]' );
 		const change = root.querySelector( '[data-contact-change]' );
 		const params = new URLSearchParams( window.location.search );
 		const needs = readNeeds();
@@ -34,10 +33,6 @@ const initializeContactHandoffs = () => {
 			row.append( term, description );
 			list.append( row );
 		} );
-		if ( result && needs.company ) {
-			result.hidden = false;
-			result.textContent = `Rozmowę zaczniesz z zespołem: ${ needs.company.label }`;
-		}
 		if ( change && needs.returnUrl ) {
 			change.hidden = false;
 			change.href = needs.returnUrl;

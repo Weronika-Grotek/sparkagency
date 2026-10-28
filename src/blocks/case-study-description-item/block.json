@@ -37,6 +37,10 @@
     "counterDuration": {
       "type": "number",
       "default": 1200
+    },
+    "metrics": {
+      "type": "array",
+      "default": []
     }
   },
   "supports": {

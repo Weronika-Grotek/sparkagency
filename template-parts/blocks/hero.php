@@ -127,6 +127,9 @@ if ( ! $show_secondary_button ) {
 			<h1 class="dev-spark-hero__title"><?php echo esc_html( $attributes['headline'] ); ?> <strong><?php echo esc_html( $attributes['brand'] ); ?></strong></h1>
 			<div class="dev-spark-hero__foot">
 				<p class="dev-spark-hero__lead"><?php echo esc_html( $attributes['lead'] ); ?></p>
+				<?php if ( ! empty( $attributes['leadSecondary'] ) ) : ?>
+					<p class="dev-spark-hero__lead-secondary"><?php echo esc_html( $attributes['leadSecondary'] ); ?></p>
+				<?php endif; ?>
 				<div class="dev-spark-hero__actions">
 					<?php if ( $show_primary_button && $attributes['primaryLabel'] && $attributes['primaryUrl'] ) : ?>
 						<div class="wp-block-button dev-spark-hero__button"><a class="wp-block-button__link" href="<?php echo esc_url( $attributes['primaryUrl'] ); ?>"><?php echo esc_html( $attributes['primaryLabel'] ); ?></a></div>

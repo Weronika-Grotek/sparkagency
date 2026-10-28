@@ -51,6 +51,9 @@ const createTemplate = attributes => [['core/group', {
 }, [['core/paragraph', {
   className: 'dev-spark-hero__lead',
   content: attributes.lead
+}], ['core/paragraph', {
+  className: 'dev-spark-hero__lead-secondary',
+  placeholder: 'Dodatkowy tekst pod opisem'
 }], ['core/buttons', {
   className: 'dev-spark-hero__actions',
   layout: {

@@ -2,8 +2,8 @@
 
 .spark-contact-handoff {
     display: grid;
-    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-    gap: clamp(2rem, 6vw, 6rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
     width: min(100%, 82.5rem);
     margin-inline: auto;
     padding: clamp(3rem, 7vw, 6rem) clamp(1rem, 4vw, 3.5rem);
@@ -11,59 +11,76 @@
     color: vars.$color-text;
 
     &__summary {
-        padding: clamp(1.5rem, 3vw, 2.5rem);
+        padding: clamp(1.25rem, 2.5vw, 1.5rem);
         border: 1px solid vars.$color-line-strong;
-        border-radius: vars.$radius-card;
+        border-radius: vars.$radius-sm;
         background: vars.$color-surface;
     }
 
     &__summary h2 {
         margin: 0;
-        font-size: clamp(1.8rem, 1.2rem + 2vw, 3rem);
-        line-height: 1;
+        color: vars.$color-accent;
+        font-size: .6875rem;
+        font-weight: 700;
+        letter-spacing: .12em;
+        line-height: 1.4;
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
     }
 
     &__summary>p {
-        margin: 1rem 0 2rem;
+        margin: .75rem 0 0;
         color: vars.$color-subtitle;
-    }
-
-    &__result {
-        margin: 0 0 1.5rem;
-        color: vars.$color-accent;
-        font-size: 1.1rem;
-        font-weight: 700;
+        line-height: 1.55;
     }
 
     &__summary dl {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .4rem;
         margin: 0;
-        border-top: 1px solid vars.$color-line;
+        padding: 0;
     }
 
     &__summary dl div {
-        padding: .9rem 0;
-        border-bottom: 1px solid vars.$color-line;
+        display: contents;
     }
 
     &__summary dt {
-        color: vars.$color-subtitle;
-        font-size: .75rem;
-        font-weight: 600;
-        letter-spacing: .08em;
-        text-transform: uppercase;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
     }
 
     &__summary dd {
-        margin: .25rem 0 0;
-        font-weight: 700;
+        margin: 0;
+        padding: .4rem .65rem;
+        border: 1px solid vars.$color-line;
+        border-radius: vars.$radius-sm;
+        color: vars.$color-accent;
+        font-size: .875rem;
+        line-height: 1.35;
     }
 
     &__change {
-        display: inline-block;
-        margin-top: 1.25rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        width: fit-content;
+        margin-top: .75rem;
         color: vars.$color-accent;
         font-size: .875rem;
         font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: .25em;
+
+        &::after {
+            content: '→';
+            text-decoration: none;
+        }
 
         &[hidden] {
             display: none;

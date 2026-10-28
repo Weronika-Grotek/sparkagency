@@ -21,8 +21,8 @@ const Edit = ( { attributes, setAttributes } ) => {
 			<section { ...blockProps }>
 				<div className="spark-contact-handoff__summary">
 					<RichText tagName="h2" value={ attributes.title || '' } placeholder={ __( 'Nagłówek podsumowania', domain ) } onChange={ ( title ) => setAttributes( { title } ) } />
+					<dl><div><dt>{ __( 'Wybrana potrzeba', domain ) }</dt><dd>{ __( 'Odczytana z generatora potrzeb', domain ) }</dd></div></dl>
 					<RichText tagName="p" value={ attributes.lede || '' } placeholder={ __( 'Opis podsumowania', domain ) } onChange={ ( lede ) => setAttributes( { lede } ) } />
-					<dl><div><dt>{ __( 'Wybrana potrzeba', domain ) }</dt><dd>{ __( 'Zostanie odczytana z adresu URL.', domain ) }</dd></div></dl>
 				</div>
 				<div { ...innerBlocksProps } />
 			</section>

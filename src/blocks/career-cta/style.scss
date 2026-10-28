@@ -1,14 +1,14 @@
 @use "../variables" as vars;
 
 .spark-career-cta {
-	--career-ink: #0b0b0d;
-	--career-surface: #131316;
-	--career-paper: #f3f2ef;
-	--career-muted: #9b9ba3;
-	--career-line: rgba(243, 242, 239, .12);
-	--career-line-strong: rgba(243, 242, 239, .28);
-	--career-accent: #fff;
-	--career-accent-ink: #0b0b0d;
+	--career-ink: #{vars.$color-background};
+	--career-surface: #{vars.$color-surface};
+	--career-paper: #{vars.$color-text};
+	--career-muted: #{vars.$color-subtitle};
+	--career-line: #{vars.$color-line};
+	--career-line-strong: #{vars.$color-line-strong};
+	--career-accent: #{vars.$color-agency-dark};
+	--career-accent-ink: #{vars.$color-agency-dark-ink};
 	--career-radius-card: 4px;
 	--career-radius-button: 2px;
 	--career-display-weight: 800;
@@ -32,8 +32,8 @@
 	}
 
 	&[data-brand="works"] {
-		--career-accent: #d8ab52;
-		--career-accent-ink: #1b1406;
+		--career-accent: #{vars.$color-works-dark};
+		--career-accent-ink: #{vars.$color-works-dark-ink};
 		--career-radius-card: 0;
 		--career-radius-button: 0;
 		--career-display-weight: 700;
@@ -41,8 +41,8 @@
 	}
 
 	&[data-brand="exp"] {
-		--career-accent: #01b57c;
-		--career-accent-ink: #00150e;
+		--career-accent: #{vars.$color-exp};
+		--career-accent-ink: #{vars.$color-exp-ink};
 		--career-radius-card: 12px;
 		--career-radius-button: 8px;
 		--career-display-weight: 650;
@@ -50,16 +50,16 @@
 	}
 
 	&[data-brand="warsaw"] {
-		--career-accent: #43a0ed;
-		--career-accent-ink: #04121f;
+		--career-accent: #{vars.$color-warsaw};
+		--career-accent-ink: #{vars.$color-warsaw-ink};
 		--career-radius-card: 0;
 		--career-radius-button: 0;
 		--career-display-track: -.055em;
 	}
 
 	&[data-brand="health"] {
-		--career-accent: #a857bc;
-		--career-accent-ink: #17071b;
+		--career-accent: #{vars.$color-health-dark};
+		--career-accent-ink: #{vars.$color-health-dark-ink};
 		--career-radius-card: 28px;
 		--career-radius-button: 999px;
 		--career-display-weight: 500;
@@ -67,36 +67,49 @@
 	}
 
 	&[data-brand="studio"] {
-		--career-accent: #d65251;
-		--career-accent-ink: #1e0707;
+		--career-accent: #{vars.$color-studio};
+		--career-accent-ink: #{vars.$color-studio-ink};
 		--career-radius-card: 2px;
 		--career-display-track: -.04em;
 		--career-display-style: italic;
 	}
 
-	&[data-theme="light"] {
-		--career-ink: #f4f6f8;
-		--career-surface: #fff;
-		--career-paper: #0e1116;
-		--career-muted: #5a616b;
-		--career-line: rgba(14, 17, 22, .12);
-		--career-line-strong: rgba(14, 17, 22, .28);
-		--career-accent-ink: #fff;
+	// The page theme switch overrides a block's saved preview theme so the CTA
+	// follows the same light/dark palette as the rest of the site.
+	@mixin light-brand($brand, $color, $ink) {
+		&[data-brand="#{$brand}"] { --career-accent: #{$color}; --career-accent-ink: #{$ink}; }
 	}
 
-	&[data-theme="light"][data-brand="agency"] { --career-accent: #0e1116; }
-	&[data-theme="light"][data-brand="works"] { --career-accent: #8c6a2c; }
-	&[data-theme="light"][data-brand="exp"] { --career-accent: #007a53; }
-	&[data-theme="light"][data-brand="warsaw"] { --career-accent: #1f72bf; }
-	&[data-theme="light"][data-brand="studio"] { --career-accent: #b83a39; }
+	@mixin light-palette {
+		--career-ink: var(--wp--preset--color--light-background, #F4F6F8);
+		--career-surface: var(--wp--preset--color--light-surface, #FFFFFF);
+		--career-paper: var(--wp--preset--color--light-text, #484848);
+		--career-muted: var(--wp--preset--color--light-subtitle, #707070);
+		--career-line: var(--wp--preset--color--light-line, #B0B0B0);
+		--career-line-strong: var(--wp--preset--color--light-line-strong, #808080);
+		@include light-brand(agency, vars.$color-agency, vars.$color-agency-ink);
+		@include light-brand(works, vars.$color-works, vars.$color-works-ink);
+		@include light-brand(exp, vars.$color-exp, vars.$color-exp-ink);
+		@include light-brand(warsaw, vars.$color-warsaw, vars.$color-warsaw-ink);
+		@include light-brand(health, vars.$color-health, vars.$color-health-ink);
+		@include light-brand(studio, vars.$color-studio, vars.$color-studio-ink);
+	}
 
+	&[data-theme="light"] { @include light-palette; }
+
+	html[data-theme="light"] &, body[data-theme="light"] & {
+		@include light-palette;
+	}
+
+	html[data-theme="light"] &[data-brand="health"],
+	body[data-theme="light"] &[data-brand="health"],
 	&[data-theme="light"][data-brand="health"] {
-		--career-accent: #8e3fa3;
-		--career-ink: #f8f5f8;
-		--career-paper: #1a1320;
-		--career-muted: #655c6b;
-		--career-line: rgba(26, 19, 32, .12);
-		--career-line-strong: rgba(26, 19, 32, .26);
+		--career-ink: var(--wp--preset--color--health-background, #F8F5F8);
+		--career-surface: var(--wp--preset--color--health-surface, #FFFFFF);
+		--career-paper: var(--wp--preset--color--health-text, #B5B5B5);
+		--career-muted: var(--wp--preset--color--health-subtitle, #707070);
+		--career-line: var(--wp--preset--color--health-line, #B0B0B0);
+		--career-line-strong: var(--wp--preset--color--health-line-strong, #808080);
 	}
 
 	&__wrap {

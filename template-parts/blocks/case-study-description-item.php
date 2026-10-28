@@ -15,6 +15,16 @@ $counter_suffix   = isset($attributes['counterSuffix']) ? (string) $attributes['
 $counter_label    = isset($attributes['counterLabel']) ? (string) $attributes['counterLabel'] : '';
 $counter_duration = isset($attributes['counterDuration']) && is_numeric($attributes['counterDuration']) ? (int) $attributes['counterDuration'] : 1200;
 $counter_duration = min(5000, max(300, $counter_duration));
+$metrics = isset($attributes['metrics']) && is_array($attributes['metrics']) ? $attributes['metrics'] : array();
+if (empty($metrics) && $show_counter) {
+	$metrics[] = array(
+		'value'    => $counter_value,
+		'prefix'   => $counter_prefix,
+		'suffix'   => $counter_suffix,
+		'label'    => $counter_label,
+		'duration' => $counter_duration,
+	);
+}
 ?>
 <section <?php echo wp_kses_data(get_block_wrapper_attributes(array('class' => 'spark-case-study-description-item'))); ?>>
 	<?php if (! empty($attributes['title'])) : ?>
@@ -24,12 +34,22 @@ $counter_duration = min(5000, max(300, $counter_duration));
 		<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Rendered and sanitized by Gutenberg.
 		?>
 	</div>
-	<?php if ($show_counter) : ?>
-		<div class="spark-case-study-description-item__counter" data-case-study-counter data-counter-value="<?php echo esc_attr($counter_value); ?>" data-counter-duration="<?php echo esc_attr($counter_duration); ?>">
-			<p class="spark-case-study-description-item__counter-value"><span><?php echo esc_html($counter_prefix); ?></span><strong data-case-study-counter-value><?php echo esc_html($counter_value); ?></strong><span><?php echo esc_html($counter_suffix); ?></span></p>
-			<?php if ('' !== $counter_label) : ?>
-				<p class="spark-case-study-description-item__counter-label"><?php echo wp_kses_post($counter_label); ?></p>
-			<?php endif; ?>
+	<?php if (! empty($metrics)) : ?>
+		<div class="spark-case-study-description-item__metrics">
+			<?php foreach ($metrics as $metric) :
+				$value = isset($metric['value']) && is_numeric($metric['value']) ? (int) $metric['value'] : 0;
+				$prefix = isset($metric['prefix']) ? (string) $metric['prefix'] : '';
+				$suffix = isset($metric['suffix']) ? (string) $metric['suffix'] : '';
+				$label = isset($metric['label']) ? (string) $metric['label'] : '';
+				$duration = isset($metric['duration']) && is_numeric($metric['duration']) ? min(5000, max(300, (int) $metric['duration'])) : $counter_duration;
+			?>
+				<div class="spark-case-study-description-item__metric" data-case-study-counter data-counter-value="<?php echo esc_attr($value); ?>" data-counter-duration="<?php echo esc_attr($duration); ?>">
+					<p class="spark-case-study-description-item__counter-value"><span><?php echo esc_html($prefix); ?></span><strong data-case-study-counter-value><?php echo esc_html($value); ?></strong><span><?php echo esc_html($suffix); ?></span></p>
+					<?php if ('' !== $label) : ?>
+						<p class="spark-case-study-description-item__counter-label"><?php echo wp_kses_post($label); ?></p>
+					<?php endif; ?>
+				</div>
+			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
 </section>

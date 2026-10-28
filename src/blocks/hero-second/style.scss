@@ -500,6 +500,41 @@
     }
 }
 
+// Keep the secondary hero in sync with the primary hero when the visitor
+// switches the site theme. In particular, don't let a saved inline background
+// color override the active theme's background behind the fireworks.
+html[data-theme="light"] .dev-spark-hero--secondary,
+body[data-theme="light"] .dev-spark-hero--secondary,
+.dev-spark-hero--secondary.is-theme-light {
+    --hero-bg: var(--wp--preset--color--light-background, #F4F6F8) !important;
+    --hero-text: var(--wp--preset--color--light-text, #484848);
+    --hero-muted: var(--wp--preset--color--light-subtitle, #707070);
+    --hero-accent: var(--spark-color-accent, #0E1116);
+    --hero-accent-ink: var(--spark-color-accent-ink, #FFFFFF);
+    --hero-line: var(--wp--preset--color--light-line, #B0B0B0);
+    --hero-line-strong: var(--wp--preset--color--light-line-strong, #808080);
+    --hero-particle-glow-color: #0E1116;
+    background-color: var(--wp--preset--color--light-background, #F4F6F8) !important;
+    color: var(--wp--preset--color--light-text, #484848) !important;
+    color-scheme: light;
+}
+
+html[data-theme="dark"] .dev-spark-hero--secondary,
+body[data-theme="dark"] .dev-spark-hero--secondary,
+.dev-spark-hero--secondary.is-theme-dark {
+    --hero-bg: var(--wp--preset--color--background, #0B0B0D) !important;
+    --hero-text: var(--wp--preset--color--text, #B5B5B5);
+    --hero-muted: var(--wp--preset--color--subtitle, #909090);
+    --hero-accent: var(--spark-color-accent, #FFFFFF);
+    --hero-accent-ink: var(--spark-color-accent-ink, #0B0B0D);
+    --hero-line: var(--wp--preset--color--line, #505050);
+    --hero-line-strong: var(--wp--preset--color--line-strong, #6C6C6C);
+    --hero-particle-glow-color: #FFFFFF;
+    background-color: var(--wp--preset--color--background, #0B0B0D) !important;
+    color: var(--wp--preset--color--text, #B5B5B5) !important;
+    color-scheme: dark;
+}
+
 // Support both brand attributes and classes from variables.
 @each $brand in works, exp, warsaw, health, studio {
 

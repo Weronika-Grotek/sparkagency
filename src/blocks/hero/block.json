@@ -24,6 +24,7 @@
 		"particleColor": { "type": "string", "default": "" },
 		"particleGlowColor": { "type": "string", "default": "" },
 		"lead": { "type": "string", "default": "" },
+		"leadSecondary": { "type": "string", "default": "" },
 		"showNavigation": { "type": "boolean", "default": false },
 		"navigationRootLabel": { "type": "string", "default": "" },
 		"navigationRootUrl": { "type": "string", "default": "" },

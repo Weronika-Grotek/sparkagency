@@ -11,11 +11,11 @@
   "attributes": {
     "title": {
       "type": "string",
-      "default": "Twój punkt startu"
+      "default": "Z generatora potrzeb"
     },
     "lede": {
       "type": "string",
-      "default": "Wybrałeś poniższe obszary. Uzupełnij dane, aby rozpocząć rozmowę."
+      "default": "Zaznaczyliśmy właściwe zespoły i wpisaliśmy odpowiedzi do opisu. Dopisz szczegóły projektu i zostaw dane kontaktowe."
     },
     "emptyText": {
       "type": "string",

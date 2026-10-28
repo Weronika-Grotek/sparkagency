@@ -9,8 +9,8 @@
 	"description": "Pokazuje odpowiedzi z Generatora potrzeb przed formularzem kontaktowym.",
 	"textdomain": "sparkagency",
 	"attributes": {
-		"title": { "type": "string", "default": "Twój punkt startu" },
-		"lede": { "type": "string", "default": "Wybrałeś poniższe obszary. Uzupełnij dane, aby rozpocząć rozmowę." },
+		"title": { "type": "string", "default": "Z generatora potrzeb" },
+		"lede": { "type": "string", "default": "Zaznaczyliśmy właściwe zespoły i wpisaliśmy odpowiedzi do opisu. Dopisz szczegóły projektu i zostaw dane kontaktowe." },
 		"emptyText": { "type": "string", "default": "Wybierz potrzeby w generatorze, aby zobaczyć ich podsumowanie." }
 	},
 	"supports": {
