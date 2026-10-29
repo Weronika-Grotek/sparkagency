@@ -53,7 +53,7 @@ $get_case_terms = static function ( int $post_id, string $type, string $taxonomy
 	}
 
 	foreach ( get_object_taxonomies( $type, 'names' ) as $object_taxonomy ) {
-		if ( 'post_format' === $object_taxonomy ) {
+		if ( in_array( $object_taxonomy, array( 'post_format', 'case_client', 'case_category' ), true ) ) {
 			continue;
 		}
 		$terms = get_the_terms( $post_id, $object_taxonomy );
@@ -71,7 +71,7 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 	$brands = array();
 
 	foreach ( $taxonomies as $object_taxonomy ) {
-		if ( 'post_format' === $object_taxonomy ) {
+		if ( in_array( $object_taxonomy, array( 'post_format', 'case_client', 'case_category' ), true ) ) {
 			continue;
 		}
 
@@ -131,12 +131,14 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 							$terms        = $get_case_terms( $case_id, $post_type, $brand_taxonomy );
 							$case_brands  = $get_case_brands( $case_id, $post_type, $brand_taxonomy );
 							$brand        = $case_brands[0]['slug'] ?? 'exp';
-							$client       = '' !== $client_meta_key ? get_post_meta( $case_id, $client_meta_key, true ) : '';
+							$client_terms = sparkagency_get_case_study_term_names( $case_id, 'case_client' );
+							$client       = ! empty( $client_terms ) ? implode( ', ', $client_terms ) : ( '' !== $client_meta_key ? get_post_meta( $case_id, $client_meta_key, true ) : '' );
 							$metric_value = '' !== $metric_value_meta_key ? get_post_meta( $case_id, $metric_value_meta_key, true ) : '';
 							$metric_label = '' !== $metric_label_meta_key ? get_post_meta( $case_id, $metric_label_meta_key, true ) : '';
 							$accent_note  = get_post_meta( $case_id, 'case_study_card_note_accent', true );
 							$plain_note   = get_post_meta( $case_id, 'case_study_card_note_plain', true );
-							$category     = ! empty( $terms ) ? $terms[0]->name : get_the_date( 'Y' );
+							$category_terms = sparkagency_get_case_study_term_names( $case_id, 'case_category' );
+							$category       = ! empty( $category_terms ) ? implode( ', ', $category_terms ) : ( ! empty( $terms ) ? $terms[0]->name : get_the_date( 'Y' ) );
 							$excerpt      = get_the_excerpt();
 							$is_wide_case = 0 === ( ( $case_index - 1 ) % 4 );
 							?>

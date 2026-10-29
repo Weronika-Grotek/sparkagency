@@ -71,13 +71,15 @@ $brand_aliases = array('sparkagency' => 'agency', 'sparkexp' => 'exp', 'sparkwar
 						$brand_key          = $brand_keys[0] ?? 'agency';
 						$secondary_brand_key = $brand_keys[1] ?? $brand_key;
 						$glow_count         = min(4, max(3, count($brand_keys)));
-						$client        = get_post_meta($case_id, 'client', true);
+						$client_terms   = sparkagency_get_case_study_term_names( $case_id, 'case_client' );
+						$client         = ! empty( $client_terms ) ? implode( ', ', $client_terms ) : get_post_meta( $case_id, 'client', true );
+						$category_terms = sparkagency_get_case_study_term_names( $case_id, 'case_category' );
 						$metric_value  = get_post_meta($case_id, 'metric_value', true);
 						$metric_label  = get_post_meta($case_id, 'metric_label', true);
 						$accent_note   = get_post_meta($case_id, 'case_study_card_note_accent', true);
 						$plain_note    = get_post_meta($case_id, 'case_study_card_note_plain', true);
 						$card_filters  = ! empty($term_slugs) ? $term_slugs : array('unassigned');
-						$category_text = ! empty($term_names) ? implode(', ', $term_names) : get_the_date('Y');
+						$category_text  = ! empty( $category_terms ) ? implode( ', ', $category_terms ) : ( ! empty( $term_names ) ? implode( ', ', $term_names ) : get_the_date( 'Y' ) );
 						?>
 						<a class="spark-case-archive__card<?php echo 0 === (($case_index - 1) % 4) || 3 === (($case_index - 1) % 4) ? ' is-wide' : ''; ?>" href="<?php the_permalink(); ?>" data-case-card data-case-categories="<?php echo esc_attr(implode(' ', $card_filters)); ?>" data-brand="<?php echo esc_attr($brand_key); ?>" style="--case-index:<?php echo esc_attr((string) ($case_index - 1)); ?>">
 							<div class="spark-case-archive__art<?php echo has_post_thumbnail() ? ' has-image' : ''; ?>" data-brand="<?php echo esc_attr($brand_key); ?>" data-brand-secondary="<?php echo esc_attr($secondary_brand_key); ?>">

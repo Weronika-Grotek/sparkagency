@@ -155,6 +155,80 @@ function sparkagency_register_case_study_branches_taxonomy(): void {
 }
 add_action( 'init', 'sparkagency_register_case_study_branches_taxonomy', 20 );
 
+/** Register client/brand and category taxonomies for current and legacy case study posts. */
+function sparkagency_register_case_study_detail_taxonomies(): void {
+	$case_types = array_values( array_filter( array( 'case-study', 'case_study' ), 'post_type_exists' ) );
+	if ( empty( $case_types ) ) {
+		return;
+	}
+
+	$taxonomies = array(
+		'case_client'   => array(
+			'hierarchical' => false,
+			'labels'       => array(
+				'name'                       => __( 'Klienci / marki', 'sparkagency' ),
+				'singular_name'              => __( 'Klient / marka', 'sparkagency' ),
+				'menu_name'                  => __( 'Klient / marka', 'sparkagency' ),
+				'all_items'                  => __( 'Wszyscy klienci / marki', 'sparkagency' ),
+				'edit_item'                  => __( 'Edytuj klienta / markę', 'sparkagency' ),
+				'add_new_item'               => __( 'Dodaj klienta / markę', 'sparkagency' ),
+				'new_item_name'              => __( 'Nazwa klienta / marki', 'sparkagency' ),
+				'search_items'               => __( 'Szukaj klientów / marek', 'sparkagency' ),
+				'popular_items'              => __( 'Popularni klienci / marki', 'sparkagency' ),
+				'separate_items_with_commas'  => __( 'Oddziel klientów / marki przecinkami', 'sparkagency' ),
+				'choose_from_most_used'      => __( 'Wybierz spośród najczęściej używanych', 'sparkagency' ),
+			),
+		),
+		'case_category' => array(
+			'hierarchical' => true,
+			'labels'       => array(
+				'name'              => __( 'Kategorie case study', 'sparkagency' ),
+				'singular_name'     => __( 'Kategoria', 'sparkagency' ),
+				'menu_name'         => __( 'Kategoria', 'sparkagency' ),
+				'all_items'         => __( 'Wszystkie kategorie', 'sparkagency' ),
+				'edit_item'         => __( 'Edytuj kategorię', 'sparkagency' ),
+				'add_new_item'      => __( 'Dodaj kategorię', 'sparkagency' ),
+				'new_item_name'     => __( 'Nazwa kategorii', 'sparkagency' ),
+				'parent_item'       => __( 'Kategoria nadrzędna', 'sparkagency' ),
+				'parent_item_colon' => __( 'Kategoria nadrzędna:', 'sparkagency' ),
+				'search_items'      => __( 'Szukaj kategorii', 'sparkagency' ),
+			),
+		),
+	);
+
+	foreach ( $taxonomies as $taxonomy => $config ) {
+		if ( ! taxonomy_exists( $taxonomy ) ) {
+			register_taxonomy(
+				$taxonomy,
+				$case_types,
+				array(
+					'labels'            => $config['labels'],
+					'public'            => true,
+					'publicly_queryable' => false,
+					'show_ui'           => true,
+					'show_admin_column' => true,
+					'show_in_rest'      => true,
+					'hierarchical'      => $config['hierarchical'],
+					'rewrite'           => false,
+				)
+			);
+		}
+
+		foreach ( $case_types as $post_type ) {
+			if ( ! is_object_in_taxonomy( $post_type, $taxonomy ) ) {
+				register_taxonomy_for_object_type( $taxonomy, $post_type );
+			}
+		}
+	}
+}
+add_action( 'init', 'sparkagency_register_case_study_detail_taxonomies', 20 );
+
+/** Return the assigned names from a case study detail taxonomy. */
+function sparkagency_get_case_study_term_names( int $post_id, string $taxonomy ): array {
+	$terms = taxonomy_exists( $taxonomy ) ? get_the_terms( $post_id, $taxonomy ) : false;
+	return is_array( $terms ) ? wp_list_pluck( $terms, 'name' ) : array();
+}
+
 /** Register the full case study archive as an editable Gutenberg block. */
 function sparkagency_register_case_studies_archive_block(): void {
 	$metadata = get_theme_file_path( '/src/blocks/case-studies-archive/block.json' );

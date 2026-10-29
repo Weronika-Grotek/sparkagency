@@ -23,7 +23,14 @@ get_header();
 		$brand_terms     = array();
 		$category_terms  = array();
 		$taxonomies      = get_object_taxonomies( (string) $post_type, 'objects' );
-		$client          = get_post_meta( $case_id, 'client', true );
+		$client_terms    = sparkagency_get_case_study_term_names( $case_id, 'case_client' );
+		$client          = ! empty( $client_terms ) ? implode( ', ', $client_terms ) : get_post_meta( $case_id, 'client', true );
+		$category_names  = sparkagency_get_case_study_term_names( $case_id, 'case_category' );
+		$wp_categories   = sparkagency_get_case_study_term_names( $case_id, 'category' );
+		$category_meta   = get_post_meta( $case_id, 'case_study_category', true );
+		if ( empty( $category_meta ) ) {
+			$category_meta = get_post_meta( $case_id, 'category', true );
+		}
 		$brand           = 'agency';
 		$brand_aliases   = array(
 			'agency' => array( 'agency', 'sparkagency' ),
@@ -39,7 +46,13 @@ get_header();
 		$next_brand      = 'agency';
 
 		foreach ( $taxonomies as $taxonomy ) {
-			if ( ! $taxonomy->public || 'post_format' === $taxonomy->name ) {
+			$taxonomy_label = $taxonomy->labels->singular_name ?? '';
+			if ( preg_match( '/categor|kategor/i', $taxonomy->name . ' ' . $taxonomy_label ) ) {
+				$taxonomy_category_names = sparkagency_get_case_study_term_names( $case_id, $taxonomy->name );
+				$category_names          = array_merge( $category_names, $taxonomy_category_names );
+			}
+
+			if ( ! $taxonomy->public || in_array( $taxonomy->name, array( 'post_format', 'case_client', 'case_category' ), true ) ) {
 				continue;
 			}
 
@@ -81,7 +94,27 @@ get_header();
 			array_shift( $category_terms );
 		}
 
-		$category_label = implode( ', ', wp_list_pluck( $category_terms, 'name' ) );
+		$category_names = array_values( array_unique( array_merge( $category_names, $wp_categories ) ) );
+		if ( empty( $category_names ) && ! empty( $category_meta ) ) {
+			$category_names = is_array( $category_meta ) ? $category_meta : array( $category_meta );
+		}
+		$category_names = array_values(
+			array_unique(
+				array_filter(
+					array_map(
+						static function ( $category ): string {
+							if ( $category instanceof WP_Term ) {
+								return trim( $category->name );
+							}
+
+							return is_scalar( $category ) ? trim( (string) $category ) : '';
+						},
+						$category_names
+					)
+				)
+			)
+		);
+		$category_label = ! empty( $category_names ) ? implode( ', ', $category_names ) : implode( ', ', wp_list_pluck( $category_terms, 'name' ) );
 
 		if ( '' !== (string) $client ) {
 			$metadata[ __( 'Klient / marka', 'sparkagency' ) ] = $client;
