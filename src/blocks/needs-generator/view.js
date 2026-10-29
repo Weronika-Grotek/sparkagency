@@ -186,6 +186,7 @@ const initializeNeedsGenerators = () => {
 			const answered = Math.min( activeStep, steps.length );
 			root.style.setProperty( '--needs-step-count', String( steps.length + 1 ) );
 			root.style.setProperty( '--needs-progress', String( isResult ? 1 : answered / ( steps.length + 1 ) ) );
+			back.hidden = activeStep === 0;
 			back.disabled = activeStep === 0;
 			count.textContent = isResult ? 'Gotowe · możesz zmienić odpowiedzi' : `Pytanie ${ activeStep + 1 } z ${ steps.length } · wybierz jedną odpowiedź`;
 			renderNavigation( steps, isResult );

@@ -129,7 +129,7 @@ $config = array(
 		<p><?php esc_html_e( 'Generator wymaga co najmniej jednej odpowiedzi w kroku 1.', 'sparkagency' ); ?></p>
 	<?php else : ?>
 		<div class="spark-needs-generator__finder" data-spark-needs-generator data-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>">
-			<ol class="spark-needs-generator__steps" data-needs-steps></ol><div class="spark-needs-generator__bar" aria-hidden="true"><span data-needs-progress></span></div><div class="spark-needs-generator__stage" data-needs-stage aria-live="polite"></div><div class="spark-needs-generator__footer"><button class="spark-needs-generator__back" type="button" data-needs-back><?php esc_html_e( '← Wstecz', 'sparkagency' ); ?></button><span data-needs-count></span></div>
+		<ol class="spark-needs-generator__steps" data-needs-steps></ol><div class="spark-needs-generator__bar" aria-hidden="true"><span data-needs-progress></span></div><div class="spark-needs-generator__stage" data-needs-stage aria-live="polite"></div><div class="spark-needs-generator__footer"><button class="spark-needs-generator__back" type="button" data-needs-back hidden><?php esc_html_e( '← Wstecz', 'sparkagency' ); ?></button><span data-needs-count></span></div>
 		</div>
 	<?php endif; ?>
 </section>

@@ -2,11 +2,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=swap");
 
 .dev-spark-marquee {
-    --marquee-bg: #{vars.$color-background};
-    --marquee-text: #{vars.$color-text};
-    --marquee-accent: #{vars.$color-accent};
-    --marquee-line: #{vars.$color-line};
-    --marquee-outline: #{vars.$color-line-strong};
     --marquee-radius: var(--spark-radius-btn, 2px);
     --marquee-size: clamp(2.4rem, 1rem + 5.5vw, 6.5rem);
 
@@ -17,10 +12,9 @@
     gap: .2em;
     overflow: hidden;
     padding-block: clamp(1rem, 2.5vw, 2rem);
-    border-bottom: 1px solid var(--marquee-line);
-    background: var(--marquee-bg);
-    color: var(--marquee-text);
-    color-scheme: dark;
+    border-bottom: 1px solid vars.$color-line;
+    background: vars.$color-background;
+    color: var(--marquee-text, #F3F2EF);
     font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: var(--marquee-size);
     font-weight: 800;
@@ -52,18 +46,18 @@
             width: .22em;
             height: .22em;
             border-radius: var(--marquee-radius);
-            background: var(--marquee-accent);
+            background: vars.$color-accent;
             transform: rotate(45deg);
         }
     }
 
     &__row--outline &__word {
         color: transparent;
-        -webkit-text-stroke: 1px var(--marquee-outline);
+        -webkit-text-stroke: 1px vars.$color-line-strong;
     }
 
     &__row--outline &__word--filled {
-        color: var(--marquee-text);
+        color: var(--marquee-text, #F3F2EF);
         -webkit-text-stroke: 0;
     }
 
@@ -78,14 +72,14 @@ html[data-theme="light"] .dev-spark-marquee,
 body[data-theme="light"] .dev-spark-marquee,
 .is-theme-light .dev-spark-marquee,
 .dev-spark-marquee.is-theme-light {
-    color-scheme: light;
+    --marquee-text: var(--spark-color-heading, #0E1116);
 }
 
 html[data-theme="dark"] .dev-spark-marquee,
 body[data-theme="dark"] .dev-spark-marquee,
 .is-theme-dark .dev-spark-marquee,
 .dev-spark-marquee.is-theme-dark {
-    color-scheme: dark;
+    --marquee-text: #F3F2EF;
 }
 
 @media (prefers-reduced-motion: reduce) {

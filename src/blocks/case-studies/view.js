@@ -24,6 +24,8 @@ const setupCaseStudies = ( section ) => {
 		const index = Math.min( cards.length, Math.max( 1, 1 + Math.round( bounded * ( cards.length - 1 ) ) ) );
 
 		section.style.setProperty( '--case-progress', bounded.toFixed( 3 ) );
+		const activeBrandColor = cards[ index - 1 ] && getComputedStyle( cards[ index - 1 ] ).getPropertyValue( '--case-color' ).trim();
+		if ( activeBrandColor ) section.style.setProperty( '--case-active-color', activeBrandColor );
 		if ( current ) current.textContent = String( index ).padStart( 2, '0' );
 	};
 

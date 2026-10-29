@@ -84,7 +84,7 @@ const panelView = (panel, index, total, edit, update) => {
           name: v
         }))}</h3></div><div className='dev-spark-group__panel-2'>{text(edit, 'p', '', panel.text, 'Opis marki', v => set({
         text: v
-      }))}<div className='dev-spark-group__pills'>{pills.map((pill, i) => text(edit, 'span', '', pill, 'Tag', v => set({
+      }), ['core/bold'])}<div className='dev-spark-group__pills'>{pills.map((pill, i) => text(edit, 'span', '', pill, 'Tag', v => set({
           pills: pills.map((p, j) => j === i ? v : p)
         }))).map((node, i) => <Fragment key={i}>{node}</Fragment>)}</div><a {...ctaProps}>{text(edit, 'span', '', panel.ctaLabel, 'Podgląd strony', v => set({
           ctaLabel: v

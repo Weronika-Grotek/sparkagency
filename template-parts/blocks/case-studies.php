@@ -26,6 +26,7 @@ $client_meta_key      = sanitize_key( $attributes['clientMetaKey'] ?? 'client' )
 $metric_value_meta_key = sanitize_key( $attributes['metricValueMetaKey'] ?? 'metric_value' );
 $metric_label_meta_key = sanitize_key( $attributes['metricLabelMetaKey'] ?? 'metric_label' );
 $contact_url           = esc_url( $attributes['contactUrl'] ?? '' );
+$progress_color        = sanitize_hex_color( $attributes['progressColor'] ?? '' );
 $contact_label         = trim( wp_strip_all_tags( $attributes['contactLabel'] ?? __( 'Porozmawiajmy o Twoim projekcie', 'sparkagency' ) ) );
 $has_contact_cta       = '' !== $contact_url && '' !== $contact_label;
 $case_query           = new WP_Query(
@@ -100,7 +101,10 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 	return array_values( $brands );
 };
 ?>
-<section <?php echo wp_kses_data( get_block_wrapper_attributes( array( 'class' => 'spark-case-studies' . ( $has_contact_cta ? ' has-case-studies-contact' : '' ) ) ) ); ?> data-spark-case-studies>
+<section <?php echo get_block_wrapper_attributes( array(
+	'class' => 'spark-case-studies' . ( $has_contact_cta ? ' has-case-studies-contact' : '' ),
+	'style' => $progress_color ? '--case-progress-color-custom: ' . $progress_color : '',
+) ); ?> data-spark-case-studies>
 	<header class="spark-case-studies__header">
 		<?php if ( ! empty( $attributes['eyebrow'] ) ) : ?>
 			<p class="spark-case-studies__eyebrow"><?php echo esc_html( $attributes['eyebrow'] ); ?></p>

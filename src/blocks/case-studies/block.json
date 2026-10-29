@@ -14,6 +14,7 @@
 		"lede": { "type": "string", "default": "Case studies, w których strategia, design i technologia spotykają się w konkretnych rezultatach." },
 		"postType": { "type": "string", "default": "case-study" },
 		"postsPerPage": { "type": "number", "default": 5 },
+		"progressColor": { "type": "string", "default": "" },
 		"brandTaxonomy": { "type": "string", "default": "" },
 		"clientMetaKey": { "type": "string", "default": "client" },
 		"metricValueMetaKey": { "type": "string", "default": "metric_value" },

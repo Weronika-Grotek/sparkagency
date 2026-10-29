@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, TextControl, ToggleControl } from '@wordpress/components';
+import { ColorPalette, PanelBody, RangeControl, TextControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const Edit = ( { attributes, setAttributes } ) => (
@@ -15,6 +15,16 @@ const Edit = ( { attributes, setAttributes } ) => (
 				/>
 				<RangeControl label={ __( 'Liczba realizacji', 'sparkagency' ) } value={ attributes.postsPerPage } onChange={ ( postsPerPage ) => setAttributes( { postsPerPage } ) } min={ 1 } max={ 12 } />
 				<TextControl label={ __( 'Taksonomia marek (opcjonalnie)', 'sparkagency' ) } value={ attributes.brandTaxonomy } onChange={ ( brandTaxonomy ) => setAttributes( { brandTaxonomy } ) } />
+			</PanelBody>
+			<PanelBody title={ __( 'Kolor postępu', 'sparkagency' ) } initialOpen={ false }>
+				<p>{ __( 'Domyślnie kolor zmienia się wraz z marką aktualnej realizacji. Wybierz kolor, aby ustawić własny.', 'sparkagency' ) }</p>
+				<ColorPalette
+					value={ attributes.progressColor || undefined }
+					clearable={ true }
+					disableCustomColors={ false }
+					enableAlpha={ false }
+					onChange={ ( progressColor ) => setAttributes( { progressColor: progressColor || '' } ) }
+				/>
 			</PanelBody>
 			<PanelBody title={ __( 'Pola wpisu', 'sparkagency' ) } initialOpen={ false }>
 				<TextControl label={ __( 'Meta: klient', 'sparkagency' ) } value={ attributes.clientMetaKey } onChange={ ( clientMetaKey ) => setAttributes( { clientMetaKey } ) } />
