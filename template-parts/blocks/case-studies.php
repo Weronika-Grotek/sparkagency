@@ -25,6 +25,19 @@ $brand_taxonomy       = sanitize_key( $attributes['brandTaxonomy'] ?? '' );
 $client_meta_key      = sanitize_key( $attributes['clientMetaKey'] ?? 'client' );
 $metric_value_meta_key = sanitize_key( $attributes['metricValueMetaKey'] ?? 'metric_value' );
 $metric_label_meta_key = sanitize_key( $attributes['metricLabelMetaKey'] ?? 'metric_label' );
+$all_url               = esc_url( $attributes['allUrl'] ?? '' );
+$archive_page           = get_page_by_path( 'case-studies', OBJECT, 'page' );
+if ( '' === $all_url && $archive_page instanceof WP_Post ) {
+	$all_url = esc_url( get_permalink( $archive_page ) );
+}
+if ( '' === $all_url ) {
+	$all_url = esc_url( get_post_type_archive_link( $post_type ) );
+}
+$all_label             = trim( wp_strip_all_tags( $attributes['allLabel'] ?? __( 'Wszystkie realizacje', 'sparkagency' ) ) );
+$all_label             = '' !== $all_label ? $all_label : __( 'Wszystkie realizacje', 'sparkagency' );
+$all_card_colors       = array( 'default', 'agency', 'works', 'exp', 'warsaw', 'health', 'studio', 'custom' );
+$all_card_color        = in_array( $attributes['allCardColor'] ?? 'default', $all_card_colors, true ) ? $attributes['allCardColor'] : 'default';
+$all_card_custom_color = 'custom' === $all_card_color ? sanitize_hex_color( $attributes['allCardCustomColor'] ?? '' ) : '';
 $contact_url           = esc_url( $attributes['contactUrl'] ?? '' );
 $progress_color        = sanitize_hex_color( $attributes['progressColor'] ?? '' );
 $contact_label         = trim( wp_strip_all_tags( $attributes['contactLabel'] ?? __( 'Porozmawiajmy o Twoim projekcie', 'sparkagency' ) ) );
@@ -123,7 +136,7 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 	<?php else : ?>
 		<div class="spark-case-studies__pin" data-case-pin>
 			<div class="spark-case-studies__sticky">
-				<div class="spark-case-studies__progress" aria-hidden="true"><span><b data-case-current>01</b> / <?php echo esc_html( sprintf( '%02d', $case_query->post_count ) ); ?></span><i data-case-progress></i></div>
+				<div class="spark-case-studies__progress" aria-hidden="true"><span><b data-case-current>01</b> / <?php echo esc_html( sprintf( '%02d', $case_query->post_count + ( '' !== $all_url ? 1 : 0 ) ) ); ?></span><i data-case-progress></i></div>
 				<div class="spark-case-studies__window">
 					<div class="spark-case-studies__track" data-case-track>
 						<?php $case_index = 0; ?>
@@ -199,8 +212,8 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 								</div>
 							</a>
 						<?php endwhile; ?>
-						<?php if ( ! empty( $attributes['allUrl'] ) ) : ?>
-							<a class="spark-case-studies__all" href="<?php echo esc_url( $attributes['allUrl'] ); ?>"><span><?php echo esc_html( $attributes['allLabel'] ?? __( 'Wszystkie realizacje', 'sparkagency' ) ); ?></span><b aria-hidden="true">→</b></a>
+						<?php if ( '' !== $all_url ) : ?>
+							<a class="spark-case-studies__all<?php echo in_array( $all_card_color, array( 'agency', 'works', 'exp', 'warsaw', 'health', 'studio' ), true ) ? ' has-case-color-brand-' . esc_attr( $all_card_color ) : ( 'custom' === $all_card_color ? ' has-case-custom-color' : '' ); ?>" href="<?php echo $all_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped with esc_url above. ?>" data-case-card style="--case-index:<?php echo esc_attr( (string) $case_index ); ?><?php echo $all_card_custom_color ? ';--case-color:' . esc_attr( $all_card_custom_color ) : ''; ?>"><span><?php echo esc_html( $all_label ); ?></span><b aria-hidden="true">→</b></a>
 						<?php endif; ?>
 					</div>
 				</div>

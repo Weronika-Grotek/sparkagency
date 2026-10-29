@@ -21,6 +21,8 @@
 		"metricLabelMetaKey": { "type": "string", "default": "metric_label" },
 		"allUrl": { "type": "string", "default": "" },
 		"allLabel": { "type": "string", "default": "Wszystkie realizacje" },
+		"allCardColor": { "type": "string", "default": "default" },
+		"allCardCustomColor": { "type": "string", "default": "" },
 		"contactUrl": { "type": "string", "default": "" },
 		"contactLabel": { "type": "string", "default": "Porozmawiajmy o Twoim projekcie" },
 		"contactNewTab": { "type": "boolean", "default": false }

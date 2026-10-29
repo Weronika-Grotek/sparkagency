@@ -217,7 +217,7 @@
 
     transform-origin: 50% 0;
     transform: scale(calc(1 - var(--p) * 0.06));
-    filter: brightness(calc(1 - var(--p) * 0.12));
+    filter: brightness(calc(1 - var(--p) * 0.6));
 
     // Kolorowa poświata.
     &::before {
@@ -588,6 +588,10 @@ body[data-theme="light"] .dev-spark-group,
 
 	.dev-spark-group__pills span { background: color-mix(in srgb, var(--group-bg) 72%, transparent); }
 	.dev-spark-group__lbox { background: var(--group-text); }
+
+	.dev-spark-group__panel {
+		filter: brightness(calc(1 - var(--p) * 0.12));
+	}
 }
 
 html[data-theme="dark"] .dev-spark-group,

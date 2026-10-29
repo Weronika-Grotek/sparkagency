@@ -57,6 +57,14 @@
       "type": "string",
       "default": "Wszystkie realizacje"
     },
+    "allCardColor": {
+      "type": "string",
+      "default": "default"
+    },
+    "allCardCustomColor": {
+      "type": "string",
+      "default": ""
+    },
     "contactUrl": {
       "type": "string",
       "default": ""

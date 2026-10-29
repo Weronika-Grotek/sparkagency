@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
-import { ColorPalette, PanelBody, RangeControl, TextControl, ToggleControl } from '@wordpress/components';
+import { ColorPalette, ColorPicker, PanelBody, RangeControl, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const Edit = ( { attributes, setAttributes } ) => (
@@ -32,8 +32,32 @@ const Edit = ( { attributes, setAttributes } ) => (
 				<TextControl label={ __( 'Meta: opis rezultatu', 'sparkagency' ) } value={ attributes.metricLabelMetaKey } onChange={ ( metricLabelMetaKey ) => setAttributes( { metricLabelMetaKey } ) } />
 			</PanelBody>
 			<PanelBody title={ __( 'Link na końcu listy', 'sparkagency' ) } initialOpen={ false }>
-				<TextControl label={ __( 'URL: wszystkie realizacje', 'sparkagency' ) } type="url" value={ attributes.allUrl } onChange={ ( allUrl ) => setAttributes( { allUrl } ) } />
+				<TextControl label={ __( 'URL: wszystkie realizacje', 'sparkagency' ) } type="url" value={ attributes.allUrl } onChange={ ( allUrl ) => setAttributes( { allUrl } ) } help={ __( 'Puste pole kieruje do archiwum case studies.', 'sparkagency' ) } />
 				<TextControl label={ __( 'Etykieta: wszystkie realizacje', 'sparkagency' ) } value={ attributes.allLabel } onChange={ ( allLabel ) => setAttributes( { allLabel } ) } />
+				<SelectControl
+					label={ __( 'Kolor końcowej karty', 'sparkagency' ) }
+					value={ attributes.allCardColor || 'default' }
+					options={ [
+						{ label: __( 'Domyślny', 'sparkagency' ), value: 'default' },
+						{ label: 'Agency', value: 'agency' },
+						{ label: 'Works', value: 'works' },
+						{ label: 'EXP', value: 'exp' },
+						{ label: 'Warsaw', value: 'warsaw' },
+						{ label: 'Health', value: 'health' },
+						{ label: 'Studio', value: 'studio' },
+						{ label: __( 'Własny kolor', 'sparkagency' ), value: 'custom' },
+					] }
+					onChange={ ( allCardColor ) => setAttributes( { allCardColor } ) }
+				/>
+				{ attributes.allCardColor === 'custom' && (
+					<div style={ { marginTop: '12px' } }>
+						<ColorPicker
+							color={ attributes.allCardCustomColor || '#01B57C' }
+							enableAlpha={ false }
+							onChangeComplete={ ( value ) => setAttributes( { allCardCustomColor: value.hex.toUpperCase() } ) }
+						/>
+					</div>
+				) }
 			</PanelBody>
 			<PanelBody title={ __( 'Przycisk pod kartami', 'sparkagency' ) } initialOpen={ false }>
 				<TextControl label={ __( 'Adres URL', 'sparkagency' ) } type="url" value={ attributes.contactUrl } onChange={ ( contactUrl ) => setAttributes( { contactUrl } ) } help={ __( 'Pozostaw puste, aby ukryć przycisk.', 'sparkagency' ) } />

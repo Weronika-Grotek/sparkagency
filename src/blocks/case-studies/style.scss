@@ -350,10 +350,10 @@ $case-brand-colors: (
 		height: var(--case-art-height);
 		place-content: center;
 		padding: 2rem;
-		border: 1px dashed vars.$color-line-strong;
-		border-radius: vars.$radius-card;
+		border: 1px dashed var(--spark-color-line-strong);
+		border-radius: var(--spark-radius-card);
 		background: transparent;
-		color: vars.$color-text;
+		color: var(--spark-color-heading);
 		text-align: center;
 		text-decoration: none;
 		transition: background .35s var(--case-ease), color .35s var(--case-ease), border-color .35s var(--case-ease);
@@ -514,6 +514,11 @@ $case-brand-colors: (
 		color: var(--case-ink);
 	}
 
+	&__all.has-case-custom-color:hover {
+		background: color-mix(in srgb, var(--case-color) 18%, transparent);
+		color: var(--spark-color-heading);
+	}
+
 	&__card:focus-visible,
 	&__all:focus-visible,
 	&__contact:focus-visible {
@@ -535,7 +540,54 @@ $case-brand-colors: (
 		&__chips span.has-case-brand-#{$brand} {
 			--case-chip-color: #{map.get($tokens, color)};
 		}
+
+		&__all.has-case-color-brand-#{$brand} {
+			--case-color: #{map.get($tokens, color)};
+			--case-ink: #{map.get($tokens, ink)};
+		}
 	}
+}
+
+html[data-theme="light"] .spark-case-studies__all.has-case-color-brand-agency,
+body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-agency,
+.is-theme-light .spark-case-studies__all.has-case-color-brand-agency {
+	--case-color: var(--wp--preset--color--agency, #0E1116);
+	--case-ink: var(--wp--preset--color--agency-ink, #FFFFFF);
+}
+
+html[data-theme="light"] .spark-case-studies__all.has-case-color-brand-works,
+body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-works,
+.is-theme-light .spark-case-studies__all.has-case-color-brand-works {
+	--case-color: var(--wp--preset--color--works, #8C6A2C);
+	--case-ink: var(--wp--preset--color--works-ink, #FFFFFF);
+}
+
+html[data-theme="light"] .spark-case-studies__all.has-case-color-brand-exp,
+body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-exp,
+.is-theme-light .spark-case-studies__all.has-case-color-brand-exp {
+	--case-color: #007A53;
+	--case-ink: #FFFFFF;
+}
+
+html[data-theme="light"] .spark-case-studies__all.has-case-color-brand-warsaw,
+body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-warsaw,
+.is-theme-light .spark-case-studies__all.has-case-color-brand-warsaw {
+	--case-color: #1F72BF;
+	--case-ink: #FFFFFF;
+}
+
+html[data-theme="light"] .spark-case-studies__all.has-case-color-brand-health,
+body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-health,
+.is-theme-light .spark-case-studies__all.has-case-color-brand-health {
+	--case-color: var(--wp--preset--color--health, #8E3FA3);
+	--case-ink: var(--wp--preset--color--health-ink, #FFFFFF);
+}
+
+html[data-theme="light"] .spark-case-studies__all.has-case-color-brand-studio,
+body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-studio,
+.is-theme-light .spark-case-studies__all.has-case-color-brand-studio {
+	--case-color: #B83A39;
+	--case-ink: #FFFFFF;
 }
 
 @keyframes spark-case-drift {
@@ -556,6 +608,18 @@ $case-brand-colors: (
 	from {
 		opacity: .001;
 		transform: translateY(1.25rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes spark-case-reveal-soft {
+	from {
+		opacity: .001;
+		transform: translateY(.625rem);
 	}
 
 	to {
@@ -587,9 +651,13 @@ $case-brand-colors: (
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
 
-	.spark-case-studies.is-case-ready .spark-case-studies__card,
-	.spark-case-studies.is-case-ready .spark-case-studies__all {
+	.spark-case-studies.is-case-ready .spark-case-studies__card {
 		animation: spark-case-reveal .6s var(--case-ease) both;
+		animation-delay: min(calc(var(--case-index, 0) * 70ms), 350ms);
+	}
+
+	.spark-case-studies.is-case-ready .spark-case-studies__all {
+		animation: spark-case-reveal-soft 1.5s var(--case-ease) both;
 		animation-delay: min(calc(var(--case-index, 0) * 70ms), 350ms);
 	}
 }
