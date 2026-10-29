@@ -233,17 +233,25 @@
 
 .spark-case-archive__note {
   margin: 0;
-  font-size: 0.8rem;
   line-height: 1.5;
+}
+
+.spark-case-archive__notes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
 }
 
 .spark-case-archive__note--accent {
   color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
   font-weight: 700;
+  font-size: 1.25rem;
 }
 
 .spark-case-archive__note--plain {
   color: var(--spark-color-text-muted, #909090);
+  font-size: 1rem;
 }
 
 .spark-case-archive__card:hover .spark-case-archive__art {

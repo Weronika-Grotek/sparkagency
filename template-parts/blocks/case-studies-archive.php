@@ -96,8 +96,10 @@ $brand_aliases = array('sparkagency' => 'agency', 'sparkexp' => 'exp', 'sparkwar
 								<?php if (has_excerpt()) : ?><p class="spark-case-archive__excerpt"><?php echo esc_html(wp_trim_words(get_the_excerpt(), 26)); ?></p><?php endif; ?>
 								<span class="spark-case-archive__more"><?php esc_html_e('Zobacz case study', 'sparkagency'); ?></span>
 								<?php if ($metric_value && $metric_label) : ?><div class="spark-case-archive__metric"><strong><?php echo esc_html($metric_value); ?></strong><span><?php echo esc_html($metric_label); ?></span></div><?php endif; ?>
-								<?php if ($accent_note) : ?><p class="spark-case-archive__note spark-case-archive__note--accent"><?php echo nl2br(esc_html($accent_note)); ?></p><?php endif; ?>
-								<?php if ($plain_note) : ?><p class="spark-case-archive__note spark-case-archive__note--plain"><?php echo nl2br(esc_html($plain_note)); ?></p><?php endif; ?>
+								<?php if ($accent_note || $plain_note) : ?><div class="spark-case-archive__notes">
+									<?php if ($accent_note) : ?><p class="spark-case-archive__note spark-case-archive__note--accent"><?php echo nl2br(esc_html($accent_note)); ?></p><?php endif; ?>
+									<?php if ($plain_note) : ?><p class="spark-case-archive__note spark-case-archive__note--plain"><?php echo nl2br(esc_html($plain_note)); ?></p><?php endif; ?>
+								</div><?php endif; ?>
 							</div>
 						</a>
 					<?php endwhile; ?>

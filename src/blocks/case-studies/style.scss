@@ -322,6 +322,29 @@ $case-brand-colors: (
 		line-height: 1.35;
 	}
 
+	&__notes {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: .25rem 1rem;
+	}
+
+	&__note {
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	&__note--accent {
+		color: var(--case-color);
+		font-size: 1.25rem;
+		font-weight: vars.$font-weight-extrabold;
+	}
+
+	&__note--plain {
+		color: vars.$color-subtitle;
+		font-size: 1rem;
+	}
+
 	&__all {
 		display: grid;
 		height: var(--case-art-height);

@@ -134,6 +134,8 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 							$client       = '' !== $client_meta_key ? get_post_meta( $case_id, $client_meta_key, true ) : '';
 							$metric_value = '' !== $metric_value_meta_key ? get_post_meta( $case_id, $metric_value_meta_key, true ) : '';
 							$metric_label = '' !== $metric_label_meta_key ? get_post_meta( $case_id, $metric_label_meta_key, true ) : '';
+							$accent_note  = get_post_meta( $case_id, 'case_study_card_note_accent', true );
+							$plain_note   = get_post_meta( $case_id, 'case_study_card_note_plain', true );
 							$category     = ! empty( $terms ) ? $terms[0]->name : get_the_date( 'Y' );
 							$excerpt      = get_the_excerpt();
 							$is_wide_case = 0 === ( ( $case_index - 1 ) % 4 );
@@ -181,6 +183,12 @@ $get_case_brands = static function ( int $post_id, string $type, string $taxonom
 									<span class="spark-case-studies__more"><?php esc_html_e( 'Zobacz case study', 'sparkagency' ); ?></span>
 									<?php if ( '' !== (string) $metric_value && '' !== (string) $metric_label ) : ?>
 										<div class="spark-case-studies__metric"><strong><?php echo esc_html( $metric_value ); ?></strong><span><?php echo esc_html( $metric_label ); ?></span></div>
+									<?php endif; ?>
+									<?php if ( $accent_note || $plain_note ) : ?>
+										<div class="spark-case-studies__notes">
+											<?php if ( $accent_note ) : ?><p class="spark-case-studies__note spark-case-studies__note--accent"><?php echo nl2br( esc_html( $accent_note ) ); ?></p><?php endif; ?>
+											<?php if ( $plain_note ) : ?><p class="spark-case-studies__note spark-case-studies__note--plain"><?php echo nl2br( esc_html( $plain_note ) ); ?></p><?php endif; ?>
+										</div>
 									<?php endif; ?>
 								</div>
 							</a>
