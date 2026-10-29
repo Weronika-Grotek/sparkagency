@@ -10,9 +10,20 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 .editor-styles-wrapper {
+	--spark-color-heading: #FFFFFF;
 	background:
 		radial-gradient(circle at 8% 12%, color-mix(in srgb, var(--wp--preset--color--exp) 42%, transparent), transparent 32rem),
 		radial-gradient(circle at 92% 18%, color-mix(in srgb, var(--wp--preset--color--warsaw) 38%, transparent), transparent 30rem),
 		radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--wp--preset--color--studio) 30%, transparent), transparent 36rem),
 		var(--wp--preset--color--background);
+}
+
+.editor-styles-wrapper :is(h1, h2, h3, h4, h5, h6) {
+	color: var(--spark-color-heading, #FFFFFF) !important;
+}
+
+.editor-styles-wrapper[data-theme="light"],
+.editor-styles-wrapper .is-theme-light,
+.editor-styles-wrapper [data-theme="light"] {
+	--spark-color-heading: #0E1116;
 }

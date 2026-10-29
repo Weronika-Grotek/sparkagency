@@ -94,7 +94,7 @@ const Edit = ({ attributes, setAttributes }) => {
 				<Button variant="primary" onClick={() => setCompanies([...companies, blankCompany()])}>{__('Dodaj firmę', domain)}</Button>
 			</PanelBody>
 		</InspectorControls>
-		<section {...useBlockProps({ className: 'spark-needs-generator is-theme-dark' })}>
+		<section {...useBlockProps({ className: 'spark-needs-generator' })}>
 			<header className="spark-needs-generator__header"><RichText tagName="p" className="spark-needs-generator__eyebrow" value={attributes.eyebrow || ''} placeholder={__('Etykieta sekcji', domain)} allowedFormats={[]} onChange={(eyebrow) => setAttributes({ eyebrow })} /><div><RichText tagName="h2" value={attributes.title || ''} placeholder={__('Nagłówek', domain)} onChange={(title) => setAttributes({ title })} /><RichText tagName="p" className="spark-needs-generator__lede" value={attributes.lede || ''} placeholder={__('Opis sekcji', domain)} onChange={(lede) => setAttributes({ lede })} /></div></header>
 			<div className="spark-needs-generator__preview"><p className="spark-needs-generator__progress">{stepLabels[0]}</p><h3>{titles[0] || __('Co chcesz zrobić?', domain)}</h3><div className="spark-needs-generator__options">{questionOptions[0].map((action, index) => { const company = companyForAction(action); return <button className={`is-action is-brand-${company?.brand || 'agency'}`} type="button" key={index}><i aria-hidden="true" /><span>{action.label || __('Nowe działanie', domain)}</span></button>; })}</div></div>
 		</section>

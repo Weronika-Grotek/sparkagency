@@ -5,6 +5,10 @@ body {
   color: var(--wp--preset--color--text);
 }
 
+body :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--spark-color-heading, #FFFFFF) !important;
+}
+
 .p-cursor-dot,
 .p-cursor-ring {
   position: fixed;

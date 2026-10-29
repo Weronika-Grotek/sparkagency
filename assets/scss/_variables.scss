@@ -5,6 +5,7 @@
     --spark-color-surface-2: var(--wp--preset--color--surface-2, #1C1C20);
     --spark-color-surface-3: var(--wp--preset--color--surface-3, #2A2A30);
     --spark-color-text: var(--wp--preset--color--text, #B5B5B5);
+    --spark-color-heading: #FFFFFF;
     --spark-color-text-muted: var(--wp--preset--color--subtitle, #909090);
     --spark-color-text-subtle: var(--wp--preset--color--text-subtle, #707070);
     --spark-color-line: var(--wp--preset--color--line, #505050);
@@ -24,6 +25,7 @@
 html[data-theme="light"],
 body[data-theme="light"],
 .is-theme-light {
+    --spark-color-heading: #0E1116;
     --spark-color-bg: var(--wp--preset--color--light-background, #F4F6F8);
     --spark-color-surface: var(--wp--preset--color--light-surface, #FFFFFF);
     --spark-color-surface-2: var(--wp--preset--color--light-surface-2, #E9EDF1);
@@ -42,6 +44,7 @@ body[data-theme="light"],
 html[data-theme="dark"],
 body[data-theme="dark"],
 .is-theme-dark {
+    --spark-color-heading: #FFFFFF;
     --spark-color-bg: var(--wp--preset--color--background, #0B0B0D);
     --spark-color-surface: var(--wp--preset--color--surface, #131316);
     --spark-color-surface-2: var(--wp--preset--color--surface-2, #1C1C20);

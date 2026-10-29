@@ -1,23 +1,24 @@
 @use "../variables" as vars;
 .spark-needs-generator {
     --needs-gap: clamp(1rem, 2vw, 1.5rem);
-    // Generator potrzeb zawsze korzysta z jasnej powierzchni, niezależnie od motywu strony.
-    --spark-color-bg: var(--wp--preset--color--light-background, #F4F6F8);
-    --spark-color-surface: var(--wp--preset--color--light-surface, #FFFFFF);
-    --spark-color-surface-2: var(--wp--preset--color--light-surface-2, #E9EDF1);
-    --spark-color-surface-3: var(--wp--preset--color--light-surface-3, #D7DDE3);
-    --spark-color-text: var(--wp--preset--color--light-text, #484848);
-    --spark-color-text-muted: var(--wp--preset--color--light-subtitle, #5A616B);
-    --spark-color-text-subtle: var(--wp--preset--color--light-text-subtle, #8B929B);
-    --spark-color-line: var(--wp--preset--color--light-line, rgba(14, 17, 22, .12));
-    --spark-color-line-strong: var(--wp--preset--color--light-line-strong, rgba(14, 17, 22, .28));
-    --spark-color-danger: var(--wp--preset--color--light-danger, #C2361F);
-    --spark-color-scrim: var(--wp--preset--color--light-scrim, #FFFFFF);
-    --spark-color-accent: var(--wp--preset--color--agency, #0E1116);
-    --spark-color-accent-ink: var(--wp--preset--color--agency-ink, #FFFFFF);
+    // Generator surfaces contrast with the active page theme.
+    --needs-theme-bg: var(--wp--preset--color--light-background, #F4F6F8);
+    --needs-theme-surface: var(--wp--preset--color--light-surface, #FFFFFF);
+    --needs-theme-surface-2: var(--wp--preset--color--light-surface-2, #E9EDF1);
+    --needs-theme-text: var(--wp--preset--color--light-text, #484848);
+    --needs-theme-muted: var(--wp--preset--color--light-subtitle, #707070);
+    --needs-theme-line: var(--wp--preset--color--light-line, #B0B0B0);
+    --needs-theme-line-strong: var(--wp--preset--color--light-line-strong, #808080);
+    --needs-theme-accent: var(--wp--preset--color--agency, #0E1116);
+    --needs-theme-accent-ink: var(--wp--preset--color--agency-ink, #FFFFFF);
+    --needs-theme-heading: #0E1116;
     padding: clamp(3rem, 8vw, 7.5rem) clamp(1rem, 4vw, 3.5rem);
-    background: vars.$color-background;
-    color: vars.$color-text;
+    background: var(--needs-theme-bg);
+    color: var(--needs-theme-text);
+
+    :is(h1, h2, h3, h4, h5, h6) {
+        color: var(--needs-theme-heading) !important;
+    }
 
     &__header,
     &__finder {
@@ -35,7 +36,7 @@
     &__eyebrow,
     &__progress {
         margin: 0;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .72rem;
         font-weight: 600;
         letter-spacing: .14em;
@@ -51,7 +52,7 @@
     &__lede {
         max-width: 58ch;
         margin: 1.5rem 0 0;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: clamp(1rem, .9rem + .8vw, 1.25rem);
         line-height: 1.5;
     }
@@ -59,9 +60,9 @@
     &__finder,
     &__preview {
         overflow: hidden;
-        border: 1px solid vars.$color-line-strong;
+        border: 1px solid var(--needs-theme-line-strong);
         border-radius: vars.$radius-card;
-        background: vars.$color-surface;
+        background: var(--needs-theme-surface);
     }
 
     &__steps {
@@ -69,7 +70,7 @@
         grid-template-columns: repeat(var(--needs-step-count), minmax(0, 1fr));
         margin: 0;
         padding: 0;
-        border-bottom: 1px solid vars.$color-line;
+        border-bottom: 1px solid var(--needs-theme-line);
         list-style: none;
     }
 
@@ -79,14 +80,14 @@
     }
 
     &__steps li+li {
-        border-left: 1px solid vars.$color-line;
+        border-left: 1px solid var(--needs-theme-line);
     }
 
     &__steps button,
     &__back {
         border: 0;
         background: transparent;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         cursor: pointer;
         font: inherit;
         text-align: left;
@@ -95,7 +96,7 @@
     &__steps button:not(:disabled):hover,
     &__steps .is-active button,
     &__steps .is-done button {
-        color: vars.$color-text;
+        color: var(--needs-theme-text);
     }
 
     &__steps button:disabled {
@@ -106,7 +107,7 @@
         display: block;
         overflow: hidden;
         margin-top: .3rem;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .72rem;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -114,14 +115,14 @@
 
     &__bar {
         height: 2px;
-        background: vars.$color-line;
+        background: var(--needs-theme-line);
     }
 
     &__bar span {
         display: block;
         width: calc(var(--needs-progress, 0) * 100%);
         height: 100%;
-        background: vars.$color-accent;
+        background: var(--needs-theme-accent);
         transition: width .35s ease;
     }
 
@@ -158,9 +159,9 @@
         align-items: center;
         gap: 0.35rem;
         padding: 1rem 1.15rem;
-        border: 1px solid vars.$color-line-strong;
+        border: 1px solid var(--needs-theme-line-strong);
         background: transparent;
-        color: var(--spark-color-text);
+        color: var(--needs-theme-text);
         cursor: pointer;
         font: inherit;
         font-weight: 600;
@@ -170,7 +171,7 @@
 
     &__options button:hover,
     &__options button:focus-visible {
-        border-color: vars.$color-text;
+        border-color: var(--needs-theme-text);
         outline: 0;
     }
 
@@ -181,9 +182,9 @@
         height: 1.6rem;
         flex: none;
         place-items: center;
-        border: 1px solid vars.$color-line-strong;
+        border: 1px solid var(--needs-theme-line-strong);
         border-radius: vars.$radius-sm;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .72rem;
     }
 
@@ -194,7 +195,7 @@
         flex: none;
         margin-right: 2px;
         border-radius: 50%;
-        background: var(--needs-option-color, vars.$color-accent);
+        background: var(--needs-option-color, var(--needs-theme-accent));
     }
 
     &__options .is-brand-agency,
@@ -246,7 +247,7 @@
     }
 
     &__footer span {
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .875rem;
     }
 
@@ -258,7 +259,7 @@
 
     &__result-brand {
         margin: 1.25rem 0 0;
-        color: vars.$color-text;
+        color: var(--needs-theme-text);
         font-size: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
         font-weight: 400;
         line-height: .9;
@@ -266,7 +267,7 @@
     }
 
     &__company-accent {
-        color: var(--needs-company-accent, vars.$color-accent);
+        color: var(--needs-company-accent, var(--needs-theme-accent));
     }
 
     &__company-accent.is-bold {
@@ -282,41 +283,41 @@
 
     &__result-text {
         max-width: 56ch;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
     }
 
     &__result-summary {
         margin: .75rem 0 0;
-        border-top: 1px solid vars.$color-line;
+        border-top: 1px solid var(--needs-theme-line);
     }
 
     &__result-summary div {
         display: block;
         padding: .8rem 0;
-        border-bottom: 1px solid vars.$color-line;
+        border-bottom: 1px solid var(--needs-theme-line);
     }
 
     &__result-summary dt {
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .8rem;
     }
 
     &__result-summary dd {
         margin: 0;
-        color: vars.$color-text;
+        color: var(--needs-theme-text);
         font-weight: 700;
     }
 
     &__result-panel {
         align-self: start;
         padding: clamp(1rem, 3vw, 1.5rem);
-        border: 1px solid vars.$color-line;
-        background: vars.$color-surface-2;
+        border: 1px solid var(--needs-theme-line);
+        background: var(--needs-theme-surface-2);
     }
 
     &__result-panel-title {
         margin: 0;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .72rem;
         font-weight: 700;
         letter-spacing: .12em;
@@ -325,7 +326,7 @@
 
     &__result-note {
         margin: 1rem 0 0;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
         font-size: .8rem;
         line-height: 1.45;
     }
@@ -349,17 +350,17 @@
         align-items: center;
         justify-content: center;
         padding: .9rem 1.25rem;
-        border: 1px solid vars.$color-accent;
+        border: 1px solid var(--needs-theme-accent);
         border-radius: vars.$radius-btn;
-        background: vars.$color-accent;
-        color: vars.$color-accent-ink;
+        background: var(--needs-theme-accent);
+        color: var(--needs-theme-accent-ink);
         font-weight: 700;
         text-decoration: none;
     }
 
     &__empty {
         margin: 0 0 1.5rem;
-        color: vars.$color-subtitle;
+        color: var(--needs-theme-muted);
     }
 
     &__editor-option {
@@ -396,6 +397,25 @@
         margin: .75rem 0 2rem;
         font-size: clamp(1.4rem, 1.05rem + 1.4vw, 2.1rem);
     }
+}
+
+.editor-styles-wrapper .spark-needs-generator :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--needs-theme-heading) !important;
+}
+
+html[data-theme="light"] .spark-needs-generator,
+body[data-theme="light"] .spark-needs-generator,
+.is-theme-light .spark-needs-generator {
+    --needs-theme-bg: var(--wp--preset--color--background, #0B0B0D);
+    --needs-theme-surface: var(--wp--preset--color--surface, #131316);
+    --needs-theme-surface-2: var(--wp--preset--color--surface-2, #1C1C20);
+    --needs-theme-text: var(--wp--preset--color--text, #B5B5B5);
+    --needs-theme-muted: var(--wp--preset--color--subtitle, #909090);
+    --needs-theme-line: var(--wp--preset--color--line, #505050);
+    --needs-theme-line-strong: var(--wp--preset--color--line-strong, #6C6C6C);
+    --needs-theme-accent: var(--wp--preset--color--agency-dark, #FFFFFF);
+    --needs-theme-accent-ink: var(--wp--preset--color--agency-dark-ink, #0B0B0D);
+    --needs-theme-heading: #FFFFFF;
 }
 @media (max-width: 48rem) {
     .spark-needs-generator {
