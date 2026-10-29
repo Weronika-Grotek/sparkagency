@@ -74,6 +74,8 @@ $brand_aliases = array('sparkagency' => 'agency', 'sparkexp' => 'exp', 'sparkwar
 						$client        = get_post_meta($case_id, 'client', true);
 						$metric_value  = get_post_meta($case_id, 'metric_value', true);
 						$metric_label  = get_post_meta($case_id, 'metric_label', true);
+						$accent_note   = get_post_meta($case_id, 'case_study_card_note_accent', true);
+						$plain_note    = get_post_meta($case_id, 'case_study_card_note_plain', true);
 						$card_filters  = ! empty($term_slugs) ? $term_slugs : array('unassigned');
 						$category_text = ! empty($term_names) ? implode(', ', $term_names) : get_the_date('Y');
 						?>
@@ -94,6 +96,8 @@ $brand_aliases = array('sparkagency' => 'agency', 'sparkexp' => 'exp', 'sparkwar
 								<?php if (has_excerpt()) : ?><p class="spark-case-archive__excerpt"><?php echo esc_html(wp_trim_words(get_the_excerpt(), 26)); ?></p><?php endif; ?>
 								<span class="spark-case-archive__more"><?php esc_html_e('Zobacz case study', 'sparkagency'); ?></span>
 								<?php if ($metric_value && $metric_label) : ?><div class="spark-case-archive__metric"><strong><?php echo esc_html($metric_value); ?></strong><span><?php echo esc_html($metric_label); ?></span></div><?php endif; ?>
+								<?php if ($accent_note) : ?><p class="spark-case-archive__note spark-case-archive__note--accent"><?php echo nl2br(esc_html($accent_note)); ?></p><?php endif; ?>
+								<?php if ($plain_note) : ?><p class="spark-case-archive__note spark-case-archive__note--plain"><?php echo nl2br(esc_html($plain_note)); ?></p><?php endif; ?>
 							</div>
 						</a>
 					<?php endwhile; ?>

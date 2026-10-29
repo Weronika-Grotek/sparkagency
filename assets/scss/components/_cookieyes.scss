@@ -1,0 +1,321 @@
+/* CookieYes keeps the consent logic; these rules adapt its surfaces to the prototype. */
+.cky-consent-container,
+.cky-modal,
+#cky-btn-revisit-wrapper {
+	font-family: inherit !important;
+}
+.cky-overlay{
+	z-index:10 !important;
+}
+.cky-modal{
+	box-shadow: none !important;
+}
+.cky-consent-container {
+	position: fixed !important;
+	z-index: 999990 !important;
+	 right: auto !important;
+	bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+	left: 50% !important;
+	width: min(60rem, calc(100vw - 2rem)) !important;
+	max-width: calc(100vw - 2rem) !important;
+	max-height: calc(100svh - 2rem) !important;
+	transform: translateX(-50%) !important;
+}
+.cky-footer-shadow {
+
+	background: none !important;
+
+}
+
+.cky-consent-container .cky-notice {
+	width: 100% !important;
+	max-width: none !important;
+	max-height: calc(100svh - 2rem) !important;
+	box-sizing: border-box !important;
+	padding: 1.5rem 2rem !important;
+	border: 1px solid #6c6c75 !important;
+	border-radius: 4px !important;
+	background: #131316 !important;
+	box-shadow: 0 1rem 3rem rgb(0 0 0 / 28%) !important;
+	color: #f3f2ef !important;
+}
+
+.cky-consent-container .cky-notice-group {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1fr) auto !important;
+	align-items: center !important;
+	gap: 1.5rem 2rem !important;
+}
+
+.cky-consent-container .cky-title,
+.cky-modal .cky-title,
+.cky-modal .cky-preference-title {
+	margin: 0 0 0.4rem !important;
+	color: #f3f2ef !important;
+	font-size: 1.25rem !important;
+	font-weight: 700 !important;
+	line-height: 1.2 !important;
+}
+
+.cky-consent-container .cky-notice-des,
+.cky-consent-container [data-cky-tag="description"],
+.cky-modal .cky-preference-content-wrapper,
+.cky-modal .cky-accordion p,
+.cky-modal .cky-category-des {
+	max-width: 62ch !important;
+	color: #9b9ba3 !important;
+	font-size: 0.875rem !important;
+	line-height: 1.55 !important;
+}
+
+.cky-consent-container .cky-notice-des p,
+.cky-consent-container [data-cky-tag="description"] p {
+	margin: 0 !important;
+}
+
+.cky-consent-container .cky-notice-des a,
+.cky-consent-container [data-cky-tag="description"] a,
+.cky-modal .cky-preference-content-wrapper a,
+.cky-modal a.cky-link {
+	color: #f3f2ef !important;
+	text-decoration: underline !important;
+	text-underline-offset: 0.2em;
+}
+
+.cky-consent-container .cky-notice-btn-wrapper {
+	display: flex !important;
+	flex: 0 0 auto !important;
+	align-items: center !important;
+	justify-content: flex-end !important;
+	gap: 0.5rem !important;
+	margin: 0 !important;
+}
+
+.cky-consent-container .cky-btn,
+.cky-modal .cky-btn,
+.cky-consent-container [data-cky-tag$="button"],
+.cky-modal [data-cky-tag$="button"] {
+	min-height: 2.75rem !important;
+	padding: 0.8rem 1.1rem !important;
+	border: 1px solid #6c6c75 !important;
+	border-radius: 2px !important;
+	background: transparent !important;
+	color: #f3f2ef !important;
+	font-family: inherit !important;
+	font-size: 0.875rem !important;
+	font-weight: 700 !important;
+	line-height: 1 !important;
+	text-align: center !important;
+	text-decoration: none !important;
+	box-shadow: none !important;
+}
+
+.cky-consent-container .cky-btn:hover,
+.cky-modal .cky-btn:hover,
+.cky-consent-container [data-cky-tag$="button"]:hover,
+.cky-modal [data-cky-tag$="button"]:hover {
+	border-color: #f3f2ef !important;
+	background: #1c1c20 !important;
+	color: #fff !important;
+}
+
+/* The customise/back actions are text links in the reference design. */
+.cky-consent-container .cky-btn-customize,
+.cky-consent-container [data-cky-tag="settings-button"],
+.cky-modal .cky-btn-customize,
+.cky-modal [data-cky-tag="detail-back-button"] {
+	min-height: 2.75rem !important;
+	padding-inline: 0.5rem !important;
+	border-color: transparent !important;
+	background: transparent !important;
+	text-decoration: underline !important;
+	text-underline-offset: 0.25em;
+}
+
+.cky-consent-container .cky-btn-accept,
+.cky-consent-container [data-cky-tag="accept-button"],
+.cky-modal .cky-btn-accept,
+.cky-modal [data-cky-tag="detail-accept-button"] {
+	border-color: #f3f2ef !important;
+	background: #f3f2ef !important;
+	color: #0b0b0d !important;
+}
+
+.cky-consent-container .cky-btn-accept:hover,
+.cky-consent-container [data-cky-tag="accept-button"]:hover,
+.cky-modal .cky-btn-accept:hover,
+.cky-modal [data-cky-tag="detail-accept-button"]:hover {
+	border-color: #d8d7d4 !important;
+	background: #d8d7d4 !important;
+	color: #0b0b0d !important;
+}
+
+/* Preferences expand from a card anchored to the bottom, like the HTML prototype. */
+.cky-modal {
+	position: fixed !important;
+	z-index: 999999 !important;
+	display: flex !important;
+	align-items: flex-end !important;
+	justify-content: center !important;
+	padding: 0 1rem calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+	box-sizing: border-box !important;
+	background: transparent !important;
+}
+
+.cky-modal .cky-preference-center {
+	width: min(60rem, calc(100vw - 2rem)) !important;
+	max-width: calc(100vw - 2rem) !important;
+	max-height: calc(100svh - 2rem) !important;
+	box-sizing: border-box !important;
+	padding: 1.5rem 2rem !important;
+	border: 1px solid #6c6c75 !important;
+	border-radius: 4px !important;
+	background: #131316 !important;
+	color: #f3f2ef !important;
+	box-shadow: 0 1rem 3rem rgb(0 0 0 / 28%) !important;
+	z-index: 11 !important;
+}
+.cky-consent-bar {
+	background: none !important; 
+    border: none!important; 
+	padding: 0 !important;
+    box-shadow: 0 -1px 10px 0 #acabab4d; 
+    border-radius: 6px;
+}
+.cky-modal .cky-preference-header,
+.cky-modal .cky-preference-body-wrapper,
+.cky-modal .cky-preference-footer-wrapper,
+.cky-modal .cky-preference-content-wrapper {
+	background: #131316 !important;
+}
+
+.cky-modal .cky-preference-header,
+.cky-modal .cky-accordion-wrapper,
+.cky-modal .cky-preference-footer-wrapper,
+.cky-modal .cky-accordion,
+.cky-modal .cky-accordion-item,
+.cky-modal .cky-category-wrapper {
+	border-color: rgb(243 242 239 / 12%) !important;
+}
+
+.cky-modal .cky-preference-header {
+	padding-bottom: 1rem !important;
+}
+
+.cky-modal .cky-accordion-btn,
+.cky-modal .cky-category-title,
+.cky-modal .cky-always-active {
+	color: #f3f2ef !important;
+	font-size: 1rem !important;
+	font-weight: 600 !important;
+}
+
+.cky-modal .cky-accordion,
+.cky-modal .cky-category-wrapper {
+	padding-block: 0.75rem !important;
+}
+
+.cky-modal .cky-always-active {
+	flex: none !important;
+	color: #9b9ba3 !important;
+	font-size: 0.625rem !important;
+	letter-spacing: 0.12em !important;
+	text-transform: uppercase !important;
+}
+
+.cky-modal .cky-switch {
+	width: 2.75rem !important;
+	min-width: 2.75rem !important;
+	height: 1.625rem !important;
+}
+
+.cky-modal .cky-switch .cky-slider {
+	border: 1px solid #6c6c75 !important;
+	border-radius: 2px !important;
+	background: #2a2a30 !important;
+}
+
+.cky-modal .cky-switch input:checked + .cky-slider,
+.cky-modal .cky-switch input:checked ~ .cky-slider {
+	border-color: #f3f2ef !important;
+	background: #f3f2ef !important;
+}
+
+.cky-modal .cky-switch input:checked + .cky-slider::before,
+.cky-modal .cky-switch input:checked ~ .cky-slider::before {
+	background: #0b0b0d !important;
+}
+
+.cky-modal :focus-visible,
+.cky-consent-container :focus-visible,
+#cky-btn-revisit-wrapper :focus-visible {
+	outline: 2px solid #f3f2ef !important;
+	outline-offset: 3px !important;
+}
+
+@media (max-width: 47.5rem) {
+	.cky-consent-container {
+		right: auto !important;
+		bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px)) !important;
+		left: 50% !important;
+		width: calc(100vw - 1rem) !important;
+		max-width: none !important;
+		max-height: calc(100svh - 1rem) !important;
+		transform: translateX(-50%) !important;
+	}
+
+	.cky-consent-container .cky-notice {
+		max-height: calc(100svh - 1rem) !important;
+		padding: 1.5rem 1rem !important;
+	}
+
+	.cky-consent-container .cky-notice-group {
+		grid-template-columns: minmax(0, 1fr) !important;
+		gap: 1.5rem !important;
+	}
+
+	.cky-consent-container .cky-notice-btn-wrapper {
+		width: 100% !important;
+		flex-direction: column !important;
+		align-items: stretch !important;
+	}
+
+	.cky-consent-container .cky-btn,
+	.cky-consent-container [data-cky-tag$="button"] {
+		width: 100% !important;
+		min-height: 2.75rem !important;
+	}
+
+	.cky-consent-container .cky-btn-customize,
+	.cky-consent-container [data-cky-tag="settings-button"] {
+		flex: 1 1 100% !important;
+	}
+
+	.cky-modal {
+		align-items: flex-end !important;
+		padding: 0 0.5rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) !important;
+	}
+
+	.cky-modal .cky-preference-center {
+		width: calc(100vw - 1rem) !important;
+		max-width: none !important;
+		max-height: calc(100svh - 1rem) !important;
+		padding: 1.5rem 1rem !important;
+		overflow-y: auto !important;
+	}
+
+	.cky-modal .cky-preference-footer-wrapper,
+	.cky-modal .cky-preference-footer {
+		gap: 0.5rem !important;
+	}
+
+	.cky-modal .cky-preference-footer-wrapper .cky-btn,
+	.cky-modal [data-cky-tag="detail-save-button"],
+	.cky-modal [data-cky-tag="detail-accept-button"] {
+		width: 100% !important;
+	}
+
+	.cky-modal [data-cky-tag="detail-back-button"] {
+		width: auto !important;
+	}
+}

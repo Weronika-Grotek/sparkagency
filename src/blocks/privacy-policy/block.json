@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "sparkagency/privacy-policy",
+	"version": "1.0.0",
+	"title": "Polityka prywatności",
+	"category": "design",
+	"icon": "privacy",
+	"description": "Treść polityki prywatności z automatycznym spisem treści.",
+	"textdomain": "sparkagency",
+	"supports": {
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"html": false
+	},
+	"editorScript": "file:./index.jsx"
+}

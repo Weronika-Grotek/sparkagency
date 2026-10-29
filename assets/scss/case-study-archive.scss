@@ -230,6 +230,21 @@
 	font-size: .75rem;
 }
 
+.spark-case-archive__note {
+	margin: 0;
+	font-size: .8rem;
+	line-height: 1.5;
+}
+
+.spark-case-archive__note--accent {
+	color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
+	font-weight: 700;
+}
+
+.spark-case-archive__note--plain {
+	color: var(--spark-color-text-muted, #909090);
+}
+
 .spark-case-archive__card:hover .spark-case-archive__art {
 	border-color: var(--case-archive-accent, var(--wp--preset--color--agency-dark, #fff));
 }
@@ -367,8 +382,8 @@
 }
 
 .spark-case-archive__glow--one {
-    top: 33%;
-    left: 34%;
+	top: 33%;
+	left: 34%;
 }
 
 
@@ -525,7 +540,7 @@ html[data-theme="light"] .spark-case-archive [data-brand-secondary="works"] {
 }
 
 .spark-case-archive__art {
-	    border: 1px solid var(--spark-color-line);
+	border: 1px solid var(--spark-color-line);
 	/* border: 1px solid color-mix(in srgb, var(--case-archive-accent) 62%, var(--wp--preset--color--line, #505050)); */
 	background: var(--spark-color-surface, #131316);
 }
@@ -568,15 +583,6 @@ html[data-theme="light"] .spark-case-archive__metric strong {
 html[data-theme="light"] .spark-case-archive__chips span i,
 html[data-theme="light"] .spark-case-archive__filter i {
 	box-shadow: inset 0 0 0 1px var(--spark-color-line-strong);
-}
-
-html[data-theme="light"] .spark-case-archive__chips span[data-brand] {
-	color: var(--wp--preset--color--light-text, #484848);
-}
-
-html[data-theme="light"] .spark-case-archive__filter[data-brand="health"] {
-	--case-archive-accent: var(--wp--preset--color--light-text, #484848);
-	color: var(--wp--preset--color--light-text, #484848);
 }
 
 .spark-case-archive__filter[data-brand="agency"],
@@ -664,11 +670,19 @@ html[data-theme="light"] .spark-case-archive [data-brand="works"] {
 }
 
 @keyframes spark-case-archive-filter-in {
-	from { opacity: 0; transform: translateY(.75rem); }
-	to { opacity: 1; transform: none; }
+	from {
+		opacity: 0;
+		transform: translateY(.75rem);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.spark-case-archive__card,
 	.spark-case-archive__card.is-filtering-in {
 		animation: none;

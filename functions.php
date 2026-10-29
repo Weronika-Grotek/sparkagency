@@ -319,6 +319,68 @@ function sparkagency_fix_case_studies_menu_link( array $items ): array {
 }
 add_filter( 'wp_nav_menu_objects', 'sparkagency_fix_case_studies_menu_link' );
 
+/** Add archive card note fields to both current and legacy case study posts. */
+function sparkagency_add_case_study_note_meta_boxes(): void {
+	foreach ( array( 'case-study', 'case_study' ) as $post_type ) {
+		if ( post_type_exists( $post_type ) ) {
+			add_meta_box(
+				'sparkagency-case-study-card-notes',
+				__( 'Dopiski na karcie archiwum', 'sparkagency' ),
+				'sparkagency_render_case_study_note_meta_box',
+				$post_type,
+				'side',
+				'default'
+			);
+		}
+	}
+}
+add_action( 'add_meta_boxes', 'sparkagency_add_case_study_note_meta_boxes' );
+
+/** Render the two optional note fields shown at the end of archive cards. */
+function sparkagency_render_case_study_note_meta_box( WP_Post $post ): void {
+	wp_nonce_field( 'sparkagency_save_case_study_card_notes', 'sparkagency_case_study_card_notes_nonce' );
+	$accent_note = (string) get_post_meta( $post->ID, 'case_study_card_note_accent', true );
+	$plain_note  = (string) get_post_meta( $post->ID, 'case_study_card_note_plain', true );
+	?>
+	<p>
+		<label for="case_study_card_note_accent"><strong><?php esc_html_e( 'Dopisek w kolorze kafelka', 'sparkagency' ); ?></strong></label>
+		<textarea class="widefat" id="case_study_card_note_accent" name="case_study_card_note_accent" rows="2"><?php echo esc_textarea( $accent_note ); ?></textarea>
+	</p>
+	<p>
+		<label for="case_study_card_note_plain"><strong><?php esc_html_e( 'Zwykły dopisek', 'sparkagency' ); ?></strong></label>
+		<textarea class="widefat" id="case_study_card_note_plain" name="case_study_card_note_plain" rows="2"><?php echo esc_textarea( $plain_note ); ?></textarea>
+	</p>
+	<?php
+}
+
+/** Save archive card notes with the case study post. */
+function sparkagency_save_case_study_card_notes( int $post_id, WP_Post $post ): void {
+	if ( ! in_array( $post->post_type, array( 'case-study', 'case_study' ), true ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	$nonce = isset( $_POST['sparkagency_case_study_card_notes_nonce'] )
+		? sanitize_text_field( wp_unslash( $_POST['sparkagency_case_study_card_notes_nonce'] ) )
+		: '';
+	if ( ! wp_verify_nonce( $nonce, 'sparkagency_save_case_study_card_notes' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	foreach ( array( 'case_study_card_note_accent', 'case_study_card_note_plain' ) as $field ) {
+		$value = isset( $_POST[ $field ] ) ? sanitize_textarea_field( wp_unslash( $_POST[ $field ] ) ) : '';
+		if ( '' === $value ) {
+			delete_post_meta( $post_id, $field );
+		} else {
+			update_post_meta( $post_id, $field, $value );
+		}
+	}
+}
+add_action( 'save_post', 'sparkagency_save_case_study_card_notes', 10, 2 );
+
 /** Registers the career offers post type. */
 function sparkagency_register_career_post_type() {
 	if ( ! post_type_exists( 'career' ) ) {
