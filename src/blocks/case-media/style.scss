@@ -124,7 +124,7 @@
 		text-align: center;
 	}
 
-	@media (max-width: 47.5rem) {
+	@media (max-width: vars.$breakpoint-mobile) {
 		&__heading,
 		&__grid {
 			grid-template-columns: 1fr;

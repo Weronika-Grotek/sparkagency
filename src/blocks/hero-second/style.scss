@@ -569,7 +569,7 @@ body[data-theme="dark"] .dev-spark-hero--secondary,
     }
 }
 
-@media (max-width: 760px) {
+@media (max-width: vars.$breakpoint-mobile) {
     .dev-spark-hero {
         &__foot {
             grid-template-columns: 1fr;

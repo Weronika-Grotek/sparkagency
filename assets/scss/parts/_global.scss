@@ -9,7 +9,7 @@ body :is(h1, h2, h3, h4, h5, h6) {
   color: var(--spark-color-heading, #FFFFFF) !important;
 }
 
-@media (max-width: 34rem) {
+@media (max-width: vars.$breakpoint-mobile-compact) {
   body h2 {
     font-size: 2.25rem !important;
   }

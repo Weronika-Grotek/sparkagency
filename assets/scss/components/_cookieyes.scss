@@ -1,3 +1,4 @@
+@use "../variables" as vars;
 /* CookieYes keeps the consent logic; these rules adapt its surfaces to the prototype. */
 .cky-consent-container,
 .cky-modal,
@@ -253,7 +254,7 @@
 	outline-offset: 3px !important;
 }
 
-@media (max-width: 47.5rem) {
+@media (max-width: vars.$breakpoint-mobile) {
 	.cky-consent-container {
 		right: auto !important;
 		bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px)) !important;

@@ -390,14 +390,14 @@
   border: 1px solid #ddd;
 }
 
-@media (max-width: 60rem) {
+@media (max-width: vars.$breakpoint-desktop-compact) {
   .spark-contact-full-form__layout {
     grid-template-columns: minmax(0, 1.5fr) minmax(14rem, .8fr);
     gap: clamp(1.5rem, 4vw, 3rem);
   }
 }
 
-@media (max-width: 52rem) {
+@media (max-width: vars.$breakpoint-tablet-compact) {
   .spark-contact-full-form__layout {
     grid-template-columns: 1fr;
   }
@@ -412,7 +412,7 @@
   }
 }
 
-@media (max-width: 34rem) {
+@media (max-width: vars.$breakpoint-mobile-compact) {
 
   .spark-contact-full-form__grid,
   .spark-contact-full-form__aside {

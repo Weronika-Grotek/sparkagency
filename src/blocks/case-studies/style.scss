@@ -662,7 +662,7 @@ body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-studio,
 	}
 }
 
-@media (max-width: 56.1875rem),
+@media (max-width: vars.$breakpoint-tablet-near),
 (pointer: coarse) {
 	.spark-case-studies {
 		--case-card-width: min(84vw, 28rem);
@@ -673,7 +673,7 @@ body[data-theme="light"] .spark-case-studies__all.has-case-color-brand-studio,
 	}
 }
 
-@media (max-width: 40rem) {
+@media (max-width: vars.$breakpoint-mobile-small) {
 	.spark-case-studies {
 		--case-art-height: 20rem;
 

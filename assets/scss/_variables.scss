@@ -1,4 +1,16 @@
-
+// Responsive breakpoints. Keep the original values to preserve current layouts.
+$breakpoint-desktop: 64rem !default;
+$breakpoint-tablet: 53.75rem !default;
+$breakpoint-mobile: 47.5rem !default;
+$breakpoint-desktop-compact: 60rem !default;
+$breakpoint-tablet-wide: 62.5rem !default;
+$breakpoint-tablet-large: 56.25rem !default;
+$breakpoint-tablet-near: 56.1875rem !default;
+$breakpoint-tablet-compact: 52rem !default;
+$breakpoint-mobile-wide: 48rem !default;
+$breakpoint-mobile-small: 40rem !default;
+$breakpoint-mobile-compact: 34rem !default;
+$breakpoint-mobile-narrow: 32.5rem !default;
 :root {
     --spark-color-bg: var(--wp--preset--color--background, #0B0B0D);
     --spark-color-surface: var(--wp--preset--color--surface, #131316);

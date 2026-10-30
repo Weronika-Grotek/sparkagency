@@ -228,7 +228,7 @@ html[data-spark-motion],
 html[data-spark-motion] body { scroll-behavior: auto !important; }
 html[data-spark-motion] *, html[data-spark-motion] *::before, html[data-spark-motion] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 
-@media (max-width: 53.75rem) {
+@media (max-width: vars.$breakpoint-tablet) {
   .p-preferences-dock { display: none; }
 }
 

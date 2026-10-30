@@ -443,7 +443,7 @@ body[data-theme="light"] .spark-needs-generator,
     --needs-theme-heading: #FFFFFF;
 }
 
-@media (max-width: 48rem) {
+@media (max-width: vars.$breakpoint-mobile-wide) {
     .spark-needs-generator {
 
         &__header,

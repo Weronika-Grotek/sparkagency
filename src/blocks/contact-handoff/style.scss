@@ -97,7 +97,7 @@
     }
 }
 
-@media (max-width: 52rem) {
+@media (max-width: vars.$breakpoint-tablet-compact) {
     .spark-contact-handoff {
         grid-template-columns: 1fr;
     }

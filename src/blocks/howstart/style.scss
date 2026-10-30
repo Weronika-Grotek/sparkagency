@@ -188,7 +188,7 @@
     min-width: 2ch;
   }
 
-  @media (max-width: 53.75rem) {
+  @media (max-width: vars.$breakpoint-tablet) {
     &__layout {
       grid-template-columns: 1fr;
       gap: 1.5rem;

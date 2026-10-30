@@ -1,3 +1,4 @@
+@use "../variables" as vars;
 .spark-case-archive {
 	--case-archive-gutter: clamp(1rem, 4vw, 3.5rem);
 	--case-archive-width: 82.5rem;
@@ -326,7 +327,7 @@
 	color: var(--spark-color-text-muted, #909090);
 }
 
-@media (max-width: 48rem) {
+@media (max-width: vars.$breakpoint-mobile-wide) {
 	.spark-case-archive__grid {
 		gap: 3rem 1rem;
 	}

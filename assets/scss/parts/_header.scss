@@ -271,7 +271,7 @@ html[data-theme="light"] .p-header__sun {
   }
 }
 
-@media (max-width: 53.75rem) {
+@media (max-width: vars.$breakpoint-tablet) {
   .p-header__inner {
     gap: .5rem;
     padding-block: .5rem;

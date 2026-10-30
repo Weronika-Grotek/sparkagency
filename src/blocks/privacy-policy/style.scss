@@ -1,3 +1,4 @@
+@use "../variables" as vars;
 .spark-privacy-policy {
 	display: grid;
 	grid-template-columns: minmax( 12rem, 0.7fr ) minmax( 0, 1.6fr );
@@ -86,7 +87,7 @@
 		ol { padding-inline-start: 1.35rem; }
 	}
 
-	@media ( max-width: 48rem ) {
+	@media ( max-width: vars.$breakpoint-mobile-wide ) {
 		grid-template-columns: 1fr;
 		gap: 2rem;
 

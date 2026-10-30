@@ -211,14 +211,14 @@
         outline-offset: .1875rem;
     }
 
-    @media (max-width: 62.5rem) {
+    @media (max-width: vars.$breakpoint-tablet-wide) {
         &__cards {
             grid-template-columns: repeat(min(var(--teams-columns, 3), 2), minmax(0, 1fr));
         }
 
     }
 
-    @media (max-width: 47.5rem) {
+    @media (max-width: vars.$breakpoint-mobile) {
         &__header {
             grid-template-columns: 1fr;
             gap: 1rem;
@@ -226,7 +226,7 @@
 
     }
 
-    @media (max-width: 40rem) {
+    @media (max-width: vars.$breakpoint-mobile-small) {
         &__cards {
             grid-template-columns: 1fr;
             gap: 2rem;
@@ -234,7 +234,7 @@
 
     }
 
-    @media (max-width: 32.5rem) {
+    @media (max-width: vars.$breakpoint-mobile-narrow) {
         & &__lede {
             font-size: 1.125rem;
         }

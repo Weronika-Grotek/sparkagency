@@ -360,13 +360,13 @@
     gap: .25rem;
   }
 
-  @media (max-width: 56.25rem) {
+  @media (max-width: vars.$breakpoint-tablet-large) {
     &__grid {
       grid-template-columns: 1fr;
     }
   }
 
-  @media (max-width: 47.5rem) {
+  @media (max-width: vars.$breakpoint-mobile) {
     &__header {
       grid-template-columns: 1fr;
       gap: 1rem;

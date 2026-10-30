@@ -199,7 +199,7 @@
 		color: var(--career-paper);
 	}
 
-	@media (max-width: 47.5rem) {
+	@media (max-width: vars.$breakpoint-mobile) {
 		&__actions { justify-content: flex-start; }
 	}
 }

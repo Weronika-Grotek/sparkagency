@@ -146,7 +146,7 @@
   }
 }
 
-@media (max-width: 53.75rem) {
+@media (max-width: vars.$breakpoint-tablet) {
   .p-footer {
     padding-top: 3rem;
   }
@@ -164,7 +164,7 @@
   }
 }
 
-@media (max-width: 34rem) {
+@media (max-width: vars.$breakpoint-mobile-compact) {
   .p-footer__grid {
     grid-template-columns: 1fr;
     gap: 2rem;

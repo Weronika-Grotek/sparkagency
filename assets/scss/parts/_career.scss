@@ -600,7 +600,7 @@
     margin: 0;
   }
 
-  @media (max-width: 48rem) {
+  @media (max-width: vars.$breakpoint-mobile-wide) {
     &__listing-heading {
       grid-template-columns: 1fr;
       gap: .75rem;

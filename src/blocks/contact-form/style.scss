@@ -267,14 +267,14 @@
         border-bottom: 1px solid #ddd
     }
 
-    @media(max-width:52rem) {
+    @media(max-width:vars.$breakpoint-tablet-compact) {
         &__layout {
             grid-template-columns: 1fr;
             gap: 2.5rem
         }
     }
 
-    @media(max-width:34rem) {
+    @media(max-width:vars.$breakpoint-mobile-compact) {
         h2 {
             font-size: 2.25rem;
         }

@@ -1,3 +1,4 @@
+@use "../variables" as vars;
 .spark-requirement {
   display: grid;
   width: min(calc(100% - 2rem), 75rem);
@@ -90,7 +91,7 @@
   margin-top: 1rem;
 }
 
-@media (max-width: 760px) {
+@media (max-width: vars.$breakpoint-mobile) {
   .spark-requirement {
     grid-template-columns: 1fr;
     row-gap: .75rem;

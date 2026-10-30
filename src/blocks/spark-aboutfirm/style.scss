@@ -235,14 +235,14 @@ body[data-theme="light"] .spark-aboutfirm .spark-aboutfirm__row:not(:hover) .spa
 
 
 
-@media (max-width: 760px) {
+@media (max-width: vars.$breakpoint-mobile) {
 	.spark-aboutfirm__header {
 		grid-template-columns: 1fr;
 		gap: 1rem;
 	}
 }
 
-@media (max-width: 640px) {
+@media (max-width: vars.$breakpoint-mobile-small) {
 	.spark-aboutfirm__row {
 		grid-template-columns: 1fr;
 		gap: .75rem;

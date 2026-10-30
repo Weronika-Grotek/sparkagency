@@ -110,7 +110,7 @@
       font-size: var(--fs-2xl);
     }
 
-    @media (max-width: 47.5rem) {
+    @media (max-width: vars.$breakpoint-mobile) {
       grid-template-columns: 1fr;
       gap: var(--s2);
     }
@@ -336,7 +336,7 @@
       outline-offset: 0.25rem;
     }
 
-    @media (max-width: 53.75rem) {
+    @media (max-width: vars.$breakpoint-tablet) {
       top: calc(var(--head) + 0.625rem + var(--i) * 0.625rem);
       grid-template-columns: 1fr;
       min-height: 0;
@@ -569,7 +569,7 @@
   }
 }
 
-@media (max-width: 40rem) {
+@media (max-width: vars.$breakpoint-mobile-small) {
   .dev-spark-group {
     --s3: #{vars.$space-2};
     --s4: #{vars.$space-3};
