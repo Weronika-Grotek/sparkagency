@@ -248,6 +248,15 @@ $font-size-subtitle: var(--wp--preset--font-size--subtitle, 33.6px) !default;
 $font-size-body: var(--wp--preset--font-size--body, 20px) !default;
 $font-size-tag: var(--wp--preset--font-size--tag, 11.5px) !default;
 
+// Spacing scale shared by block layouts.
+$space-1: .5rem !default;
+$space-2: 1rem !default;
+$space-3: 1.5rem !default;
+$space-4: 2rem !default;
+$space-5: 3rem !default;
+$space-6: 4.5rem !default;
+$space-7: 7.5rem !default;
+
 // Weights.
 $font-weight-regular: 400 !default;
 $font-weight-semibold: 600 !default;

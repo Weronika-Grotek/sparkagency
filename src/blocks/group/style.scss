@@ -27,10 +27,13 @@
   --fs-giant: clamp(3.4rem, 1rem + 9vw, #{vars.$font-size-h1});
 
   // Odstępy.
-  --s2: 1rem;
-  --s3: 1.5rem;
-  --s4: 2rem;
-  --s6: 4.5rem;
+  --s1: #{vars.$space-1};
+  --s2: #{vars.$space-2};
+  --s3: #{vars.$space-3};
+  --s4: #{vars.$space-4};
+  --s5: #{vars.$space-5};
+  --s6: #{vars.$space-6};
+  --s7: #{vars.$space-7};
 
   // Pozostałe ustawienia.
   --radius-card: #{vars.$radius-card};
@@ -38,7 +41,7 @@
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
   --head: var(--group-header-height);
 
-  padding-block: 7.5rem;
+  padding-block: var(--s7);
   background: var(--group-bg);
   color: var(--paper);
   font: #{vars.$font-weight-regular} #{vars.$font-size-body} / #{vars.$line-height-body} var(--f);
@@ -133,26 +136,26 @@
     display: grid;
     justify-items: start;
     gap: var(--s3);
-    margin-top: var(--s5, 3rem);
+    margin-top: var(--s5);
   }
 
-&__note {
-  max-width: 62ch;
-  margin: 0;
-  color: var(--mist);
-  font-family: var(--f);
-  font-size: 1rem;
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.55;
-  letter-spacing: 0;
+  &__note {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--mist);
+    font-family: var(--f);
+    font-size: vars.$font-size-body;
+    font-weight: vars.$font-weight-regular;
+    font-style: vars.$font-style-normal;
+    line-height: vars.$line-height-body;
+    letter-spacing: 0;
 
-  strong,
-  b {
-    color: var(--paper);
-    font-weight: 700;
+    strong,
+    b {
+      color: var(--paper);
+      font-weight: vars.$font-weight-semibold;
+    }
   }
-}
 
   &__cta {
     display: flex;
@@ -337,6 +340,7 @@
       top: calc(var(--head) + 0.625rem + var(--i) * 0.625rem);
       grid-template-columns: 1fr;
       min-height: 0;
+      gap: var(--s3);
 
       &::after {
         background: linear-gradient(
@@ -561,6 +565,39 @@
 
     .dev-spark-group__pills > span {
       min-width: 2rem;
+    }
+  }
+}
+
+@media (max-width: 40rem) {
+  .dev-spark-group {
+    --s3: #{vars.$space-2};
+    --s4: #{vars.$space-3};
+    --s6: #{vars.$space-5};
+    --s7: 4rem;
+
+    &__wrap {
+      padding-inline: clamp(1rem, 5vw, 1.5rem);
+    }
+
+    &__head {
+      margin-bottom: var(--s6);
+    }
+
+    &__stack {
+      gap: var(--s2);
+    }
+
+    &__panel {
+      padding: clamp(1rem, 5vw, 1.5rem);
+    }
+
+    &__panel-1 {
+      gap: var(--s3);
+    }
+
+    &__footer {
+      margin-top: var(--s5);
     }
   }
 }
