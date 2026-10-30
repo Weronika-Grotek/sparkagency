@@ -17,10 +17,11 @@ import { applyNeedsToForm } from "../_shared/needs";
   const validate = (form) => {
     const name = form.elements.spark_contact_name,
       email = form.elements.spark_contact_email,
+      phone = form.elements.spark_contact_phone,
       message = form.elements.spark_contact_message,
       consent = form.elements.spark_contact_consent,
       file = form.elements.spark_contact_attachment;
-    [name, email, message, consent, file].forEach((field) =>
+    [name, email, phone, message, consent, file].forEach((field) =>
       field.setCustomValidity(""),
     );
     const checks = [
@@ -33,8 +34,13 @@ import { applyNeedsToForm } from "../_shared/needs";
       ],
       [
         email,
-        email.validity.valid && email.value.includes("@"),
+        email.validity.valid && email.value.includes("@") && email.value.length <= 254,
         "Podaj poprawny adres e-mail ze znakiem @.",
+      ],
+      [
+        phone,
+        !phone.value.trim() || (/^\+?[0-9().\s-]+$/.test(phone.value) && phone.value.replace(/\D/g, "").length >= 7 && phone.value.replace(/\D/g, "").length <= 15),
+        "Telefon może zawierać 7–15 cyfr oraz spacje, nawiasy i myślniki.",
       ],
       [
         message,
@@ -149,6 +155,7 @@ import { applyNeedsToForm } from "../_shared/needs";
         syncTopics();
         if (!validate(form)) event.preventDefault();
       });
+      root.querySelector("[data-spark-contact-notice]")?.focus();
       if (
         new URLSearchParams(window.location.search).get(
           "spark_contact_status",

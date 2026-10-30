@@ -25,6 +25,10 @@ final class ContactForm {
 		'advice' => 'Nie wiem, doradźcie',
 	);
 	private const MAX_FILE_SIZE    = 10485760;
+	private const RATE_LIMIT_MAX   = 3;
+	private const RATE_LIMIT_WINDOW = 10 * MINUTE_IN_SECONDS;
+	private const MIN_FORM_SECONDS = 3;
+	private const MAX_FORM_AGE     = DAY_IN_SECONDS;
 
 	/** Register public submission and administration hooks. */
 	public function register(): void {
@@ -212,25 +216,34 @@ final class ContactForm {
 
 	/** Process a public form submission. */
 	public function submit(): void {
-		if ( ! isset( $_POST['spark_contact_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['spark_contact_nonce'] ) ), 'sparkagency_contact_form' ) ) {
+		$nonce = $this->post_string( 'spark_contact_nonce' );
+		if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'sparkagency_contact_form' ) ) {
 			$this->redirect( 'invalid' );
 		}
 
-		$name    = sanitize_text_field( wp_unslash( $_POST['spark_contact_name'] ?? '' ) );
-		$email   = sanitize_email( wp_unslash( $_POST['spark_contact_email'] ?? '' ) );
-		$company = sanitize_text_field( wp_unslash( $_POST['spark_contact_company'] ?? '' ) );
-		$message = sanitize_textarea_field( wp_unslash( $_POST['spark_contact_message'] ?? '' ) );
-		$topics  = sanitize_text_field( wp_unslash( $_POST['spark_contact_topics'] ?? '' ) );
-		$keys    = array_filter( array_map( 'sanitize_key', explode( ',', (string) wp_unslash( $_POST['spark_contact_topic_keys'] ?? '' ) ) ) );
-		$keys[]  = sanitize_key( (string) wp_unslash( $_POST['spark_need_company'] ?? '' ) );
-		$phone   = sanitize_text_field( wp_unslash( $_POST['spark_contact_phone'] ?? '' ) );
-		$budget  = sanitize_text_field( wp_unslash( $_POST['spark_contact_budget'] ?? '' ) );
-		$start   = sanitize_text_field( wp_unslash( $_POST['spark_contact_start'] ?? '' ) );
-		$source  = sanitize_text_field( wp_unslash( $_POST['spark_contact_source'] ?? '' ) );
-		$consent = isset( $_POST['spark_contact_consent'] ) && '1' === $_POST['spark_contact_consent'];
-
-		if ( ! $this->is_valid_name( $name ) || ! is_email( $email ) || $this->string_length( $company ) > 50 || '' === trim( $message ) || $this->string_length( $message ) > 300 || $this->string_length( $topics ) > 300 || $this->string_length( $phone ) > 50 || $this->string_length( $budget ) > 100 || $this->string_length( $start ) > 100 || $this->string_length( $source ) > 100 || ! $consent ) {
+		if ( '' !== $this->post_string( 'spark_contact_website' ) || ! $this->is_valid_form_timing() ) {
 			$this->redirect( 'invalid' );
+		}
+
+		$name    = sanitize_text_field( $this->post_string( 'spark_contact_name' ) );
+		$email   = sanitize_email( $this->post_string( 'spark_contact_email' ) );
+		$company = sanitize_text_field( $this->post_string( 'spark_contact_company' ) );
+		$message = sanitize_textarea_field( $this->post_string( 'spark_contact_message' ) );
+		$topics  = sanitize_text_field( $this->post_string( 'spark_contact_topics' ) );
+		$keys    = array_filter( array_map( 'sanitize_key', explode( ',', $this->post_string( 'spark_contact_topic_keys' ) ) ) );
+		$keys[]  = sanitize_key( $this->post_string( 'spark_need_company' ) );
+		$phone   = sanitize_text_field( $this->post_string( 'spark_contact_phone' ) );
+		$budget  = sanitize_text_field( $this->post_string( 'spark_contact_budget' ) );
+		$start   = sanitize_text_field( $this->post_string( 'spark_contact_start' ) );
+		$source  = sanitize_text_field( $this->post_string( 'spark_contact_source' ) );
+		$consent = '1' === $this->post_string( 'spark_contact_consent' );
+
+		if ( ! $this->is_valid_name( $name ) || ! is_email( $email ) || $this->string_length( $email ) > 254 || $this->string_length( $company ) > 50 || '' === trim( $message ) || $this->string_length( $message ) > 300 || $this->string_length( $topics ) > 300 || ! $this->is_valid_phone( $phone ) || ! $this->is_allowed_value( $budget, array( '', 'do 50 tys. zł', '50–150 tys. zł', '150–500 tys. zł', 'powyżej 500 tys. zł', 'Jeszcze nie wiem' ) ) || ! $this->is_allowed_value( $start, array( '', 'Jak najszybciej', 'W ciągu miesiąca', 'W ciągu kwartału', 'Później / rozpoznanie' ) ) || ! $this->is_allowed_value( $source, array( '', 'Polecenie', 'Wyszukiwarka', 'LinkedIn', 'Wydarzenie branżowe', 'Inne' ) ) || ! $consent ) {
+			$this->redirect( 'invalid' );
+		}
+
+		if ( ! $this->allow_submission_from_ip() ) {
+			$this->redirect( 'limited' );
 		}
 
 		$attachment = $this->handle_attachment();
@@ -282,11 +295,11 @@ final class ContactForm {
 		);
 		$lines  = array();
 		foreach ( $fields as $key => $heading ) {
-			$value = $this->trim_to( sanitize_text_field( wp_unslash( $_POST[ 'spark_need_' . $key ] ?? '' ) ), 100 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in submit().
+			$value = $this->trim_to( sanitize_text_field( $this->post_string( 'spark_need_' . $key ) ), 100 );
 			if ( '' === $value ) {
 				continue;
 			}
-			$label   = $this->trim_to( sanitize_text_field( wp_unslash( $_POST[ 'spark_need_' . $key . '_label' ] ?? '' ) ), 150 ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in submit().
+			$label   = $this->trim_to( sanitize_text_field( $this->post_string( 'spark_need_' . $key . '_label' ) ), 150 );
 			$lines[] = $heading . ' ' . ( '' !== $label && $label !== $value ? $label . ' [' . $value . ']' : $value );
 		}
 		if ( empty( $lines ) ) {
@@ -303,6 +316,73 @@ final class ContactForm {
 	/** Validate a real name with Unicode letters and common separators only. */
 	private function is_valid_name( string $name ): bool {
 		return '' !== $name && $this->string_length( $name ) <= 45 && 1 === preg_match( "/^[\\p{L}\\p{M}]+(?:[ '\\-]+[\\p{L}\\p{M}]+)*$/u", $name );
+	}
+
+	/** Read a scalar POST value safely after WordPress request slashing. */
+	private function post_string( string $key ): string {
+		$value = wp_unslash( $_POST[ $key ] ?? '' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Called after nonce verification in submit().
+		return is_string( $value ) || is_numeric( $value ) ? (string) $value : '';
+	}
+
+	/** Verify the signed form-render time and reject instant or stale submissions. */
+	private function is_valid_form_timing(): bool {
+		$started_at = $this->post_string( 'spark_contact_started_at' );
+		$signature  = $this->post_string( 'spark_contact_started_signature' );
+		if ( '' === $started_at || ! ctype_digit( $started_at ) || '' === $signature || ! hash_equals( wp_hash( $started_at . '|sparkagency_contact_form' ), $signature ) ) {
+			return false;
+		}
+		$elapsed = time() - (int) $started_at;
+		return $elapsed >= self::MIN_FORM_SECONDS && $elapsed <= self::MAX_FORM_AGE;
+	}
+
+	/** Enforce a shared per-IP submission window using an atomic option lock. */
+	private function allow_submission_from_ip(): bool {
+		$ip = sanitize_text_field( (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated below with filter_var().
+		if ( false === filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+			return false;
+		}
+
+		$bucket = 'sparkagency_contact_rate_' . hash_hmac( 'sha256', $ip, wp_salt( 'auth' ) );
+		$lock   = $bucket . '_lock';
+		$now    = time();
+		if ( ! add_option( $lock, $now, '', false ) ) {
+			$locked_at = (int) get_option( $lock, $now );
+			if ( $now - $locked_at > 10 ) {
+				delete_option( $lock );
+				if ( ! add_option( $lock, $now, '', false ) ) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+
+		$attempts = get_transient( $bucket );
+		$attempts = is_array( $attempts ) ? array_filter( $attempts, static fn( $timestamp ): bool => is_numeric( $timestamp ) && $now - (int) $timestamp < self::RATE_LIMIT_WINDOW ) : array();
+		$allowed  = count( $attempts ) < self::RATE_LIMIT_MAX;
+		if ( $allowed ) {
+			$attempts[] = $now;
+			set_transient( $bucket, array_values( $attempts ), self::RATE_LIMIT_WINDOW );
+		}
+		delete_option( $lock );
+		return $allowed;
+	}
+
+	/** Check optional phone input with 7–15 digits and common formatting chars. */
+	private function is_valid_phone( string $phone ): bool {
+		if ( '' === $phone ) {
+			return true;
+		}
+		if ( 1 !== preg_match( '/^\+?[0-9().\s-]+$/u', $phone ) ) {
+			return false;
+		}
+		$digits = preg_replace( '/\D/', '', $phone );
+		return is_string( $digits ) && strlen( $digits ) >= 7 && strlen( $digits ) <= 15;
+	}
+
+	/** Check select/hidden choice values against the options rendered by the form. */
+	private function is_allowed_value( string $value, array $allowed ): bool {
+		return in_array( $value, $allowed, true );
 	}
 
 	/** Count multibyte characters when the server supports mbstring. */

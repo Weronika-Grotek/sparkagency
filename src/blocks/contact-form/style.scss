@@ -81,6 +81,16 @@
         gap: 1.5rem
     }
 
+    &__honeypot {
+        position: absolute !important;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
     &__form fieldset {
         margin: 0;
         padding: 0;
