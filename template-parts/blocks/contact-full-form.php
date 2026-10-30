@@ -18,6 +18,22 @@ foreach (is_array($attributes['topics'] ?? null) ? $attributes['topics'] : array
 $id = wp_unique_id('spark-contact-full-');
 $anchor = sanitize_title($text($attributes['anchor'] ?? ''));
 $status = sanitize_key(wp_unslash($_GET['spark_contact_status'] ?? ''));
+$departments = array();
+foreach (is_array($attributes['departments'] ?? null) ? $attributes['departments'] : array() as $department) {
+	if (! is_array($department)) {
+		continue;
+	}
+	$name  = $text($department['name'] ?? '');
+	$email = sanitize_email($text($department['email'] ?? ''));
+	$color = sanitize_hex_color($text($department['color'] ?? ''));
+	if ($name || $email) {
+		$departments[] = array('name' => $name, 'email' => $email, 'color' => $color ?: '#FFFFFF');
+	}
+}
+$map_url = esc_url($text($attributes['mapUrl'] ?? ''));
+$email   = sanitize_email($text($attributes['contactEmail'] ?? ''));
+$phone   = $text($attributes['contactPhone'] ?? '');
+$phone_link = preg_replace('/[^+0-9]/', '', $phone);
 ?>
 <section <?php echo get_block_wrapper_attributes(array('class' => 'spark-contact-full-form', 'id' => $anchor ?: $id)); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 			?> data-spark-contact-full-form>
@@ -56,19 +72,22 @@ $status = sanitize_key(wp_unslash($_GET['spark_contact_status'] ?? ''));
 					</fieldset>
 					<fieldset>
 						<legend><b>03</b>Dane kontaktowe</legend>
-						<div class="spark-contact-full-form__grid"><label>Imię i nazwisko *<input name="spark_contact_name" maxlength="45" required autocomplete="name" placeholder="Anna Kowalska" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_name"></small></label><label>Firma<input name="spark_contact_company" maxlength="50" autocomplete="organization" placeholder="Firma sp. z o.o." /><small class="spark-contact-full-form__error" data-error-for="spark_contact_company"></small></label><label>E-mail *<input name="spark_contact_email" type="email" required autocomplete="email" placeholder="anna@firma.pl" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_email"></small></label><label>Telefon<input name="spark_contact_phone" type="tel" autocomplete="tel" placeholder="+48 600 000 000" /></label></div>
+						<div class="spark-contact-full-form__grid"><label>Imię i nazwisko *<input name="spark_contact_name" maxlength="45" required autocomplete="name" placeholder="Anna Kowalska" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_name"></small></label><label>E-mail *<input name="spark_contact_email" type="email" required autocomplete="email" placeholder="anna@firma.pl" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_email"></small></label><label>Telefon<input name="spark_contact_phone" type="tel" autocomplete="tel" placeholder="+48 600 000 000" /></label></div>
 					</fieldset>
 					<label class="spark-contact-full-form__consent"><input name="spark_contact_consent" type="checkbox" value="1" required />Wyrażam zgodę na przetwarzanie danych w celu odpowiedzi na zapytanie. <a href="<?php echo esc_url($text($attributes['privacyUrl'] ?? '')); ?>">Polityka prywatności</a><small class="spark-contact-full-form__error" data-error-for="spark_contact_consent"></small></label>
 					<footer><span>Wymagane: opis, imię, e-mail, zgoda</span><button type="submit">Wyślij zapytanie <b>→</b></button></footer>
 				</form>
 			</div>
-			<aside>
-				<div><span>Adres</span>
+			<aside class="spark-contact-full-form__aside" aria-label="<?php esc_attr_e('Dane kontaktowe', 'sparkagency'); ?>">
+				<div class="spark-contact-full-form__aside-group"><span><?php echo esc_html($text($attributes['addressLabel'] ?? 'Adres')); ?></span>
 					<p><?php echo esc_html($text($attributes['address'] ?? '')); ?></p>
+					<?php if ($map_url && $text($attributes['mapLabel'] ?? '')) : ?><a class="spark-contact-full-form__map-link" href="<?php echo esc_url($map_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($text($attributes['mapLabel'])); ?> <span aria-hidden="true">↗</span></a><?php endif; ?>
 				</div>
-				<div><span>Nowe projekty</span>
-					<p><?php echo esc_html($text($attributes['contactInfo'] ?? '')); ?></p>
+				<div class="spark-contact-full-form__aside-group"><span><?php echo esc_html($text($attributes['contactTitle'] ?? 'Nowe projekty')); ?></span>
+					<?php if ($email) : ?><p><a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></p><?php endif; ?>
+					<?php if ($phone || $text($attributes['contactHours'] ?? '')) : ?><p class="spark-contact-full-form__contact-meta"><?php if ($phone_link) : ?><a href="tel:<?php echo esc_attr($phone_link); ?>"><?php echo esc_html($phone); ?></a><?php else : ?><?php echo esc_html($phone); ?><?php endif; ?><?php if ($phone && $text($attributes['contactHours'] ?? '')) : ?> · <?php endif; ?><?php echo esc_html($text($attributes['contactHours'] ?? '')); ?></p><?php endif; ?>
 				</div>
+				<?php if ($departments) : ?><div class="spark-contact-full-form__aside-group spark-contact-full-form__teams"><span><?php echo esc_html($text($attributes['teamsTitle'] ?? 'Zespoły')); ?></span><div class="spark-contact-full-form__department-list"><?php foreach ($departments as $department) : ?><div class="spark-contact-full-form__department"><span><i style="--department-color:<?php echo esc_attr($department['color']); ?>"></i><?php echo esc_html($department['name']); ?></span><?php if ($department['email']) : ?><a href="mailto:<?php echo esc_attr($department['email']); ?>"><?php echo esc_html($department['email']); ?></a><?php endif; ?></div><?php endforeach; ?></div></div><?php endif; ?>
 			</aside>
 		</div>
 	</div>

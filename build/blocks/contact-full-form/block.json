@@ -52,13 +52,76 @@
         }
       ]
     },
+    "addressLabel": {
+      "type": "string",
+      "default": "Adres"
+    },
     "address": {
       "type": "string",
       "default": "ul. Cybernetyki 19\n02-677 Warszawa"
     },
-    "contactInfo": {
+    "mapUrl": {
       "type": "string",
-      "default": "Nowe projekty\nOdpowiadamy w dni robocze."
+      "default": "https://www.google.com/maps/search/?api=1&query=Cybernetyki+19+Warszawa"
+    },
+    "mapLabel": {
+      "type": "string",
+      "default": "Otwórz w Mapach Google"
+    },
+    "contactTitle": {
+      "type": "string",
+      "default": "Nowe projekty"
+    },
+    "contactEmail": {
+      "type": "string",
+      "default": "kontakt@sparkagency.pl"
+    },
+    "contactPhone": {
+      "type": "string",
+      "default": "[telefon do uzupełnienia]"
+    },
+    "contactHours": {
+      "type": "string",
+      "default": "pon–pt 9:00–17:00"
+    },
+    "teamsTitle": {
+      "type": "string",
+      "default": "Zespoły"
+    },
+    "departments": {
+      "type": "array",
+      "default": [
+        {
+          "key": "works",
+          "name": "sparkWORKS",
+          "email": "kontakt@sparkworks.pl",
+          "color": "#D8AB52"
+        },
+        {
+          "key": "exp",
+          "name": "sparkEXP",
+          "email": "kontakt@sparkexp.pl",
+          "color": "#01B57C"
+        },
+        {
+          "key": "warsaw",
+          "name": "sparkWARSAW",
+          "email": "kontakt@sparkwarsaw.pl",
+          "color": "#43A0ED"
+        },
+        {
+          "key": "health",
+          "name": "sparkHEALTH",
+          "email": "kontakt@sparkhealth.pl",
+          "color": "#A857BC"
+        },
+        {
+          "key": "studio",
+          "name": "sparkSTUDIO",
+          "email": "kontakt@sparkstudio.pl",
+          "color": "#D65251"
+        }
+      ]
     },
     "privacyUrl": {
       "type": "string",

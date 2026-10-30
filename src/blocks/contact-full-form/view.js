@@ -17,11 +17,10 @@ import { applyNeedsToForm } from "../_shared/needs";
   const validate = (form) => {
     const name = form.elements.spark_contact_name,
       email = form.elements.spark_contact_email,
-      company = form.elements.spark_contact_company,
       message = form.elements.spark_contact_message,
       consent = form.elements.spark_contact_consent,
       file = form.elements.spark_contact_attachment;
-    [name, email, company, message, consent, file].forEach((field) =>
+    [name, email, message, consent, file].forEach((field) =>
       field.setCustomValidity(""),
     );
     const checks = [
@@ -36,11 +35,6 @@ import { applyNeedsToForm } from "../_shared/needs";
         email,
         email.validity.valid && email.value.includes("@"),
         "Podaj poprawny adres e-mail ze znakiem @.",
-      ],
-      [
-        company,
-        company.value.length <= 50,
-        "Firma może mieć maksymalnie 50 znaków.",
       ],
       [
         message,
@@ -108,7 +102,6 @@ import { applyNeedsToForm } from "../_shared/needs";
         [
           ["spark_contact_name", "name", 45],
           ["spark_contact_email", "email", 254],
-          ["spark_contact_company", "company", 50],
           ["spark_contact_message", "message", 300],
         ].forEach(([fieldName, draftName, limit]) => {
           if (typeof draft[draftName] === "string")
@@ -132,17 +125,11 @@ import { applyNeedsToForm } from "../_shared/needs";
       if (applyNeedsToForm(root, form)) syncTopics();
       [
         "spark_contact_name",
-        "spark_contact_company",
         "spark_contact_message",
       ].forEach((name) =>
         form.elements[name].addEventListener("input", () => {
           const field = form.elements[name];
-          const limit =
-            name === "spark_contact_name"
-              ? 45
-              : name === "spark_contact_company"
-                ? 50
-                : 300;
+          const limit = name === "spark_contact_name" ? 45 : 300;
           if (name === "spark_contact_name")
             field.value = field.value.replace(/[^\p{L}\p{M} '\-]/gu, "");
           field.value = field.value.slice(0, limit);

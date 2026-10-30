@@ -14,7 +14,7 @@
 .spark-contact-full-form header { max-width: 50rem; display: grid; gap: 1rem; margin-bottom: clamp(3rem, 6vw, 5rem); }
 .spark-contact-full-form h2 { font-family: vars.$font-family-primary; font-size: clamp(2.8rem, 1.5rem + 5vw, 6rem); font-weight: vars.$font-weight-display; font-style: vars.$font-style-display; line-height: .92; letter-spacing: vars.$font-tracking-display; }
 .spark-contact-full-form header p { color: vars.$color-subtitle; font-size: vars.$font-size-body; line-height: 1.5; }
-.spark-contact-full-form__layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(15rem, .7fr); gap: clamp(3rem, 7vw, 6rem); }
+.spark-contact-full-form__layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(17rem, .95fr); gap: clamp(3rem, 6vw, 5rem); }
 .spark-contact-full-form form { display: grid; gap: 2rem; }
 .spark-contact-full-form fieldset { display: grid; gap: 1.25rem; margin: 0; padding: 2rem 0 0; border: 0; border-top: 1px solid vars.$color-line; }
 .spark-contact-full-form legend { font-weight: 700; }
@@ -37,11 +37,25 @@
 .spark-contact-full-form footer { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding-top: 1.5rem; border-top: 1px solid vars.$color-line; }
 .spark-contact-full-form footer span, .spark-contact-full-form aside span { color: vars.$color-subtitle; font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .spark-contact-full-form footer button { padding: .9rem 1.25rem; border: 1px solid vars.$color-accent; border-radius: vars.$radius-btn; background: vars.$color-accent; color: vars.$color-accent-ink; font: 700 .875rem vars.$font-family-primary; }
-.spark-contact-full-form aside { display: grid; align-content: start; gap: 1.5rem; }
-.spark-contact-full-form aside div { display: grid; gap: .5rem; padding-bottom: 1.5rem; border-bottom: 1px solid vars.$color-line; }
+.spark-contact-full-form__aside { position: sticky; top: 6rem; align-self: start; display: grid; align-content: start; gap: 1.5rem; padding: 0; background: transparent; color: vars.$color-text; }
+.spark-contact-full-form__aside-group { display: grid; justify-items: start; gap: .65rem; padding-bottom: 1.5rem; border-bottom: 1px solid vars.$color-line; }
+.spark-contact-full-form__aside-group:last-child { padding-bottom: 0; border-bottom: 0; }
 .spark-contact-full-form aside p { white-space: pre-line; line-height: 1.5; }
+.spark-contact-full-form__aside a { color: vars.$color-text; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.spark-contact-full-form__aside > .spark-contact-full-form__aside-group > p:first-of-type { color: vars.$color-text; font-size: 1.15rem; }
+.spark-contact-full-form__aside .spark-contact-full-form__contact-meta { color: vars.$color-subtitle; font-size: .875rem; }
+.spark-contact-full-form__map-link { display: inline-flex; align-items: center; gap: .65rem; margin-top: .25rem; padding: 0 0 .35rem; border: 0; border-bottom: 1px solid vars.$color-line-strong; color: vars.$color-text !important; font-size: .8rem; font-weight: 700; text-decoration: none; }
+.spark-contact-full-form__map-link:hover, .spark-contact-full-form__map-link:focus-visible { border-color: vars.$color-accent; color: vars.$color-accent !important; }
+.spark-contact-full-form__department-list { width: 100%; }
+.spark-contact-full-form__department { display: flex; justify-content: space-between; gap: .75rem; align-items: center; width: 100%; padding-block: .65rem; border-bottom: 1px solid vars.$color-line; font-size: .8rem; }
+.spark-contact-full-form__department:last-child { border-bottom: 0; }
+.spark-contact-full-form__department > span { display: inline-flex; align-items: center; gap: .55rem; color: vars.$color-text; font-weight: 600; }
+.spark-contact-full-form__department i { width: .5rem; height: .5rem; flex: none; border-radius: 50%; background: var(--department-color); }
+.spark-contact-full-form__department > a { color: vars.$color-subtitle; font-size: .75rem; }
 .spark-contact-full-form__notice { margin: 0 0 1.5rem; padding: 1rem; border: 1px solid vars.$color-accent; }
 .spark-contact-full-form__topic-editor { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #ddd; }
+.spark-contact-full-form__department-editor { margin-bottom: 1.25rem; padding: 1rem; border: 1px solid #ddd; }
 
-@media (max-width: 52rem) { .spark-contact-full-form__layout { grid-template-columns: 1fr; } .spark-contact-full-form aside { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 34rem) { .spark-contact-full-form__grid, .spark-contact-full-form aside { grid-template-columns: 1fr; } .spark-contact-full-form footer { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 60rem) { .spark-contact-full-form__layout { grid-template-columns: minmax(0, 1.5fr) minmax(14rem, .8fr); gap: clamp(1.5rem, 4vw, 3rem); } }
+@media (max-width: 52rem) { .spark-contact-full-form__layout { grid-template-columns: 1fr; } .spark-contact-full-form__aside { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); } .spark-contact-full-form__teams { grid-column: 1 / -1; } }
+@media (max-width: 34rem) { .spark-contact-full-form__grid, .spark-contact-full-form__aside { grid-template-columns: 1fr; } .spark-contact-full-form__teams { grid-column: auto; } .spark-contact-full-form__department { align-items: flex-start; flex-direction: column; } .spark-contact-full-form footer { align-items: flex-start; flex-direction: column; } }

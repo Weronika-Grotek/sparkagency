@@ -14,9 +14,16 @@ import { __ } from "@wordpress/i18n";
 const domain = "sparkagency";
 const Edit = ({ attributes, setAttributes }) => {
   const topics = Array.isArray(attributes.topics) ? attributes.topics : [];
+  const departments = Array.isArray(attributes.departments) ? attributes.departments : [];
   const update = (index, changes) =>
     setAttributes({
       topics: topics.map((item, position) =>
+        position === index ? { ...item, ...changes } : item,
+      ),
+    });
+  const updateDepartment = (index, changes) =>
+    setAttributes({
+      departments: departments.map((item, position) =>
         position === index ? { ...item, ...changes } : item,
       ),
     });
@@ -28,15 +35,22 @@ const Edit = ({ attributes, setAttributes }) => {
       <InspectorControls>
         <PanelBody title={__("Ustawienia strony Kontakt", domain)} initialOpen>
           <TextareaControl
+            label={__("Etykieta adresu", domain)}
+            value={attributes.addressLabel || ""}
+            onChange={(addressLabel) => setAttributes({ addressLabel })}
+          />
+          <TextareaControl
             label={__("Adres", domain)}
             value={attributes.address || ""}
             onChange={(address) => setAttributes({ address })}
           />
-          <TextareaControl
-            label={__("Informacja kontaktowa", domain)}
-            value={attributes.contactInfo || ""}
-            onChange={(contactInfo) => setAttributes({ contactInfo })}
-          />
+          <TextControl label={__("Link do mapy", domain)} value={attributes.mapUrl || ""} onChange={(mapUrl) => setAttributes({ mapUrl })} />
+          <TextControl label={__("Tekst przycisku mapy", domain)} value={attributes.mapLabel || ""} onChange={(mapLabel) => setAttributes({ mapLabel })} />
+          <TextControl label={__("Nagłówek kontaktu", domain)} value={attributes.contactTitle || ""} onChange={(contactTitle) => setAttributes({ contactTitle })} />
+          <TextControl label={__("E-mail do nowych projektów", domain)} value={attributes.contactEmail || ""} onChange={(contactEmail) => setAttributes({ contactEmail })} />
+          <TextControl label={__("Telefon", domain)} value={attributes.contactPhone || ""} onChange={(contactPhone) => setAttributes({ contactPhone })} />
+          <TextControl label={__("Godziny kontaktu", domain)} value={attributes.contactHours || ""} onChange={(contactHours) => setAttributes({ contactHours })} />
+          <TextControl label={__("Nagłówek listy zespołów", domain)} value={attributes.teamsTitle || ""} onChange={(teamsTitle) => setAttributes({ teamsTitle })} />
           <TextControl
             label={__("Link polityki prywatności", domain)}
             value={attributes.privacyUrl || ""}
@@ -47,6 +61,18 @@ const Edit = ({ attributes, setAttributes }) => {
             value={attributes.successMessage || ""}
             onChange={(successMessage) => setAttributes({ successMessage })}
           />
+        </PanelBody>
+        <PanelBody title={__("Firmy i zespoły", domain)} initialOpen={false}>
+          <p>{__("Edytuj nazwy, adresy e-mail i kolory firm. Możesz też dodać własną firmę lub zespół.", domain)}</p>
+          {departments.map((department, index) => (
+            <div className="spark-contact-full-form__department-editor" key={`${department.key}-${index}`}>
+              <TextControl label={__("Nazwa wyświetlana", domain)} value={department.name || ""} onChange={(name) => updateDepartment(index, { name })} />
+              <TextControl label={__("E-mail", domain)} value={department.email || ""} onChange={(email) => updateDepartment(index, { email })} />
+              <TextControl label={__("Kolor", domain)} value={department.color || ""} onChange={(color) => updateDepartment(index, { color })} />
+              <button type="button" className="components-button is-link is-destructive" onClick={() => setAttributes({ departments: departments.filter((_, position) => position !== index) })}>{__("Usuń z listy", domain)}</button>
+            </div>
+          ))}
+          <button type="button" className="components-button is-secondary" onClick={() => setAttributes({ departments: [...departments, { key: "custom", name: "", email: "", color: "#FFFFFF" }] })}>{__("Dodaj firmę lub zespół", domain)}</button>
         </PanelBody>
         <PanelBody title={__("Tematy rozmowy", domain)} initialOpen={false}>
           {topics.map((topic, index) => (
@@ -102,15 +128,15 @@ const Edit = ({ attributes, setAttributes }) => {
               </select>
               <b>03 · Dane kontaktowe</b>
               <input disabled placeholder="Imię i nazwisko" />
-              <input disabled placeholder="Firma" />
               <input disabled placeholder="E-mail" />
               <label>
                 <input disabled type="checkbox" /> Zgoda na kontakt
               </label>
             </form>
             <aside>
-              <p>{attributes.address}</p>
-              <p>{attributes.contactInfo}</p>
+              <div><span>{attributes.addressLabel}</span><p>{attributes.address}</p><a href={attributes.mapUrl}>{attributes.mapLabel} ↗</a></div>
+              <div><span>{attributes.contactTitle}</span><p>{attributes.contactEmail || "E-mail do uzupełnienia"}</p><p>{attributes.contactPhone} · {attributes.contactHours}</p></div>
+              <div><span>{attributes.teamsTitle}</span>{departments.map((department, index) => <p key={`${department.key}-${index}`}>{department.name || "Nazwa firmy"} · {department.email || "E-mail do uzupełnienia"}</p>)}</div>
             </aside>
           </div>
         </div>
