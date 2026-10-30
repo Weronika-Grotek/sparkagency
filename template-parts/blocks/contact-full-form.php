@@ -49,15 +49,9 @@ $phone_link = preg_replace('/[^+0-9]/', '', $phone);
 						<div class="spark-contact-full-form__topics" data-contact-topic-buttons><?php foreach ($topics as $topic) : ?><button type="button" aria-pressed="false" data-topic-key="<?php echo esc_attr($topic['key']); ?>" data-topic-label="<?php echo esc_attr($topic['label']); ?>"><i style="background:<?php echo esc_attr($topic['color']); ?>"></i><?php echo esc_html($topic['label']); ?></button><?php endforeach; ?></div>
 					</fieldset>
 					<fieldset>
-						<legend><b>02</b>O projekcie</legend><label>Opis *<textarea name="spark_contact_message" maxlength="300" required rows="5" placeholder="Cel, zakres, grupa docelowa, co już macie gotowe."></textarea><small class="spark-contact-full-form__error" data-error-for="spark_contact_message"></small></label><label>Załącz brief · opcjonalnie<input name="spark_contact_attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_attachment"></small></label>
-						<div class="spark-contact-full-form__grid"><label>Budżet<select name="spark_contact_budget">
-									<option value="">Wybierz opcję</option>
-									<option>do 50 tys. zł</option>
-									<option>50–150 tys. zł</option>
-									<option>150–500 tys. zł</option>
-									<option>powyżej 500 tys. zł</option>
-									<option>Jeszcze nie wiem</option>
-								</select></label><label>Planowany start<select name="spark_contact_start">
+						<legend><b>02</b>O projekcie</legend><label>O czym chcesz porozmawiać? *<textarea name="spark_contact_message" maxlength="300" required rows="5" placeholder="Cel, zakres, rynki, termin i co już macie gotowe."></textarea><small class="spark-contact-full-form__error" data-error-for="spark_contact_message"></small></label><label>Załącz brief · opcjonalnie<input name="spark_contact_attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_attachment"></small></label>
+						<div class="spark-contact-full-form__budget"><span class="spark-contact-full-form__field-title">Budżet</span><input type="hidden" name="spark_contact_budget" value="" data-contact-budget /><div class="spark-contact-full-form__budget-options" data-contact-budget-buttons><button type="button" aria-pressed="false" data-budget="do 50 tys. zł">do 50 tys. zł</button><button type="button" aria-pressed="false" data-budget="50–150 tys. zł">50–150 tys. zł</button><button type="button" aria-pressed="false" data-budget="150–500 tys. zł">150–500 tys. zł</button><button type="button" aria-pressed="false" data-budget="powyżej 500 tys. zł">powyżej 500 tys. zł</button><button type="button" aria-pressed="false" data-budget="Jeszcze nie wiem">Jeszcze nie wiem</button></div></div>
+						<div class="spark-contact-full-form__grid spark-contact-full-form__select-grid"><label>Planowany start<select name="spark_contact_start">
 									<option>Jak najszybciej</option>
 									<option>W ciągu miesiąca</option>
 									<option>W ciągu kwartału</option>
@@ -75,7 +69,7 @@ $phone_link = preg_replace('/[^+0-9]/', '', $phone);
 						<div class="spark-contact-full-form__grid"><label>Imię i nazwisko *<input name="spark_contact_name" maxlength="45" required autocomplete="name" placeholder="Anna Kowalska" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_name"></small></label><label>E-mail *<input name="spark_contact_email" type="email" required autocomplete="email" placeholder="anna@firma.pl" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_email"></small></label><label>Telefon<input name="spark_contact_phone" type="tel" autocomplete="tel" placeholder="+48 600 000 000" /></label></div>
 					</fieldset>
 					<label class="spark-contact-full-form__consent"><input name="spark_contact_consent" type="checkbox" value="1" required />Wyrażam zgodę na przetwarzanie danych w celu odpowiedzi na zapytanie. <a href="<?php echo esc_url($text($attributes['privacyUrl'] ?? '')); ?>">Polityka prywatności</a><small class="spark-contact-full-form__error" data-error-for="spark_contact_consent"></small></label>
-					<footer><span>Wymagane: opis, imię, e-mail, zgoda</span><button type="submit">Wyślij zapytanie <b>→</b></button></footer>
+					<footer><span>Wymagane: opis, imię, e-mail, zgoda</span><button type="submit">Wyślij wiadomość <b>→</b></button></footer>
 				</form>
 			</div>
 			<aside class="spark-contact-full-form__aside" aria-label="<?php esc_attr_e('Dane kontaktowe', 'sparkagency'); ?>">

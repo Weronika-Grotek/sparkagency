@@ -77,6 +77,8 @@ import { applyNeedsToForm } from "../_shared/needs";
       const buttons = [...root.querySelectorAll("[data-topic-key]")];
       const hidden = form.querySelector("[data-contact-topics]");
       const keys = form.querySelector("[data-contact-topic-keys]");
+      const budget = form.querySelector("[data-contact-budget]");
+      const budgetButtons = [...form.querySelectorAll("[data-budget]")];
       const syncTopics = () => {
         const pressed = buttons.filter(
           (button) => button.getAttribute("aria-pressed") === "true",
@@ -95,6 +97,14 @@ import { applyNeedsToForm } from "../_shared/needs";
             String(button.getAttribute("aria-pressed") !== "true"),
           );
           syncTopics();
+        }),
+      );
+      budgetButtons.forEach((button) =>
+        button.addEventListener("click", () => {
+          budgetButtons.forEach((option) =>
+            option.setAttribute("aria-pressed", String(option === button)),
+          );
+          if (budget) budget.value = button.dataset.budget;
         }),
       );
       const draft = getDraft();
