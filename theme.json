@@ -78,7 +78,7 @@
         { "slug": "tag", "name": "Tag", "size": "11.5px" },
         { "slug": "body", "name": "Body", "size": "20px" },
         { "slug": "subtitle", "name": "Subtitle", "size": "33.6px" },
-        { "slug": "h2", "name": "H2", "size": "73.6px" },
+        { "slug": "h2", "name": "H2", "size": "2.25rem" },
         { "slug": "h1", "name": "H1", "size": "145.5px" }
       ]
     }

@@ -9,6 +9,10 @@ body :is(h1, h2, h3, h4, h5, h6) {
   color: var(--spark-color-heading, #FFFFFF) !important;
 }
 
+body h2 {
+  font-size: vars.$font-size-h2 !important;
+}
+
 .p-cursor-dot,
 .p-cursor-ring {
   position: fixed;

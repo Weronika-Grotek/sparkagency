@@ -22,6 +22,7 @@
     --spark-display-style: normal;
 }
 
+
 html[data-theme="light"],
 body[data-theme="light"],
 .is-theme-light {
@@ -243,7 +244,7 @@ $font-style-normal: normal !default;
 
 // Sizes.
 $font-size-h1: var(--wp--preset--font-size--h1, 145.5px) !default;
-$font-size-h2: var(--wp--preset--font-size--h2, 73.6px) !default;
+$font-size-h2: var(--wp--preset--font-size--h2, 2.25rem) !default;
 $font-size-subtitle: var(--wp--preset--font-size--subtitle, 33.6px) !default;
 $font-size-body: var(--wp--preset--font-size--body, 20px) !default;
 $font-size-tag: var(--wp--preset--font-size--tag, 11.5px) !default;

@@ -48,10 +48,11 @@
     }
 
     h2 {
-        font: vars.$font-family-primary;
+        font-family: vars.$font-family-primary;
         font-style: vars.$font-style-display;
         letter-spacing: vars.$font-tracking-display;
-        font-size: 4.375rem;
+        font-size: vars.$font-size-h2;
+        line-height: vars.$line-height-h2;
         text-wrap: balance;
         font-weight: vars.$font-weight-display;
     }
@@ -59,7 +60,7 @@
     &__lede {
         max-width: 30rem;
         color: vars.$color-subtitle;
-        font-size: clamp(1.1rem, 1rem + .5vw, 1.35rem);
+        font-size: vars.$font-size-body;
         line-height: 1.6;
         white-space: pre-line
     }
@@ -276,6 +277,18 @@
     @media(max-width:34rem) {
         &__grid {
             grid-template-columns: 1fr
+        }
+
+        &__layout {
+            gap: 2rem
+        }
+
+        &__form {
+            gap: 1.5rem
+        }
+
+        &__topics {
+            align-items: flex-start
         }
 
         &__foot {
