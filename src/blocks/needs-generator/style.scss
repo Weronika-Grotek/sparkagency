@@ -452,12 +452,52 @@ body[data-theme="light"] .spark-needs-generator,
         }
 
         &__steps {
-            grid-template-columns: repeat(var(--needs-step-count), auto);
-            overflow-x: auto;
+            display: flex;
+            overflow: hidden;
         }
 
         &__steps li {
-            padding: .75rem;
+            display: flex;
+            flex: 1 1 0;
+            min-width: 0;
+            padding: .75rem .5rem;
+            align-items: center;
+            justify-content: center;
+            transition: flex-grow .2s ease;
+        }
+
+        &__steps li.is-active {
+            flex-grow: 2.5;
+            box-shadow: inset 0 -2px 0 var(--needs-theme-accent);
+        }
+
+        &__steps button {
+            display: flex;
+            min-width: 0;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: 0;
+            font-size: .875rem;
+            white-space: nowrap;
+        }
+
+        &__steps .is-active button {
+            justify-content: flex-start;
+        }
+
+        &__step-title {
+            display: none;
+        }
+
+        &__steps .is-active .spark-needs-generator__step-title {
+            display: inline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &__bar {
+            display: none;
         }
 
         &__steps small {

@@ -371,7 +371,9 @@
       grid-template-columns: 1fr;
       gap: 1rem;
     }
-
+&__visual{
+        flex: unset;
+}
     &__visual,
     &__content {
       padding: 1.5rem;

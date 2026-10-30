@@ -84,7 +84,10 @@ const initializeNeedsGenerators = () => {
 				const button = create( 'button' );
 				button.type = 'button';
 				button.disabled = index > activeStep || ( step.key === 'result' && ! isResult );
-				button.textContent = `${ String( index + 1 ).padStart( 2, '0' ) } · ${ step.title }`;
+				button.append(
+					create( 'span', 'spark-needs-generator__step-number', String( index + 1 ).padStart( 2, '0' ) ),
+					create( 'span', 'spark-needs-generator__step-title', step.title )
+				);
 				button.addEventListener( 'click', () => render( index ) );
 				item.append( button );
 				if ( answers[ step.key ]?.label ) item.append( create( 'small', '', answers[ step.key ].label ) );
