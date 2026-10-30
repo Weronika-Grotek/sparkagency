@@ -18,6 +18,8 @@ foreach (is_array($attributes['topics'] ?? null) ? $attributes['topics'] : array
 $id = wp_unique_id('spark-contact-full-');
 $anchor = sanitize_title($text($attributes['anchor'] ?? ''));
 $status = sanitize_key(wp_unslash($_GET['spark_contact_status'] ?? ''));
+$form_started_at = (string) time();
+$form_started_signature = wp_hash($form_started_at . '|sparkagency_contact_form');
 $departments = array();
 foreach (is_array($attributes['departments'] ?? null) ? $attributes['departments'] : array() as $department) {
 	if (! is_array($department)) {
@@ -43,7 +45,8 @@ $phone_link = preg_replace('/[^+0-9]/', '', $phone);
 			<p><?php echo wp_kses_post($text($attributes['lede'] ?? '')); ?></p>
 		</header>
 		<div class="spark-contact-full-form__layout">
-			<div><?php if ('success' === $status) : ?><p class="spark-contact-full-form__notice" role="status"><?php echo esc_html($text($attributes['successMessage'] ?? '')); ?></p><?php endif; ?><form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data" novalidate><input type="hidden" name="action" value="sparkagency_submit_contact_form" /><input type="hidden" name="spark_contact_anchor" value="<?php echo esc_attr($anchor ?: $id); ?>" /><input type="hidden" name="spark_contact_topics" data-contact-topics value="" /><input type="hidden" name="spark_contact_topic_keys" data-contact-topic-keys value="" /><?php wp_nonce_field('sparkagency_contact_form', 'spark_contact_nonce'); ?>
+			<div><?php if ('success' === $status) : ?><p class="spark-contact-full-form__notice" role="status" tabindex="-1" data-spark-contact-notice><?php echo esc_html($text($attributes['successMessage'] ?? '')); ?></p><?php elseif ('limited' === $status) : ?><p class="spark-contact-full-form__notice is-error" role="alert" tabindex="-1" data-spark-contact-notice><?php esc_html_e('Wysłano już kilka wiadomości. Odczekaj 10 minut i spróbuj ponownie.', 'sparkagency'); ?></p><?php elseif (in_array($status, array('invalid', 'upload', 'mail'), true)) : ?><p class="spark-contact-full-form__notice is-error" role="alert" tabindex="-1" data-spark-contact-notice><?php esc_html_e('Nie udało się wysłać wiadomości. Sprawdź formularz i spróbuj ponownie.', 'sparkagency'); ?></p><?php endif; ?><form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post" enctype="multipart/form-data" novalidate><input type="hidden" name="action" value="sparkagency_submit_contact_form" /><input type="hidden" name="spark_contact_anchor" value="<?php echo esc_attr($anchor ?: $id); ?>" /><input type="hidden" name="spark_contact_topics" data-contact-topics value="" /><input type="hidden" name="spark_contact_topic_keys" data-contact-topic-keys value="" /><input type="hidden" name="spark_contact_started_at" value="<?php echo esc_attr($form_started_at); ?>" /><input type="hidden" name="spark_contact_started_signature" value="<?php echo esc_attr($form_started_signature); ?>" /><?php wp_nonce_field('sparkagency_contact_form', 'spark_contact_nonce'); ?>
+					<div class="spark-contact-full-form__honeypot" aria-hidden="true"><label for="<?php echo esc_attr($id . '-website'); ?>">Pozostaw to pole puste<input id="<?php echo esc_attr($id . '-website'); ?>" name="spark_contact_website" type="text" value="" tabindex="-1" autocomplete="off" /></label></div>
 					<fieldset>
 						<legend><b>01</b>Czego dotyczy projekt</legend>
 						<div class="spark-contact-full-form__topics" data-contact-topic-buttons><?php foreach ($topics as $topic) : ?><button type="button" aria-pressed="false" data-topic-key="<?php echo esc_attr($topic['key']); ?>" data-topic-label="<?php echo esc_attr($topic['label']); ?>"><i style="background:<?php echo esc_attr($topic['color']); ?>"></i><?php echo esc_html($topic['label']); ?></button><?php endforeach; ?></div>
@@ -52,21 +55,21 @@ $phone_link = preg_replace('/[^+0-9]/', '', $phone);
 						<legend><b>02</b>O projekcie</legend><label>O czym chcesz porozmawiać? *<textarea name="spark_contact_message" maxlength="300" required rows="5" placeholder="Cel, zakres, rynki, termin i co już macie gotowe."></textarea><small class="spark-contact-full-form__error" data-error-for="spark_contact_message"></small></label><label>Załącz brief · opcjonalnie<input name="spark_contact_attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_attachment"></small></label>
 						<div class="spark-contact-full-form__budget"><span class="spark-contact-full-form__field-title">Budżet</span><input type="hidden" name="spark_contact_budget" value="" data-contact-budget /><div class="spark-contact-full-form__budget-options" data-contact-budget-buttons><button type="button" aria-pressed="false" data-budget="do 50 tys. zł">do 50 tys. zł</button><button type="button" aria-pressed="false" data-budget="50–150 tys. zł">50–150 tys. zł</button><button type="button" aria-pressed="false" data-budget="150–500 tys. zł">150–500 tys. zł</button><button type="button" aria-pressed="false" data-budget="powyżej 500 tys. zł">powyżej 500 tys. zł</button><button type="button" aria-pressed="false" data-budget="Jeszcze nie wiem">Jeszcze nie wiem</button></div></div>
 						<div class="spark-contact-full-form__grid spark-contact-full-form__select-grid"><label>Planowany start<select name="spark_contact_start">
-									<option>Jak najszybciej</option>
-									<option>W ciągu miesiąca</option>
-									<option>W ciągu kwartału</option>
-									<option>Później / rozpoznanie</option>
+									<option value="Jak najszybciej">Jak najszybciej</option>
+									<option value="W ciągu miesiąca">W ciągu miesiąca</option>
+									<option value="W ciągu kwartału">W ciągu kwartału</option>
+									<option value="Później / rozpoznanie">Później / rozpoznanie</option>
 								</select></label><label>Skąd o nas wiesz<select name="spark_contact_source">
-									<option>Polecenie</option>
-									<option>Wyszukiwarka</option>
-									<option>LinkedIn</option>
-									<option>Wydarzenie branżowe</option>
-									<option>Inne</option>
+									<option value="Polecenie">Polecenie</option>
+									<option value="Wyszukiwarka">Wyszukiwarka</option>
+									<option value="LinkedIn">LinkedIn</option>
+									<option value="Wydarzenie branżowe">Wydarzenie branżowe</option>
+									<option value="Inne">Inne</option>
 								</select></label></div>
 					</fieldset>
 					<fieldset>
 						<legend><b>03</b>Dane kontaktowe</legend>
-						<div class="spark-contact-full-form__grid"><label>Imię i nazwisko *<input name="spark_contact_name" maxlength="45" required autocomplete="name" placeholder="Anna Kowalska" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_name"></small></label><label>E-mail *<input name="spark_contact_email" type="email" required autocomplete="email" placeholder="anna@firma.pl" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_email"></small></label><label>Telefon<input name="spark_contact_phone" type="tel" autocomplete="tel" placeholder="+48 600 000 000" /></label></div>
+						<div class="spark-contact-full-form__grid"><label>Imię i nazwisko *<input name="spark_contact_name" maxlength="45" required autocomplete="name" placeholder="Anna Kowalska" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_name"></small></label><label>E-mail *<input name="spark_contact_email" type="email" maxlength="254" required autocomplete="email" placeholder="anna@firma.pl" /><small class="spark-contact-full-form__error" data-error-for="spark_contact_email"></small></label><label>Telefon<input name="spark_contact_phone" type="tel" inputmode="tel" pattern="\+?[0-9().\s-]+" maxlength="25" autocomplete="tel" placeholder="+48 600 000 000" /></label></div>
 					</fieldset>
 					<label class="spark-contact-full-form__consent"><input name="spark_contact_consent" type="checkbox" value="1" required />Wyrażam zgodę na przetwarzanie danych w celu odpowiedzi na zapytanie. <a href="<?php echo esc_url($text($attributes['privacyUrl'] ?? '')); ?>">Polityka prywatności</a><small class="spark-contact-full-form__error" data-error-for="spark_contact_consent"></small></label>
 					<footer><span>Wymagane: opis, imię, e-mail, zgoda</span><button type="submit">Wyślij wiadomość <b>→</b></button></footer>
